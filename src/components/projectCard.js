@@ -1,72 +1,66 @@
 import React, { Component } from "react";
-import Button from "@material-ui/core/Button";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
-import TextField from "@material-ui/core/TextField";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
+import {
+    Typography,
+    Button,
+    Avatar,
+    CardActions,
+    IconButton,
+    CardContent,
+    Grid,
+    Link,
+    Card,
+    CardHeader
+} from "@material-ui/core";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import ShareIcon from "@material-ui/icons/Share";
+import Label from "./Label";
 
-export class Sneaker extends Component {
+export default class ProjectCard extends Component {
     constructor(props) {
         super(props);
-        this.state = { ...this.props, isChanged: false };
+        // this.state = { ...this.props, isChanged: false };
     }
-    onChangeModel = e => {
-        this.setState({
-            model: e.target.value
-        });
-        this.setState({
-            isChanged: true
-        });
-    };
 
-    onChangeBrand = e => {
-        this.setState({
-            brand: e.target.value
-        });
-        this.setState({
-            isChanged: true
-        });
-    };
-    onUpdate(id, sneaker) {
-        if (this.state.isChanged) this.props.onUpdate(id, sneaker);
-    }
     render() {
+        console.log(this.props);
         return (
-            <TableRow>
-                <TableCell>
-                    <TextField
-                        fullWidth
-                        value={this.state.model}
-                        onChange={this.onChangeModel}
-                    // onBlur={this.handleBlur}
-                    />
-                </TableCell>
-                <TableCell>
-                    <TextField
-                        fullWidth
-                        value={this.state.brand}
-                        onChange={this.onChangeBrand}
-                    // onBlur={this.handleBlur}
-                    />
-                </TableCell>
-                <TableCell width="100px">
-                    <ButtonGroup color="secondary">
-                        <Button onClick={() => this.props.onDelete(this.state._id)}>
-                            Удалить
-						</Button>
-                        <Button
-                            onClick={() =>
-                                this.onUpdate(this.state._id, {
-                                    model: this.state.model,
-                                    brand: this.state.brand
-                                })
-                            }
-                        >
-                            Изменить
-						</Button>
-                    </ButtonGroup>
-                </TableCell>
-            </TableRow>
+            <Card>
+                <CardHeader
+                    style={{ paddingBottom: 0 }}
+                    title={<Link href="">{this.props.project.name}</Link>}
+                    subheader={`от ${this.props.project.author.name} | ${this.props.project.date}`}
+                    avatar={<Avatar>{this.props.project.author.image}ß</Avatar>}
+                />
+                <CardContent>
+                    <Grid container spacing={1}>
+                        <Grid item>
+                            <Typography variant="subtitle2">
+                                {this.props.project.description}
+                            </Typography>
+                        </Grid>
+                        <Grid item>
+                            {this.props.project.categories.map(category => (
+                                <Label
+                                    color={category.color}
+                                    key={category.name}
+                                    style={{ marginLeft: 3 }}
+                                >
+                                    {category.name}{" "}
+                                </Label>
+                            ))}
+                        </Grid>
+                    </Grid>
+                </CardContent>
+                <CardActions disableSpacing style={{ paddingTop: 0 }}>
+                    <IconButton>
+                        <FavoriteIcon />
+                    </IconButton>
+                    <IconButton>
+                        <ShareIcon />
+                    </IconButton>
+                    <Button>Узнать больше</Button>
+                </CardActions>
+            </Card>
         );
     }
 }
