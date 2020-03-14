@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import {
   ThemeProvider,
 } from '@material-ui/styles';
-import { store } from './store';
+import store from './store';
 import './index.css';
 import App from './App';
 import TopAppBar from './components/TopAppBar';

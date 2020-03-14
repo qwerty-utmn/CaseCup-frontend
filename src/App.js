@@ -1,15 +1,14 @@
-import React from "react";
-import ProjectsBrowse from "./containers/projectsBrowse"
-import { Box } from "@material-ui/core";
+import React from 'react';
+import { Box } from '@material-ui/core';
+import ProjectsBrowse from './containers/projectsBrowse';
 
 import './App.css';
 
 function App() {
-
   return (
     <Box>
-      <ProjectsBrowse ></ProjectsBrowse>
-    </Box >
+      <ProjectsBrowse />
+    </Box>
   );
 }
 

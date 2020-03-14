@@ -40,7 +40,7 @@ module.exports = {
     // 'no-param-reassign': 'off',
     // 'import/no-dynamic-require': 'off',
     // 'consistent-return': 'off',
-    // 'react/prefer-stateless-function': 'off',
+    'react/prefer-stateless-function': 'off',
     // 'react/no-did-update-set-state': 'off',
     // 'no-shadow': 'off',
     // 'import/no-cycle': 'off',
