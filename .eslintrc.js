@@ -42,7 +42,7 @@ module.exports = {
     // 'consistent-return': 'off',
     'react/prefer-stateless-function': 'off',
     // 'react/no-did-update-set-state': 'off',
-    // 'no-shadow': 'off',
+    'no-shadow': 'off',
     // 'import/no-cycle': 'off',
     // 'no-restricted-globals': 'off',
     // 'no-nested-ternary': 'off',

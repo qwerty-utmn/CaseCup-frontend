@@ -19,7 +19,9 @@ const user = (state = INITIAL_STATE, action) => {
         errors: action.payload,
       };
     }
-    default: break;
+    default: {
+      return state;
+    }
   }
 };
 
