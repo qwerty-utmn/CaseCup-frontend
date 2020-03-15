@@ -22,8 +22,9 @@ class ProjectCreation extends Component {
     const data = {
       projects: [
         {
+          id: '1',
           name: 'FIRST PROJECT',
-          author: { name: 'Ivan Baynov', image: 'NO' },
+          author: { id: '1', name: 'Ivan Baynov', image: 'NO' },
           date: '22.01.2019',
           description:
             'We looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',
@@ -33,32 +34,36 @@ class ProjectCreation extends Component {
           ],
         },
         {
+          id: '2',
           name: 'SECOND PROJECT',
-          author: { name: 'ALexey Baynov', image: 'YES' },
+          author: { id: '2', name: 'ALexey Baynov', image: 'YES' },
           date: '22.01.2019',
           description:
             'We looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',
           categories: [{ name: 'Компьютер', color: '#AAA' }],
         },
         {
+          id: '3',
           name: 'THIRD PROJECT',
-          author: { name: 'Igor Baynov', image: 'ROCK' },
+          author: { id: '3', name: 'Igor Baynov', image: 'ROCK' },
           date: '22.01.2019',
           description:
             'We looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',
           categories: [{ name: 'Компьютер', color: '#AAA' }],
         },
         {
+          id: '4',
           name: 'FORTh PROJECT',
-          author: { name: 'Igor Baynov', image: 'ROCK' },
+          author: { id: '4', name: 'Igor Baynov', image: 'ROCK' },
           date: '22.01.2019',
           description:
             'We looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',
           categories: [{ name: 'Компьютер', color: '#AAA' }],
         },
         {
+          id: '5',
           name: 'FIFTH PROJECT',
-          author: { name: 'Igor Baynov', image: 'ROCK' },
+          author: { id: '5', name: 'Igor Baynov', image: 'ROCK' },
           date: '22.01.2019',
           description:
             'We looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',

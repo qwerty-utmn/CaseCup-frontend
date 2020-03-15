@@ -25,7 +25,20 @@ class ProjectCard extends Component {
         <CardHeader
           style={{ paddingBottom: 0 }}
           title={<Link href={`/projects/${project.id}`}>{project.name}</Link>}
-          subheader={`от ${project.author.name} | ${project.date}`}
+          subheader={(
+            <Typography variant="body2">
+              от
+              {' '}
+              <Link
+                href={`/profiles/${project.author.id}`}
+                variant="h6"
+              >
+                {project.author.name}
+              </Link>
+              {' | '}
+              {project.date}
+            </Typography>
+          )}
           avatar={(
             <Avatar>
               {project.author.image}

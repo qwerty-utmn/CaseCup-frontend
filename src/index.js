@@ -13,6 +13,7 @@ import ProjectCreation from './containers/projectCreation';
 import SignIn from './components/SignIn';
 import ProjectEdit from './containers/projectEdit';
 import Project from './containers/project';
+import Profile from './containers/profile';
 
 import theme from './theme';
 
@@ -29,6 +30,7 @@ ReactDOM.render(
           <Route exact path="/projects/:projectId" component={Project} />
           <Route exact path="/projects/edit/:projectId" component={ProjectEdit} />
           <Route exact path="/signin" component={SignIn} />
+          <Route exact path="/profiles/:profileId" component={Profile} />
         </Switch>
       </Router>
     </ThemeProvider>
