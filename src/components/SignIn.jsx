@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import {
-  Container, Card, Typography, Button, Input, Grid, TextField,
+  Container,
+  Card,
+  Typography,
+  Button,
+  TextField,
 } from '@material-ui/core';
-import AccountCircle from '@material-ui/icons/AccountCircle';
+// import AccountCircle from '@material-ui/icons/AccountCircle';
 import MuiAlert from '@material-ui/lab/Alert';
 import { submitLoginInformation } from '../actions/user';
 

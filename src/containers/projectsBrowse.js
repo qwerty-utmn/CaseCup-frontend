@@ -15,6 +15,7 @@ import {
 } from '@material-ui/core';
 import ProjectCard from '../components/projectCard';
 
+
 class ProjectCreation extends Component {
   constructor(props) {
     super(props);
@@ -73,15 +74,18 @@ class ProjectCreation extends Component {
     };
   }
 
-  smartEnding(number, forms, base = '') {
+  smartEnding = (number, forms, base = '') => {
     const rest = number % 10;
-    number %= 100;
-    if (rest === 1 && number !== 11) return `${base}${forms[0]}`;
-    if ([2, 3, 4].indexOf(rest) !== -1 && [12, 13, 14].indexOf(number) === -1) return `${base}${forms[1]}`;
+    const last = number % 100;
+    if (rest === 1 && last !== 11) return `${base}${forms[0]}`;
+    if ([2, 3, 4].indexOf(rest) !== -1 && [12, 13, 14].indexOf(last) === -1) return `${base}${forms[1]}`;
     return `${base}${forms[2]}`;
-  }
+  };
 
   render() {
+    const {
+      projects, selectedSort, anchorEl, sortMenuOpened,
+    } = this.state;
     return (
       <Container>
         <Grid container direction="column" spacing={3}>
@@ -109,9 +113,8 @@ class ProjectCreation extends Component {
           <Grid item container alignItems="flex-end" justify="space-between">
             <Grid item>
               <Typography variant="h5">
-                {`Всего ${this.state.projects.length} 
-                                    ${this.smartEnding(
-                  this.state.projects.length,
+                {`Всего ${projects.length} ${this.smartEnding(
+                  projects.length,
                   ['', 'a', 'ов'],
                   'проект',
                 )}`}
@@ -130,18 +133,18 @@ class ProjectCreation extends Component {
                 }}
                 htmlFor="sorting-menu"
               >
-                {this.state.selectedSort}
+                {selectedSort}
                 <ArrowDropDownIcon />
               </Button>
               <Menu
-                anchorEl={this.state.anchorEl}
+                anchorEl={anchorEl}
                 getContentAnchorEl={null}
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                 transformOrigin={{ vertical: 'top', horizontal: 'center' }}
                 onClose={() => {
                   this.setState({ sortMenuOpened: false });
                 }}
-                open={this.state.sortMenuOpened}
+                open={sortMenuOpened}
                 elevation={1}
               >
                 {['Самые новые', 'Популярные'].map((option) => (
@@ -159,9 +162,9 @@ class ProjectCreation extends Component {
             </Grid>
           </Grid>
           <Grid item container spacing={3}>
-            {this.state.projects
-              && this.state.projects.map((project) => (
-                <Grid item xs={12} sd={6} md={4}>
+            {projects
+              && projects.map((project) => (
+                <Grid item key={project.id} xs={12} sd={6} md={4}>
                   <ProjectCard project={project} />
                 </Grid>
               ))}
@@ -172,10 +175,10 @@ class ProjectCreation extends Component {
     );
   }
 }
-const mapStateToProps = (store) => ({
+const mapStateToProps = () => ({
   // project: store.project
 });
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = () => ({
   // login: (username, password) => dispatch(login(username, password)),
   // signup: (username, password) => dispatch(signup(username, password)),
   // logout: () => dispatch(logout()),

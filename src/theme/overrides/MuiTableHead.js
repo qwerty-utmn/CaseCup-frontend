@@ -1,9 +1,9 @@
 import {
-    colors
+  colors,
 } from '@material-ui/core';
 
 export default {
-    root: {
-        backgroundColor: colors.grey[50]
-    }
+  root: {
+    backgroundColor: colors.grey[50],
+  },
 };
