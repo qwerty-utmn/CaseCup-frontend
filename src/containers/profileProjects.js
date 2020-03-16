@@ -9,9 +9,9 @@ class ProfileProjects extends Component {
   render() {
     const { projects } = this.props;
     return (
-      <Grid container direction="column" spacing={2}>
+      <Grid container direction="column" spacing={3}>
         {projects && (projects.map((project) => (
-          <Grid key={project.id} item xs={12}>
+          <Grid item key={project.id}>
             <ProfileProjectCard project={project} />
           </Grid>
         )))}

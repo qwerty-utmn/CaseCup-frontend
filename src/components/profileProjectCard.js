@@ -25,7 +25,7 @@ class ProfileProjectCard extends Component {
                 {!project.author.image ? (`${project.author.surname[0]}${project.author.name[0]}${project.author.middlename[0]}`) : ''}
               </Avatar>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item style={{ width: '150px' }}>
               {/* color="colorTextPrimary" */}
               <Typography variant="h5" noWrap>
                 <Link href={`/projects/${project.id}`}>{project.name}</Link>

@@ -97,7 +97,7 @@ class Profile extends Component {
         },
         {
           id: '2',
-          name: 'SECOND PROJECT',
+          name: 'SECOND PROJECT dasdasdSECOND PROJECT dasdasdSECOND PROJECT dasdasdSECOND PROJECT dasdasdSECOND PROJECT dasdasdSECOND PROJECT dasdasd',
           author: {
             id: '2',
             name: 'ALexey',
