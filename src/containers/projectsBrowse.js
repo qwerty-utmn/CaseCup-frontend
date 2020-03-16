@@ -14,6 +14,7 @@ import {
   Container,
 } from '@material-ui/core';
 import ProjectCard from '../components/projectCard';
+import smartEnding from '../heplers/wordSmartEnding';
 
 
 class ProjectCreation extends Component {
@@ -79,13 +80,6 @@ class ProjectCreation extends Component {
     };
   }
 
-  smartEnding = (number, forms, base = '') => {
-    const rest = number % 10;
-    const last = number % 100;
-    if (rest === 1 && last !== 11) return `${base}${forms[0]}`;
-    if ([2, 3, 4].indexOf(rest) !== -1 && [12, 13, 14].indexOf(last) === -1) return `${base}${forms[1]}`;
-    return `${base}${forms[2]}`;
-  };
 
   render() {
     const {
@@ -118,7 +112,7 @@ class ProjectCreation extends Component {
           <Grid item container alignItems="flex-end" justify="space-between">
             <Grid item>
               <Typography variant="h5">
-                {`Всего ${projects.length} ${this.smartEnding(
+                {`Всего ${projects.length} ${smartEnding(
                   projects.length,
                   ['', 'a', 'ов'],
                   'проект',

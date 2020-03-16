@@ -33,16 +33,15 @@ class ProjectCard extends Component {
                 href={`/profiles/${project.author.id}`}
                 variant="h6"
               >
-                {project.author.name}
+                {`${project.author.surname} ${project.author.name}`}
               </Link>
               {' | '}
               {project.date}
             </Typography>
           )}
           avatar={(
-            <Avatar>
-              {project.author.image}
-              ß
+            <Avatar alt={`${project.author.surname} ${project.author.name}  ${project.author.middlename}`} src="">
+              {!project.author.image ? (`${project.author.surname[0]}${project.author.name[0]}${project.author.middlename[0]}`) : ''}
             </Avatar>
             )}
         />
