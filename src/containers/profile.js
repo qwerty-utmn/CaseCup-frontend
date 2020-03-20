@@ -7,7 +7,6 @@ import {
   Divider,
   Tab,
   Tabs,
-  Box,
   TextField,
   Avatar,
   Card,
@@ -20,29 +19,9 @@ import {
   TableBody,
 } from '@material-ui/core';
 import ProfileProjects from './profileProjects';
+import getTabProps from '../heplers/getTabProps';
+import TabPanel from '../components/tabPanel';
 
-function TabPanel(props) {
-  const {
-    children, value, index, ...other
-  } = props;
-  return (
-    <Box
-      component="div"
-      role="tabpanel"
-      hidden={value !== index}
-      id={`tabpanel-${index}`}
-      aria-labelledby={`tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-      <Box paddingTop={2}>
-        {' '}
-        {children}
-      </Box>
-      )}
-    </Box>
-  );
-}
 class Profile extends Component {
   constructor(props) {
     super(props);
@@ -53,11 +32,6 @@ class Profile extends Component {
     };
   }
 
-  a11yProps=(index) => ({
-    id: `tab-${index}`,
-    'aria-controls': `tabpanel-${index}`,
-    value: index,
-  })
 
   render() {
     // const { user,bookmarkedProjects,stats } = this.state;
@@ -101,25 +75,6 @@ class Profile extends Component {
           author: {
             id: '2',
             name: 'ALexey',
-            surname: 'Baynov',
-            middlename: 'Sergeevich',
-            image: '',
-          },
-          price: '1000',
-          members: [],
-          startDate: '22.01.2019',
-          endDate: '22.01.2019',
-          currentState: 'Обсуждение',
-          description:
-            'We looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',
-          categories: [{ name: 'Компьютер', color: '#AAA' }],
-        },
-        {
-          id: '3',
-          name: 'THIRD PROJECT',
-          author: {
-            id: '3',
-            name: 'Igor',
             surname: 'Baynov',
             middlename: 'Sergeevich',
             image: '',
@@ -192,8 +147,8 @@ class Profile extends Component {
                   this.setState({ currentTab: newValue });
                 }}
               >
-                <Tab label="Основная информация" {...this.a11yProps(0)} />
-                <Tab label="Проекты" {...this.a11yProps(1)} />
+                <Tab label="Основная информация" {...getTabProps(0)} />
+                <Tab label="Проекты" {...getTabProps(1)} />
               </Tabs>
               <Divider />
             </Grid>
