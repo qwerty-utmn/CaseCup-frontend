@@ -7,7 +7,6 @@ import {
   Button,
   TextField,
 } from '@material-ui/core';
-// import AccountCircle from '@material-ui/icons/AccountCircle';
 import MuiAlert from '@material-ui/lab/Alert';
 import { submitLoginInformation } from '../actions/user';
 
@@ -45,7 +44,7 @@ const SignIn = ({
       submitLoginInformation(credentials);
     }
   };
-  console.log('errors :', errors);
+
   return (
     <Container component="main" maxWidth="sm">
       <Card>
@@ -57,7 +56,7 @@ const SignIn = ({
             color: '#343b4c',
             textAlign: 'center',
             marginTop: '20px',
-            marginBottom: '10px',
+            marginBottom: '20px',
           }}
         >
           Вход
@@ -123,7 +122,7 @@ const SignIn = ({
             fullWidth
             size="large"
             className="signin-submit primary-fl-btn"
-            style={{ background: '#315efb', color: '#fff', marginTop: '15px' }}
+            style={{ background: '#315efb', color: '#fff', marginTop: '30px' }}
           >
             Войти
           </Button>
