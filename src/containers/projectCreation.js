@@ -4,12 +4,6 @@ import {
   Grid,
   Typography,
   OutlinedInput,
-  ListItem,
-  ListItemAvatar,
-  Avatar,
-  List,
-  CardActions,
-  Button,
   FormControl,
   TextField,
   CardHeader,
@@ -24,18 +18,25 @@ import {
   Container,
 } from '@material-ui/core';
 import { white } from 'material-ui/styles/colors';
+import MembersCard from '../components/membersCard';
 
 class ProjectCreation extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      projectForm: {
+        members: [],
+      },
       selectedCategories: [],
     };
   }
 
   render() {
     const categories = ['cat1', 'cat2', 'cat3'];
-    const { selectedCategories } = this.state;
+    const {
+      selectedCategories,
+      projectForm,
+    } = this.state;
     return (
       <Container>
         <Grid container direction="column" spacing={3}>
@@ -190,36 +191,7 @@ class ProjectCreation extends Component {
             </Card>
           </Grid>
           <Grid item>
-            <Card margin="dense">
-              <CardHeader style={{ paddingBottom: 0 }} title="Участники" />
-              <CardContent>
-                <List>
-                  <ListItem key="1" alignItems="flex-start">
-                    <ListItemAvatar>
-                      <Avatar>H</Avatar>
-                      {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" /> */}
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary="Holand"
-                      secondary="Front End Developer"
-                    />
-                  </ListItem>
-                  <ListItem key="1" alignItems="flex-start">
-                    <ListItemAvatar>
-                      <Avatar>H</Avatar>
-                      {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" /> */}
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary="Holand"
-                      secondary="Front End Developer"
-                    />
-                  </ListItem>
-                </List>
-              </CardContent>
-              <CardActions disableSpacing>
-                <Button fullWidth>Управлять</Button>
-              </CardActions>
-            </Card>
+            <MembersCard members={projectForm.members} /* handleMemberAdd *//>
           </Grid>
         </Grid>
       </Container>

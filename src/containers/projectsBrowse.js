@@ -94,7 +94,7 @@ class ProjectCreation extends Component {
                 Просмотр проектов
               </Typography>
               <Typography variant="h3" component="h1">
-                Ознакомтесь с последними проектами
+                Ознакомьтесь с последними проектами
               </Typography>
             </Grid>
             <Grid item>
