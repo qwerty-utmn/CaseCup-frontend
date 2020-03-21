@@ -14,14 +14,14 @@ const SignIn = ({
   submitLoginInformation,
   user,
 }) => {
-  const [credentials, setCredentials] = useState({ email: '', password: '' });
+  const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [errors, setErrors] = useState({});
 
 
   useEffect(() => {
-    const { email, password } = credentials;
+    const { username, password } = credentials;
     const possibleErrors = {};
-    if (email && !email.match(/^[a-z0-9_.-]+@[a-z0-9-]+\.[a-z]{2,6}(\.[a-z]{2,6})?$/i)) {
+    if (username && !username.match(/^[a-z0-9_.-]+@[a-z0-9-]+\.[a-z]{2,6}(\.[a-z]{2,6})?$/i)) {
       possibleErrors.email = 'Некорректый email';
     }
     if (password && password.length < 6) {
@@ -70,13 +70,13 @@ const SignIn = ({
             variant="outlined"
             margin="normal"
             placeholder="Введите email"
-            value={credentials.email}
+            value={credentials.username}
             onChange={handleInputChange}
             required
             label="Логин"
-            name="email"
+            name="username"
             autoComplete="email"
-            error={Boolean(errors.email)}
+            error={Boolean(errors.username)}
             helperText={errors.email || ''}
             autoFocus
             InputProps={{

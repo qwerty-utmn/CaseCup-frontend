@@ -12,26 +12,29 @@ export const submitLoginInformation = (credentials) => async (dispatch) => {
       type: 'START_LOADING',
       payload: '',
     });
-    const response = await fetch(`http://${config.server}:${config.port}/api/login`, {
+    const response = await fetch(`${config.protocol}://${config.server}:${config.port}/api/login`, {
       method: 'post',
-      'Content-type': 'application/json; charset=UTF-8',
-      body: JSON.stringify(credentials),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        body: JSON.stringify(credentials),
+      },
     });
     const json = await response.json();
-
-    if (!json.error) {
+    console.log('json', json);
+    if (!response.ok) {
       dispatch({
         type: 'USER_LOGIN_SUCCESS',
-        payload: json.user,
+        // payload: json.user,
       });
+      localStorage.setItem('token', json);
       const history = useHistory();
-      history.push('/requests');
+      history.push('/projects');
       return;
     }
 
     dispatch({
       type: 'USER_LOGIN_FAILURE',
-      payload: json.error,
+      payload: 'Введены неверные пользовательские данные',
     });
   } catch (err) {
     console.error(err);
@@ -43,13 +46,16 @@ export const getUserInformation = (id) => async (dispatch) => {
       type: 'START_LOADING',
       payload: '',
     });
-    const response = await fetch(`http://${config.server}:${config.port}/api/users/${id}`, {
+    const response = await fetch(`${config.protocol}://${config.server}:${config.port}/api/users/${id}`, {
       method: 'get',
-      'Content-type': 'application/json; charset=UTF-8',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Authorization: localStorage.getItem('token'),
+      },
     });
     const json = await response.json();
 
-    if (!json.error) {
+    if (!response.ok) {
       dispatch({
         type: 'GET_USER',
         payload: json.user,
