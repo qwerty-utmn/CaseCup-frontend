@@ -11,6 +11,7 @@ import {
   Card,
   CardHeader,
 } from '@material-ui/core';
+import moment from 'moment';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import { Link as RouterLink } from 'react-router-dom';
@@ -40,7 +41,7 @@ class ProjectCard extends Component {
                   {`${project.author.surname} ${project.author.name}`}
                 </Link>
                 {' | '}
-                {project.date}
+                {moment(project.start_datetime).format('DD.MM.YYYY')}
               </Typography>
           )}
             avatar={(

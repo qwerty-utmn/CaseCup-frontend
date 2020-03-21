@@ -9,6 +9,7 @@ import {
   Card,
 } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
+import moment from 'moment';
 import smartEnding from '../heplers/wordSmartEnding';
 import getInitials from '../heplers/getInitials';
 
@@ -64,7 +65,7 @@ class ProfileProjectCard extends Component {
             </Grid>
             <Grid item>
               <Typography variant="h5">
-                {project.startDate}
+                {moment(project.startDate).format('DD.MM.YYYY')}
               </Typography>
               <Typography variant="body2">
                 Дата начала
@@ -72,7 +73,7 @@ class ProfileProjectCard extends Component {
             </Grid>
             <Grid item>
               <Typography variant="h5">
-                {project.endDate}
+                {moment(project.endDate).format('DD.MM.YYYY')}
               </Typography>
               <Typography variant="body2">
                 Дата окончания
