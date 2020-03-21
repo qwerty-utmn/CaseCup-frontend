@@ -3,6 +3,8 @@ import config from '../config';
 
 export const USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS';
 export const USER_LOGIN_FAILURE = 'USER_LOGIN_FAILURE';
+export const GET_USER = 'GET_USER';
+// export const UPDATE_USER = 'UPDATE_USER';
 
 export const submitLoginInformation = (credentials) => async (dispatch) => {
   try {
@@ -31,6 +33,29 @@ export const submitLoginInformation = (credentials) => async (dispatch) => {
       type: 'USER_LOGIN_FAILURE',
       payload: json.error,
     });
+  } catch (err) {
+    console.error(err);
+  }
+};
+export const getUserInformation = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: 'START_LOADING',
+      payload: '',
+    });
+    const response = await fetch(`http://${config.server}:${config.port}/api/users/${id}`, {
+      method: 'get',
+      'Content-type': 'application/json; charset=UTF-8',
+    });
+    const json = await response.json();
+
+    if (!json.error) {
+      dispatch({
+        type: 'GET_USER',
+        payload: json.user,
+      });
+      return;
+    }
   } catch (err) {
     console.error(err);
   }

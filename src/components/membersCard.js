@@ -12,6 +12,7 @@ import {
   ListItemText,
 } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
+import getInitials from '../heplers/getInitials';
 
 class MembersCard extends Component {
   render() {
@@ -40,11 +41,9 @@ class MembersCard extends Component {
                     component={RouterLink}
                     to={`/profiles/${member.id}`}
                     alt={`${member.surname} ${member.name}  ${member.middlename}`}
-                    src={member.image}
+                    src={member.user_photo}
                   >
-                    {!member.image
-                      ? (`${member.surname[0]}${member.name[0]}${member.middlename[0]}`)
-                      : ''}
+                    {!member.user_photo ? getInitials(member) : ''}
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText

@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import smartEnding from '../heplers/wordSmartEnding';
+import getInitials from '../heplers/getInitials';
 
 
 class ProfileProjectCard extends Component {
@@ -22,7 +23,7 @@ class ProfileProjectCard extends Component {
           <Grid container justify="space-between">
             <Grid item>
               <Avatar alt={`${project.author.surname} ${project.author.name}  ${project.author.middlename}`} src="">
-                {!project.author.image ? (`${project.author.surname[0]}${project.author.name[0]}${project.author.middlename[0]}`) : ''}
+                {!project.author.user_photo ? getInitials(project.author) : ''}
               </Avatar>
             </Grid>
             <Grid item style={{ width: '150px' }}>

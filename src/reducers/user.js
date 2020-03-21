@@ -1,6 +1,8 @@
 import {
   USER_LOGIN_FAILURE,
   USER_LOGIN_SUCCESS,
+  GET_USER,
+  UPDATE_USER,
 } from '../actions/user';
 
 const INITIAL_STATE = {};
@@ -9,7 +11,9 @@ const user = (state = INITIAL_STATE, action) => {
     case USER_LOGIN_SUCCESS: {
       return {
         ...state,
-        ...action.payload,
+        currentUser: {
+          ...action.payload.user,
+        },
         error: '',
       };
     }
@@ -19,6 +23,22 @@ const user = (state = INITIAL_STATE, action) => {
         errors: action.payload,
       };
     }
+    case GET_USER: {
+      return {
+        ...state,
+        user: {
+          ...action.payload.user,
+        },
+      };
+    }
+    // case UPDATE_USER: {
+    //   return {
+    //     ...state,
+    //     user: {
+    //       ...action.payload.user,
+    //     },
+    //   };
+    // }
     default: {
       return state;
     }
