@@ -11,7 +11,7 @@ export const getProjects = (filter = {}, sort = {}, search_string = '') => async
       type: 'START_LOADING',
       payload: '',
     });
-    const response = await fetch(`http://${config.server}:${config.port}/api/projects`, {
+    const response = await fetch(`http://${config.server}:${config.port}/projects`, {
       method: 'post',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
@@ -39,7 +39,7 @@ export const getProject = (id) => async (dispatch) => {
       type: 'START_LOADING',
       payload: '',
     });
-    const response = await fetch(`http://${config.server}:${config.port}/api/projects/${id}`, {
+    const response = await fetch(`http://${config.server}:${config.port}/projects/${id}`, {
       method: 'get',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
@@ -66,7 +66,7 @@ export const updateProject = (project, id) => async (dispatch) => {
       type: 'START_LOADING',
       payload: '',
     });
-    const response = await fetch(`http://${config.server}:${config.port}/api/projects/${id}`, {
+    const response = await fetch(`http://${config.server}:${config.port}/projects/${id}`, {
       method: 'put',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
@@ -94,7 +94,7 @@ export const deleteProject = (id) => async (dispatch) => {
       type: 'START_LOADING',
       payload: '',
     });
-    const response = await fetch(`http://${config.server}:${config.port}/api/projects/${id}`, {
+    const response = await fetch(`http://${config.server}:${config.port}/projects/${id}`, {
       method: 'delete',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
@@ -119,7 +119,7 @@ export const addReaction = (project_id, reactionType) => async (dispatch) => {
       type: 'START_LOADING',
       payload: '',
     });
-    const response = await fetch(`http://${config.server}:${config.port}/api/projects/${project_id}/reaction`, {
+    const response = await fetch(`http://${config.server}:${config.port}/projects/${project_id}/reaction`, {
       method: 'post',
       'Content-type': 'application/json; charset=UTF-8',
       body: JSON.stringify(reactionType),

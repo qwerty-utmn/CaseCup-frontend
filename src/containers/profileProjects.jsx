@@ -6,11 +6,15 @@ import {
 import ProfileProjectCard from '../components/profileProjectCard';
 
 class ProfileProjects extends Component {
+  componentDidMount() {
+    this.props.getProjects(this.props.match.params.profileId);
+  }
+
   render() {
-    const { projects } = this.props;
+    const { userProjects } = this.props;
     return (
       <Grid container direction="column" spacing={3}>
-        {projects && (projects.map((project) => (
+        {userProjects && (userProjects.map((project) => (
           <Grid item key={project.id}>
             <ProfileProjectCard project={project} />
           </Grid>
@@ -19,13 +23,7 @@ class ProfileProjects extends Component {
     );
   }
 }
-const mapStateToProps = () => ({
-  // project: store.project
+const mapStateToProps = (store) => ({
+  userProjects: store.userProjects,
 });
-const mapDispatchToProps = () => ({
-  // login: (username, password) => dispatch(login(username, password)),
-  // signup: (username, password) => dispatch(signup(username, password)),
-  // logout: () => dispatch(logout()),
-  // removeErrors: () => dispatch(removeErrors())
-});
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileProjects);
+export default connect(mapStateToProps)(ProfileProjects);

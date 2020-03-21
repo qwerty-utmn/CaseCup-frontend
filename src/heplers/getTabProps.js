@@ -1,7 +1,7 @@
-const a11yProps = (index) => ({
+const getTabProps = (index) => ({
   id: `tab-${index}`,
   'aria-controls': `tabpanel-${index}`,
   value: index,
 });
 
-export default a11yProps;
+export default getTabProps;

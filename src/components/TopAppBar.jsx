@@ -5,7 +5,7 @@ import {
 } from '@material-ui/core';
 import { white } from 'material-ui/styles/colors';
 
-class ProjectCard extends Component {
+class TopAppBar extends Component {
   render() {
     return (
       <AppBar position="static" style={{ marginBottom: '20px' }}>
@@ -23,4 +23,4 @@ class ProjectCard extends Component {
   }
 }
 
-export default ProjectCard;
+export default TopAppBar;

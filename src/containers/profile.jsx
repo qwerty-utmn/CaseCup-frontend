@@ -21,7 +21,13 @@ import {
 import ProfileProjects from './profileProjects';
 import getTabProps from '../heplers/getTabProps';
 import TabPanel from '../components/tabPanel';
-import { getUserInformation } from '../actions/user';
+import {
+  getUserInformation,
+  updateUser,
+  updateUserPhoto,
+  getUserProjects,
+  getUserMarkedProjects,
+} from '../actions/user';
 import getInitials from '../heplers/getInitials';
 
 
@@ -30,16 +36,39 @@ class Profile extends Component {
     super(props);
     this.state = {
       currentTab: 0,
-      // user: { ...props.currentUser },
-      // bookmarkedProjects: { ...props.bookmarkedProjects },
+      userForm: {
+        id: '',
+        name: '',
+        username: '',
+        surname: '',
+        middlename: '',
+        user_photo: '',
+      },
     };
   }
 
+  handlePhotoAdd=(e) => {
+    this.props.updateUserPhoto(this.props.match.params.profileId, this.state.user.user_photo);
+  };
+
+  handleSaveButtonClick=() => {
+    this.props.updateUserPhoto(this.props.match.params.profileId, this.state.user);
+  };
+
+  componentDidMount() {
+    this.props.getUserInformation(this.props.match.params.profileId);
+    if (this.state.userForm.id !== this.props.user.id) this.setState({ userForm: { ...this.props.user } });
+  }
 
   render() {
-    const { user, bookmarkedProjects } = this.props;
+    const {
+      user,
+      currentUser,
+      getUserMarkedProjects,
+      getUserProjects,
+    } = this.props;
 
-    const { currentTab } = this.state;
+    const { currentTab, userForm } = this.state;
 
     return (
       <Container>
@@ -48,7 +77,7 @@ class Profile extends Component {
             <Grid container direction="column" spacing={3}>
               <Grid item sm style={{ paddingBottom: 0 }}>
                 <Typography variant="overline" gutterBottom>
-                  {user.role && user.role.name}
+                  {user.role}
                 </Typography>
                 <Typography variant="h3">{`${user.surname} ${user.name}`}</Typography>
               </Grid>
@@ -61,7 +90,9 @@ class Profile extends Component {
                     }}
                   >
                     <Tab label="Основная информация" {...getTabProps(0)} />
-                    <Tab label="Проекты" {...getTabProps(1)} />
+                    <Tab label={currentUser && user.id === currentUser.id ? 'Мои проекты' : 'Проекты пользователя'} {...getTabProps(1)} />
+                    {currentUser && user.id === currentUser.id && (
+                    <Tab label="Оцененные проекты" {...getTabProps(2)} />)}
                   </Tabs>
                   <Divider />
                 </Grid>
@@ -88,20 +119,39 @@ class Profile extends Component {
                                 {!user.user_photo ? getInitials(user) : ''}
                               </Avatar>
                             </Grid>
-                            <Grid item xs>
-                              <Grid container spacing={1} direction="row">
-                                <Grid item xs>
-                                  <Button>
-                                    Изменить
-                                  </Button>
-                                </Grid>
-                                <Grid item xs>
-                                  <Button>
-                                    Удалить
-                                  </Button>
+                            {currentUser && user.id === currentUser.id && (
+                              <Grid item xs>
+                                <Grid container spacing={1} direction="row">
+                                  <Grid item xs>
+                                    <Button
+                                      variant="contained"
+                                      component="label"
+                                    >
+                                      Изменить
+                                      <input
+                                        type="file"
+                                        style={{ display: 'none' }}
+                                        onChange={this.handlePhotoAdd}
+                                      />
+                                    </Button>
+                                  </Grid>
+                                  <Grid item xs>
+                                    <Button
+                                      variant="contained"
+                                      component="label"
+                                    >
+                                      Удалить
+                                      <input
+                                        accept="image/*"
+                                        type="file"
+                                        style={{ display: 'none' }}
+                                        onChange={this.handlePhotoRemove}
+                                      />
+                                    </Button>
+                                  </Grid>
                                 </Grid>
                               </Grid>
-                            </Grid>
+                            )}
                           </Grid>
                         </CardContent>
                       </Card>
@@ -145,9 +195,10 @@ class Profile extends Component {
                                 }}
                                 variant="outlined"
                                 size="small"
-                                value={user.surname}
-                                onChange={(newValue) => {
-                                  this.setState({ user: { ...user, surname: newValue } });
+                                value={userForm.surname}
+                                disabled={currentUser && user.id === currentUser.id}
+                                onChange={(e, newValue) => {
+                                  this.setState({ userForm: { ...userForm, surname: newValue } });
                                 }}
                                 fullWidth
                               />
@@ -161,8 +212,9 @@ class Profile extends Component {
                                 variant="outlined"
                                 size="small"
                                 value={user.name}
-                                onChange={(newValue) => {
-                                  this.setState({ user: { ...user, name: newValue } });
+                                disabled={currentUser && user.id === currentUser.id}
+                                onChange={(e, newValue) => {
+                                  this.setState({ userForm: { ...userForm, name: newValue } });
                                 }}
                                 fullWidth
                               />
@@ -175,9 +227,10 @@ class Profile extends Component {
                                 }}
                                 variant="outlined"
                                 size="small"
-                                value={user.middlename}
-                                onChange={(newValue) => {
-                                  this.setState({ user: { ...user, middlename: newValue } });
+                                value={userForm.middlename}
+                                disabled={currentUser && user.id === currentUser.id}
+                                onChange={(e, newValue) => {
+                                  this.setState({ userForm: { ...userForm, middlename: newValue } });
                                 }}
                                 fullWidth
                               />
@@ -190,9 +243,10 @@ class Profile extends Component {
                                 }}
                                 variant="outlined"
                                 size="small"
-                                value={user.email}
-                                onChange={(newValue) => {
-                                  this.setState({ user: { ...user, email: newValue } });
+                                value={userForm.username}
+                                disabled={currentUser && user.id === currentUser.id}
+                                onChange={(e, newValue) => {
+                                  this.setState({ userForm: { ...userForm, username: newValue } });
                                 }}
                                 fullWidth
                               />
@@ -204,7 +258,7 @@ class Profile extends Component {
                     <Grid item>
                       <Grid container justify="center">
                         <Grid item>
-                          <Button color="primary" variant="contained">
+                          <Button color="primary" variant="contained" onClick={this.handleSaveButtonClick}>
                             Сохранить
                           </Button>
                         </Grid>
@@ -215,8 +269,13 @@ class Profile extends Component {
               </Grid>
             </TabPanel>
             <TabPanel value={currentTab} tag="tabpanel-clientform" index={1}>
-              <ProfileProjects projects={bookmarkedProjects} />
+              <ProfileProjects getProjects={getUserProjects} />
             </TabPanel>
+            {currentUser && user.id === currentUser.id && (
+            <TabPanel value={currentTab} tag="tabpanel-clientform" index={1}>
+              <ProfileProjects getProjects={getUserMarkedProjects} />
+            </TabPanel>
+            )}
           </>
         )}
       </Container>
@@ -225,8 +284,13 @@ class Profile extends Component {
 }
 const mapStateToProps = (store) => ({
   user: store.user,
+  currentUser: store.currentUser,
 });
 const mapDispatchToProps = (dispatch) => ({
   getUserInformation: (id) => dispatch(getUserInformation(id)),
+  getUserMarkedProjects: (id) => dispatch(getUserMarkedProjects(id)),
+  getUserProjects: (id) => dispatch(getUserProjects(id)),
+  updateUser: (id, user) => dispatch(updateUser(id, user)),
+  updateUserPhoto: (id, photo) => dispatch(updateUserPhoto(id, photo)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);
