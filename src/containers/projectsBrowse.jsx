@@ -15,6 +15,7 @@ import {
 } from '@material-ui/core';
 import ProjectCard from '../components/projectCard';
 import smartEnding from '../heplers/wordSmartEnding';
+import { reactionChange } from '../actions/projects';
 
 
 class ProjectCreation extends Component {
@@ -27,6 +28,7 @@ class ProjectCreation extends Component {
           name: 'FIRST PROJECT',
           author: { id: '1', name: 'Ivan Baynov', image: 'NO' },
           date: '22.01.2019',
+          reactionsCount: '1000',
           description:
             'We looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',
           categories: [
@@ -39,6 +41,7 @@ class ProjectCreation extends Component {
           name: 'SECOND PROJECT',
           author: { id: '2', name: 'ALexey Baynov', image: 'YES' },
           date: '22.01.2019',
+          reactionsCount: '1000',
           description:
             'We looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',
           categories: [{ name: 'Компьютер', color: '#AAA' }],
@@ -48,6 +51,7 @@ class ProjectCreation extends Component {
           name: 'THIRD PROJECT',
           author: { id: '3', name: 'Igor Baynov', image: 'ROCK' },
           date: '22.01.2019',
+          reactionsCount: '1000',
           description:
             'We looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',
           categories: [{ name: 'Компьютер', color: '#AAA' }],
@@ -57,6 +61,7 @@ class ProjectCreation extends Component {
           name: 'FORTh PROJECT',
           author: { id: '4', name: 'Igor Baynov', image: 'ROCK' },
           date: '22.01.2019',
+          reactionsCount: '1000',
           description:
             'We looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',
           categories: [{ name: 'Компьютер', color: '#AAA' }],
@@ -66,6 +71,7 @@ class ProjectCreation extends Component {
           name: 'FIFTH PROJECT',
           author: { id: '5', name: 'Igor Baynov', image: 'ROCK' },
           date: '22.01.2019',
+          reactionsCount: '1000',
           description:
             'We looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',
           categories: [{ name: 'Компьютер', color: '#AAA' }],
@@ -82,6 +88,7 @@ class ProjectCreation extends Component {
 
 
   render() {
+    const { reactionChange } = this.props;
     const {
       projects, selectedSort, anchorEl, sortMenuOpened,
     } = this.state;
@@ -164,7 +171,7 @@ class ProjectCreation extends Component {
             {projects
               && projects.map((project) => (
                 <Grid item key={project.id} xs={12} sd={6} md={4}>
-                  <ProjectCard project={project} />
+                  <ProjectCard project={project} reactionChange={reactionChange} />
                 </Grid>
               ))}
           </Grid>
@@ -177,10 +184,7 @@ class ProjectCreation extends Component {
 const mapStateToProps = () => ({
   // project: store.project
 });
-const mapDispatchToProps = () => ({
-  // login: (username, password) => dispatch(login(username, password)),
-  // signup: (username, password) => dispatch(signup(username, password)),
-  // logout: () => dispatch(logout()),
-  // removeErrors: () => dispatch(removeErrors())
+const mapDispatchToProps = (dispatch) => ({
+  reactionChange: (id, reaction) => dispatch(reactionChange(id, reaction)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectCreation);

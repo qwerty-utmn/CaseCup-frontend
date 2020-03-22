@@ -113,16 +113,16 @@ export const deleteProject = (id) => async (dispatch) => {
   }
 };
 
-export const addReaction = (project_id, reactionType) => async (dispatch) => {
+export const reactionChange = (projectId, reaction) => async (dispatch) => {
   try {
     dispatch({
       type: 'START_LOADING',
       payload: '',
     });
-    const response = await fetch(`http://${config.server}:${config.port}/projects/${project_id}/reaction`, {
+    const response = await fetch(`http://${config.server}:${config.port}/projects/${projectId}/reaction`, {
       method: 'post',
       'Content-type': 'application/json; charset=UTF-8',
-      body: JSON.stringify(reactionType),
+      body: JSON.stringify(reaction),
     });
     const json = await response.json();
 

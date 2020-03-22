@@ -12,14 +12,37 @@ import {
   CardHeader,
 } from '@material-ui/core';
 import moment from 'moment';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import ThumbUpAlt from '@material-ui/icons/ThumbUpAlt';
+import ThumbDownAlt from '@material-ui/icons/ThumbDownAlt';
 import ShareIcon from '@material-ui/icons/Share';
 import { Link as RouterLink } from 'react-router-dom';
 import Label from './Label';
 import getInitials from '../heplers/getInitials';
 
-
+const rateButtonsStyles = {
+  liked: {
+    color: 'rgba(0, 0, 0, 1)',
+  },
+  disliked: {
+    color: 'rgba(0, 0, 0, 1)',
+  },
+  none: {
+    color: 'rgba(0, 0, 0, 0.3)',
+  },
+};
 class ProjectCard extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  handleThumbUpClick=(e) => {
+    console.log(e);
+  };
+
+  handleThumbDownClick=(e) => {
+    console.log(e);
+  };
+
   render() {
     const { project } = this.props;
 
@@ -74,12 +97,16 @@ class ProjectCard extends Component {
             </Grid>
           </CardContent>
           <CardActions disableSpacing style={{ paddingTop: 0 }}>
-            <IconButton>
-              <FavoriteIcon />
+            <IconButton onClick={this.handleThumbUpClick}>
+              <ThumbUpAlt style={project.reaction && project.reaction === 0 ? rateButtonsStyles.liked : rateButtonsStyles.none} />
             </IconButton>
-            <IconButton>
+            <Typography>{project.reactionsCount}</Typography>
+            <IconButton onClick={this.handleThumbDownClick}>
+              <ThumbDownAlt style={project.reaction && project.reaction === 1 ? rateButtonsStyles.disliked : rateButtonsStyles.none} />
+            </IconButton>
+            {/* <IconButton>
               <ShareIcon />
-            </IconButton>
+            </IconButton> */}
             <Button component={RouterLink} to={`/projects/${project.id}`}>
               Узнать больше
             </Button>

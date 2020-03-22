@@ -16,9 +16,13 @@ import {
   Tab,
   Card,
   CardContent,
+  IconButton,
+  CardHeader,
   Box,
 } from '@material-ui/core';
 import ShareIcon from '@material-ui/icons/Share';
+import ThumbUpAlt from '@material-ui/icons/ThumbUpAlt';
+import ThumbDownAlt from '@material-ui/icons/ThumbDownAlt';
 import Label from '../components/Label';
 import getTabProps from '../heplers/getTabProps';
 import TabPanel from '../components/tabPanel';
@@ -27,6 +31,17 @@ import MembersCard from '../components/membersCard';
 import CommentsBox from '../components/commentsBox';
 import ProjectSocialFeed from './projectSocialFeed';
 
+const rateButtonsStyles = {
+  liked: {
+    color: 'rgba(0, 0, 0, 1)',
+  },
+  disliked: {
+    color: 'rgba(0, 0, 0, 1)',
+  },
+  none: {
+    color: 'rgba(0, 0, 0, 0.3)',
+  },
+};
 class Project extends Component {
   constructor(props) {
     super(props);
@@ -49,15 +64,13 @@ class Project extends Component {
     this.setState({ applyModalIsOpen: false });
   };
 
-  handleMessageSend=(e) => {
-    // this.props
-  };
 
   render() {
     // const{project,user=this.props;
     const project = {
       id: '2',
       title: 'SECOND PROJECTJECT dasdasd',
+      reactionsCount: '1000',
       author: {
         id: '2',
         name: 'ALexey',
@@ -128,8 +141,8 @@ class Project extends Component {
                   {project.project_status}
                 </Label>
               </Grid>
-              <Grid item>
-                <Button
+              <Grid item style={{ display: 'flex', alignItems: 'center' }}>
+                {/* <Button
                   style={{ marginRight: '8px', backgroundColor: '#FFFFFF' }}
                   variant="contained"
                 >
@@ -137,7 +150,14 @@ class Project extends Component {
                     style={{ marginRight: '4px' }}
                   />
                   Поделиться
-                </Button>
+                </Button> */}
+                <IconButton onClick={this.handleThumbUpClick}>
+                  <ThumbUpAlt style={project.reaction && project.reaction === 0 ? rateButtonsStyles.liked : rateButtonsStyles.none} />
+                </IconButton>
+                <Typography>{project.reactionsCount}</Typography>
+                <IconButton onClick={this.handleThumbDownClick}>
+                  <ThumbDownAlt style={project.reaction && project.reaction === 1 ? rateButtonsStyles.disliked : rateButtonsStyles.none} />
+                </IconButton>
                 <Button
                   style={{ color: '#FFFFFF', backgroundColor: '#4CAF50' }}
                   onClick={this.handleOpenApplyModal}
@@ -178,8 +198,12 @@ class Project extends Component {
                         item
                       >
                         <Card>
+                          <CardHeader
+                            style={{ paddingBottom: 0 }}
+                            title="Описание"
+                          />
                           <CardContent>
-                            {project.description}
+                            <Typography>{project.description}</Typography>
                           </CardContent>
                         </Card>
                       </Grid>

@@ -56,6 +56,7 @@ class Profile extends Component {
   };
 
   componentDidMount() {
+    console.log(this.props);
     this.props.getUserInformation(this.props.match.params.profileId);
     if (this.state.userForm.id !== this.props.user.id) this.setState({ userForm: { ...this.props.user } });
   }
@@ -269,11 +270,11 @@ class Profile extends Component {
               </Grid>
             </TabPanel>
             <TabPanel value={currentTab} tag="tabpanel-clientform" index={1}>
-              <ProfileProjects getProjects={getUserProjects} />
+              <ProfileProjects getProjects={getUserProjects} user={user} />
             </TabPanel>
             {currentUser && user.id === currentUser.id && (
             <TabPanel value={currentTab} tag="tabpanel-clientform" index={1}>
-              <ProfileProjects getProjects={getUserMarkedProjects} />
+              <ProfileProjects getProjects={getUserMarkedProjects} user={currentUser} />
             </TabPanel>
             )}
           </>

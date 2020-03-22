@@ -46,6 +46,10 @@ class CommentsBox extends Component {
       <Card
         style={{ ...style }}
       >
+        <CardHeader
+          style={{ paddingBottom: 0 }}
+          title="Комментарии"
+        />
         <CardContent style={{ paddingLeft: '16px', paddingRight: '16px' }}>
           {comments && (
             <>
