@@ -15,82 +15,33 @@ import {
 } from '@material-ui/core';
 import ProjectCard from '../components/projectCard';
 import smartEnding from '../heplers/wordSmartEnding';
-import { reactionChange } from '../actions/projects';
+import { reactionChange, getProjects } from '../actions/projects';
 
 
 class ProjectCreation extends Component {
   constructor(props) {
     super(props);
-    const data = {
-      projects: [
-        {
-          id: '1',
-          name: 'FIRST PROJECT',
-          author: { id: '1', name: 'Ivan Baynov', image: 'NO' },
-          date: '22.01.2019',
-          reactionsCount: '1000',
-          description:
-            'We looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',
-          categories: [
-            { name: 'Компьютер', color: '#AAA' },
-            { name: 'Телефон', color: '#AAA' },
-          ],
-        },
-        {
-          id: '2',
-          name: 'SECOND PROJECT',
-          author: { id: '2', name: 'ALexey Baynov', image: 'YES' },
-          date: '22.01.2019',
-          reactionsCount: '1000',
-          description:
-            'We looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',
-          categories: [{ name: 'Компьютер', color: '#AAA' }],
-        },
-        {
-          id: '3',
-          name: 'THIRD PROJECT',
-          author: { id: '3', name: 'Igor Baynov', image: 'ROCK' },
-          date: '22.01.2019',
-          reactionsCount: '1000',
-          description:
-            'We looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',
-          categories: [{ name: 'Компьютер', color: '#AAA' }],
-        },
-        {
-          id: '4',
-          name: 'FORTh PROJECT',
-          author: { id: '4', name: 'Igor Baynov', image: 'ROCK' },
-          date: '22.01.2019',
-          reactionsCount: '1000',
-          description:
-            'We looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',
-          categories: [{ name: 'Компьютер', color: '#AAA' }],
-        },
-        {
-          id: '5',
-          name: 'FIFTH PROJECT',
-          author: { id: '5', name: 'Igor Baynov', image: 'ROCK' },
-          date: '22.01.2019',
-          reactionsCount: '1000',
-          description:
-            'We looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',
-          categories: [{ name: 'Компьютер', color: '#AAA' }],
-        },
-      ],
-    };
     this.state = {
       selectedSort: 'Популярные',
       sortMenuOpened: false,
       anchorEl: null,
-      ...data,
+      // projects: [],
     };
   }
 
+  componentDidMount=() => {
+    this.props.getProjects();
+  };
 
   render() {
-    const { reactionChange } = this.props;
     const {
-      projects, selectedSort, anchorEl, sortMenuOpened,
+      reactionChange,
+      projects,
+    } = this.props;
+    const {
+      selectedSort,
+      anchorEl,
+      sortMenuOpened,
     } = this.state;
     return (
       <Container>
@@ -119,8 +70,8 @@ class ProjectCreation extends Component {
           <Grid item container alignItems="flex-end" justify="space-between">
             <Grid item>
               <Typography variant="h5">
-                {`Всего ${projects.length} ${smartEnding(
-                  projects.length,
+                {`Всего ${projects ? projects.length : '0'} ${smartEnding(
+                  projects ? projects.length : '0',
                   ['', 'a', 'ов'],
                   'проект',
                 )}`}
@@ -181,10 +132,11 @@ class ProjectCreation extends Component {
     );
   }
 }
-const mapStateToProps = () => ({
-  // project: store.project
+const mapStateToProps = (store) => ({
+  projects: store.projects,
 });
 const mapDispatchToProps = (dispatch) => ({
   reactionChange: (id, reaction) => dispatch(reactionChange(id, reaction)),
+  getProjects: (filter = {}, sort = {}, search_string = '') => dispatch(getProjects(filter, sort, search_string)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectCreation);

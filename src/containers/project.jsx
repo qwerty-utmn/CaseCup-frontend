@@ -30,6 +30,8 @@ import ProjectSummary from '../components/projectSummary';
 import MembersCard from '../components/membersCard';
 import CommentsBox from '../components/commentsBox';
 import ProjectSocialFeed from './projectSocialFeed';
+import { createComment } from '../actions/comments';
+import { getProject } from '../actions/projects';
 
 const rateButtonsStyles = {
   liked: {
@@ -64,54 +66,66 @@ class Project extends Component {
     this.setState({ applyModalIsOpen: false });
   };
 
+  handleMessageSend=(content, id) => {
+    this.props.createComment(content, id);
+  };
+
+  componentDidMount=() => {
+    const id = this.props.match.params.projectId;
+    console.log(id);
+    id && this.props.getProject(id);
+  }
 
   render() {
-    // const{project,user=this.props;
-    const project = {
-      id: '2',
-      title: 'SECOND PROJECTJECT dasdasd',
-      reactionsCount: '1000',
-      author: {
-        id: '2',
-        name: 'ALexey',
-        surname: 'Baynov',
-        middlename: 'Sergeevich',
-        image: '',
-      },
-      price: '1000',
-      members: [],
-      startDate: '22.01.2019',
-      updatedAt: '22.01.2019',
-      endDate: '22.01.2019',
-      currentState: {
-        id: '0',
-        title: 'Обсуждение',
-        color: '#4CAF50',
-      },
-      description:
-        'We looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',
-      categories: [
-        { name: 'Компьютер', color: '#AAA' },
-        { name: 'Компьютер', color: '#AAA' },
-        { name: 'Компьютер', color: '#AAA' },
-        { name: 'Компьютер', color: '#AAA' },
-        { name: 'Компьютер', color: '#AAA' },
-      ],
-    };
-    const currentUser = {
-      id: '2',
-      name: 'ALexey',
-      surname: 'Baynov',
-      middlename: 'Sergeevich',
-      image: '',
-    };
+    const {
+      project,
+      currentUser,
+    } = this.props;
+    // const project = {
+    //   id: '2',
+    //   title: 'SECOND PROJECTJECT dasdasd',
+    //   reactionsCount: '1000',
+    //   author: {
+    //     id: '2',
+    //     name: 'ALexey',
+    //     surname: 'Baynov',
+    //     middlename: 'Sergeevich',
+    //     image: '',
+    //   },
+    //   price: '1000',
+    //   members: [],
+    //   startDate: '22.01.2019',
+    //   updatedAt: '22.01.2019',
+    //   endDate: '22.01.2019',
+    //   currentState: {
+    //     id: '0',
+    //     title: 'Обсуждение',
+    //     color: '#4CAF50',
+    //   },
+    //   description:
+    //     'We looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',
+    //   categories: [
+    //     { name: 'Компьютер', color: '#AAA' },
+    //     { name: 'Компьютер', color: '#AAA' },
+    //     { name: 'Компьютер', color: '#AAA' },
+    //     { name: 'Компьютер', color: '#AAA' },
+    //     { name: 'Компьютер', color: '#AAA' },
+    //   ],
+    // };
+    // const currentUser = {
+    //   id: '2',
+    //   name: 'ALexey',
+    //   surname: 'Baynov',
+    //   middlename: 'Sergeevich',
+    //   image: '',
+    // };
     const {
       applyModalIsOpen,
       currentTab,
     } = this.state;
     return (
       <Container>
-        {project && (
+        {project && project.id && (
           <>
             <Grid
               alignItems="flex-end"
@@ -284,8 +298,8 @@ const mapStateToProps = (store) => ({
   project: store.project,
   currentUser: store.currentUser,
 });
-const mapDispatchToProps = (/* dispatch */) => ({
-  // getProject: (id) => dispatch(getProject(id)),
-  // getProject: (id) => dispatch(getProject(id)),
+const mapDispatchToProps = (dispatch) => ({
+  createComment: (content, userId) => dispatch(createComment(content, userId)),
+  getProject: (id) => dispatch(getProject(id)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Project);

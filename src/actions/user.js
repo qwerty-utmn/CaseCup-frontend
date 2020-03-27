@@ -39,6 +39,7 @@ export const submitLoginInformation = (credentials) => async (dispatch) => {
     console.error(err);
   }
 };
+
 export const getUserInformation = (id) => async (dispatch) => {
   try {
     dispatch({
@@ -62,6 +63,7 @@ export const getUserInformation = (id) => async (dispatch) => {
     console.error(err);
   }
 };
+
 export const getUserProjects = (id) => async (dispatch) => {
   try {
     dispatch({
@@ -85,6 +87,7 @@ export const getUserProjects = (id) => async (dispatch) => {
     console.error(err);
   }
 };
+
 export const getUserMarkedProjects = (id) => async (dispatch) => {
   try {
     dispatch({
@@ -108,6 +111,7 @@ export const getUserMarkedProjects = (id) => async (dispatch) => {
     console.error(err);
   }
 };
+
 export const updateUserPhoto = (id, photo) => async (dispatch) => {
   try {
     dispatch({
@@ -132,6 +136,7 @@ export const updateUserPhoto = (id, photo) => async (dispatch) => {
     console.error(err);
   }
 };
+
 export const updateUser = (user) => async (dispatch) => {
   try {
     dispatch({

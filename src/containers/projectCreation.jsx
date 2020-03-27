@@ -16,9 +16,17 @@ import {
   Checkbox,
   MenuItem,
   Container,
+  CardActions,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
 } from '@material-ui/core';
 import { white } from 'material-ui/styles/colors';
 import MembersCard from '../components/membersCard';
+import { getCategories, createCategory, deleteCategory } from '../actions/categories';
+import { createProject } from '../actions/projects';
 
 class ProjectCreation extends Component {
   constructor(props) {
@@ -26,17 +34,66 @@ class ProjectCreation extends Component {
     this.state = {
       projectForm: {
         members: [],
+        title: '',
+        description: '',
+        start_datetime: '',
+        end_datetime: '',
+        project_status: '',
+        price: '',
+        selectedCategories: [],
+        files: [],
       },
-      selectedCategories: [],
+      categoryForm: {
+        title: '',
+        description: '',
+      },
+      createCategoryModalIsOpen: false,
     };
   }
 
+  handleOpenCreateCategoryModal=() => {
+    this.setState((prevState) => ({
+      ...prevState,
+      categoryForm: {
+        title: '',
+        description: '',
+      },
+      createCategoryModalIsOpen: true,
+    }));
+  };
+
+  handleCloseCreateCategoryModal=() => {
+    this.setState({ createCategoryModalIsOpen: false });
+  };
+
+  handleSubmitCreateCategoryModal=() => {
+    this.props.createCategory(this.state.categoryForm);
+    this.setState({ createCategoryModalIsOpen: false });
+  };
+
+  handleCreateProjectButtonClick=() => {
+    this.props.createProject(this.state.projectForm);
+  }
+
+  componentDidMount=() => {
+    this.props.getCategories();
+  }
+
   render() {
-    const categories = ['cat1', 'cat2', 'cat3'];
     const {
-      selectedCategories,
       projectForm,
+      createCategoryModalIsOpen,
+      categoryForm,
     } = this.state;
+    const {
+      categories,
+    } = this.props;
+    const categoriesId = categories && categories.map((cat) => cat.category_id);
+
+    // const {
+    //   categories,
+    // } = this.props;
+    console.log(categoriesId);
     return (
       <Container>
         <Grid container direction="column" spacing={3}>
@@ -64,20 +121,27 @@ class ProjectCreation extends Component {
                   </Grid>
                   <Grid item>
                     <FormControl fullWidth variant="outlined" margin="dense">
-                      <InputLabel shrink style={{ background: white }}>
+                      <InputLabel id="label" shrink style={{ background: white }}>
                         Категории
                       </InputLabel>
                       <Select
                         multiple
-                        value={selectedCategories}
-                        onChange={(e) => {
-                          this.setState({ selectedCategories: e.target.value });
+                        labelId="label"
+                        value={projectForm.selectedCategories}
+                        onChange={(e, menuItem) => {
+                          menuItem.props.value
+                          && this.setState({
+                            projectForm: {
+                              ...projectForm,
+                              selectedCategories: e.target.value,
+                            },
+                          });
                         }}
                                                 // renderValue={selected => selected.join(', ')}
-                        renderValue={(selected) => (
+                        renderValue={(selectedCategories) => (
                           <div>
-                            {selected.map((value) => (
-                              <Chip key={value} label={value} />
+                            {selectedCategories.map((cat) => (
+                              <Chip key={cat} label={cat} size="small" variant="outlined" style={{ marginRight: '2px' }} />
                             ))}
                           </div>
                         )}
@@ -99,14 +163,23 @@ class ProjectCreation extends Component {
                           },
                         }}
                       >
-                        {categories.map((cat) => (
+                        {categoriesId && categoriesId.map((cat) => (
                           <MenuItem key={cat} value={cat}>
                             <Checkbox
-                              checked={selectedCategories.indexOf(cat) > -1}
+                              checked={projectForm.selectedCategories.indexOf(cat) > -1}
                             />
                             <ListItemText primary={cat} />
                           </MenuItem>
                         ))}
+                        <MenuItem key="button" button={false} style={{ justifyContent: 'center' }}>
+                          <Button
+                            style={{ color: '#FFFFFF', backgroundColor: '#4CAF50' }}
+                            onClick={this.handleOpenCreateCategoryModal}
+                            variant="contained"
+                          >
+                            Добавить свою категорию
+                          </Button>
+                        </MenuItem>
                       </Select>
                     </FormControl>
                   </Grid>
@@ -122,8 +195,8 @@ class ProjectCreation extends Component {
                     />
                   </Grid>
                   <Grid container item spacing={2}>
-                    <Grid item>
-                      <FormControl variant="outlined" margin="dense">
+                    <Grid item xs={12} sm={6}>
+                      <FormControl variant="outlined" margin="dense" fullWidth>
                         <InputLabel shrink>Обложка проекта</InputLabel>
                         <OutlinedInput
                           type="file"
@@ -153,8 +226,8 @@ class ProjectCreation extends Component {
                                             </Button>
                                             </label> */}
                     </Grid>
-                    <Grid item>
-                      <FormControl variant="outlined" margin="dense">
+                    <Grid item xs={12} sm={6}>
+                      <FormControl variant="outlined" margin="dense" fullWidth>
                         <InputLabel shrink>Дополнительные файлы</InputLabel>
                         <OutlinedInput
                           type="file"
@@ -188,23 +261,94 @@ class ProjectCreation extends Component {
                   </Grid>
                 </Grid>
               </CardContent>
+              <CardActions style={{ paddingTop: 0 }}>
+                <Grid item>
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    onClick={this.handleCreateProjectButtonClick}
+                  >
+                    Создать
+                  </Button>
+                </Grid>
+              </CardActions>
             </Card>
           </Grid>
           <Grid item>
             <MembersCard members={projectForm.members} /* handleMemberAdd *//>
           </Grid>
         </Grid>
+        <Dialog
+          maxWidth="lg"
+          onClose={this.handleCloseCreateCategoryModal}
+          open={createCategoryModalIsOpen}
+        >
+          <DialogTitle>
+            <Typography
+              gutterBottom
+              variant="h3"
+            >
+              Создание новой категории
+            </Typography>
+          </DialogTitle>
+          <DialogContent>
+            <TextField
+              label="Название"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              margin="dense"
+              variant="outlined"
+              helperText="Одно слово"
+              size="small"
+              value={categoryForm.title}
+              onChange={(e, newValue) => {
+                this.setState({ categoryForm: { ...categoryForm, title: newValue } });
+              }}
+              fullWidth
+            />
+            <TextField
+              label="Описание"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              margin="dense"
+              variant="outlined"
+              helperText="Одно слово"
+              size="small"
+              value={categoryForm.description}
+              onChange={(e, newValue) => {
+                this.setState({ categoryForm: { ...categoryForm, description: newValue } });
+              }}
+              fullWidth
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleCloseCreateCategoryModal} color="primary">
+              Отменить
+            </Button>
+            <Button
+              onClick={this.handleSubmitCreateCategoryModal}
+              variant="contained"
+            >
+              Создать
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Container>
     );
   }
 }
-const mapStateToProps = () => ({
-  // project: store.project
+const mapStateToProps = (store) => ({
+  categories: store.categories,
 });
-const mapDispatchToProps = () => ({
-  // login: (username, password) => dispatch(login(username, password)),
-  // signup: (username, password) => dispatch(signup(username, password)),
+const mapDispatchToProps = (dispatch) => ({
+  getCategories: () => dispatch(getCategories()),
+  createProject: (project) => dispatch(createProject(project)),
+  createCategory: (category) => dispatch(createCategory(category)),
+  deleteCategory: (categoryId) => dispatch(deleteCategory(categoryId)),
   // logout: () => dispatch(logout()),
   // removeErrors: () => dispatch(removeErrors())
+
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectCreation);

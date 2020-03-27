@@ -61,8 +61,8 @@ class CommentForm extends Component {
             />
           </Paper>
         </Grid>
-        <Tooltip title="Send">
-          <IconButton color={message.length > 0 ? 'primary' : 'default'} onClick={handleMessageSend}>
+        <Tooltip title="Отправить">
+          <IconButton color={message.length > 0 ? 'primary' : 'default'} onClick={() => handleMessageSend(message, currentUser.user_id)}>
             <SendIcon />
           </IconButton>
         </Tooltip>

@@ -3,8 +3,8 @@ import {
   GET_PROJECT,
   UPDATE_PROJECT,
   DELETE_PROJECT,
+  CREATE_PROJECT,
 } from '../actions/projects';
-
 
 export const projects = (state = [], action) => {
   switch (action.type) {
@@ -17,9 +17,12 @@ export const projects = (state = [], action) => {
   }
 };
 
-export const PROJECT = (state = {}, action) => {
+export const project = (state = {}, action) => {
   switch (action.type) {
     case GET_PROJECT: {
+      return action.payload;
+    }
+    case CREATE_PROJECT: {
       return action.payload;
     }
     case UPDATE_PROJECT: {
