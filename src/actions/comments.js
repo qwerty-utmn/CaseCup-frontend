@@ -43,8 +43,8 @@ export const createComment = (content, userId) => async (dispatch) => {
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
         Authorization: localStorage.getItem('token'),
-        body: JSON.stringify(comment),
       },
+      body: JSON.stringify(comment),
     });
     const json = await response.json();
 

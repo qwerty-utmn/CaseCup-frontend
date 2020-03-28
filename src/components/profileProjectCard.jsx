@@ -23,23 +23,23 @@ class ProfileProjectCard extends Component {
         <CardContent>
           <Grid container justify="space-between">
             <Grid item>
-              <Avatar alt={`${project.author.surname} ${project.author.name}  ${project.author.middlename}`} src="">
-                {!project.author.user_photo ? getInitials(project.author) : ''}
+              <Avatar alt={`${project.creator.surname} ${project.creator.name}  ${project.creator.middlename}`} src="">
+                {!project.creator.user_photo ? getInitials(project.creator) : ''}
               </Avatar>
             </Grid>
             <Grid item style={{ width: '150px' }}>
               {/* color="colorTextPrimary" */}
               <Typography variant="h5" noWrap>
-                <Link href={`/projects/${project.id}`}>{project.name}</Link>
+                <Link href={`/projects/${project.project_id}`}>{project.title}</Link>
               </Typography>
               <Typography variant="body2">
                 от
                 {' '}
                 <Link
-                  href={`/profiles/${project.author.id}`}
+                  href={`/profiles/${project.creator.creator_id}`}
                   variant="h6"
                 >
-                  {`${project.author.surname} ${project.author.name}`}
+                  {`${project.creator.surname} ${project.creator.name}`}
                 </Link>
               </Typography>
             </Grid>

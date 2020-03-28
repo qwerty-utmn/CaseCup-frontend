@@ -48,7 +48,6 @@ class Project extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      project: null,
       applyModalIsOpen: false,
       currentTab: 0,
     };
@@ -71,9 +70,9 @@ class Project extends Component {
   };
 
   componentDidMount=() => {
-    const id = this.props.match.params.projectId;
-    console.log(id);
-    id && this.props.getProject(id);
+    const project_id = this.props.match.params.projectId;
+    console.log(project_id);
+    project_id && this.props.getProject(project_id);
   }
 
   render() {
@@ -123,9 +122,10 @@ class Project extends Component {
       applyModalIsOpen,
       currentTab,
     } = this.state;
+    console.log('project', project);
     return (
       <Container>
-        {project && project.id && (
+        {project && project.project_id && (
           <>
             <Grid
               alignItems="flex-end"
@@ -149,7 +149,7 @@ class Project extends Component {
                   {project.title}
                 </Typography>
                 <Label
-                  color={project.currentState.color}
+                  color={project.project_status.color || '#AAA'}
                   variant="outlined"
                 >
                   {project.project_status}

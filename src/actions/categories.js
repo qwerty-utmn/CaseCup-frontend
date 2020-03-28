@@ -18,13 +18,13 @@ export const getCategories = () => async (dispatch) => {
     if (!response.ok) {
       dispatch({
         type: GET_CATEGORIES,
-        payload: json.data,
+        payload: json,
       });
       return;
     }
     dispatch({
       type: GET_CATEGORIES,
-      payload: { categories: json.data },
+      payload: json,
     });
     return;
   } catch (err) {
@@ -34,23 +34,28 @@ export const getCategories = () => async (dispatch) => {
 
 export const createCategory = (category) => async (dispatch) => {
   try {
-    const response = await fetch(`http://${config.server}:${config.port}/categories/`, {
+    const response = await fetch(`http://${config.server}:${config.port}/categories/create`, {
       method: 'post',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
         Authorization: localStorage.getItem('token'),
-        body: JSON.stringify(category),
       },
+      body: JSON.stringify(category),
     });
     const json = await response.json();
 
     if (!response.ok) {
       dispatch({
         type: CREATE_CATEGORY,
-        payload: json.data,
+        payload: json,
       });
       return;
     }
+    dispatch({
+      type: CREATE_CATEGORY,
+      payload: json,
+    });
+    return;
   } catch (err) {
     console.error(err);
   }

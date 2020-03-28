@@ -16,7 +16,9 @@ export const submitLoginInformation = (credentials) => async (dispatch) => {
     });
     const response = await fetch(`http://${config.server}:${config.port}/login`, {
       method: 'post',
-      'Content-type': 'application/json; charset=UTF-8',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
       body: JSON.stringify(credentials),
     });
     const json = await response.json();
@@ -48,7 +50,10 @@ export const getUserInformation = (id) => async (dispatch) => {
     });
     const response = await fetch(`http://${config.server}:${config.port}/users/${id}`, {
       method: 'get',
-      'Content-type': 'application/json; charset=UTF-8',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Authorization: localStorage.getItem('token'),
+      },
     });
     const json = await response.json();
 
@@ -72,7 +77,10 @@ export const getUserProjects = (id) => async (dispatch) => {
     });
     const response = await fetch(`http://${config.server}:${config.port}/users/${id}/projects`, {
       method: 'get',
-      'Content-type': 'application/json; charset=UTF-8',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Authorization: localStorage.getItem('token'),
+      },
     });
     const json = await response.json();
 
@@ -96,7 +104,10 @@ export const getUserMarkedProjects = (id) => async (dispatch) => {
     });
     const response = await fetch(`http://${config.server}:${config.port}/users/${id}/marked-projects`, {
       method: 'get',
-      'Content-type': 'application/json; charset=UTF-8',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Authorization: localStorage.getItem('token'),
+      },
     });
     const json = await response.json();
 
@@ -120,7 +131,10 @@ export const updateUserPhoto = (id, photo) => async (dispatch) => {
     });
     const response = await fetch(`http://${config.server}:${config.port}/users/${id}`, {
       method: 'put',
-      'Content-type': 'application/json; charset=UTF-8',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Authorization: localStorage.getItem('token'),
+      },
       body: JSON.stringify({ id, user_photo: photo }),
     });
     const json = await response.json();
@@ -145,7 +159,10 @@ export const updateUser = (user) => async (dispatch) => {
     });
     const response = await fetch(`http://${config.server}:${config.port}/users/${user.id}`, {
       method: 'put',
-      'Content-type': 'application/json; charset=UTF-8',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Authorization: localStorage.getItem('token'),
+      },
       body: JSON.stringify(user),
     });
     const json = await response.json();

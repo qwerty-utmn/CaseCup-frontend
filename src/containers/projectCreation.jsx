@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import moment from 'moment';
+
 import {
   Grid,
   Typography,
@@ -44,7 +46,7 @@ class ProjectCreation extends Component {
         files: [],
       },
       categoryForm: {
-        title: '',
+        category_id: '',
         description: '',
       },
       createCategoryModalIsOpen: false,
@@ -67,12 +69,29 @@ class ProjectCreation extends Component {
   };
 
   handleSubmitCreateCategoryModal=() => {
+    console.log(this.state);
     this.props.createCategory(this.state.categoryForm);
     this.setState({ createCategoryModalIsOpen: false });
   };
 
   handleCreateProjectButtonClick=() => {
     this.props.createProject(this.state.projectForm);
+  }
+
+  handleProjectFormChange=(e) => {
+    e.persist();
+    this.setState((prevState) => ({
+      projectForm: {
+        ...prevState.projectForm,
+        [e.target.name]: e.target.value,
+      },
+    }));
+    // this.setState({
+    //   projectForm: {
+    //     ...this.state.projectForm,
+    //     [e.target.name]: e.target.value,
+    //   },
+    // });
   }
 
   componentDidMount=() => {
@@ -93,7 +112,7 @@ class ProjectCreation extends Component {
     // const {
     //   categories,
     // } = this.props;
-    console.log(categoriesId);
+    console.log(this.state);
     return (
       <Container>
         <Grid container direction="column" spacing={3}>
@@ -111,6 +130,9 @@ class ProjectCreation extends Component {
                   <Grid item>
                     <TextField
                       label="Название"
+                      name="title"
+                      value={projectForm.title}
+                      onChange={this.handleProjectFormChange}
                       InputLabelProps={{
                         shrink: true,
                       }}
@@ -186,6 +208,9 @@ class ProjectCreation extends Component {
                   <Grid item>
                     <TextField
                       label="Описание"
+                      name="description"
+                      value={projectForm.description}
+                      onChange={this.handleProjectFormChange}
                       InputLabelProps={{
                         shrink: true,
                       }}
@@ -193,6 +218,52 @@ class ProjectCreation extends Component {
                       size="small"
                       fullWidth
                     />
+                  </Grid>
+                  <Grid container item spacing={2}>
+                    <Grid item xs={6} sm={3}>
+                      <TextField
+                        label="Дата начала"
+                        name="start_datetime"
+                        value={projectForm.start_datetime ? moment(projectForm.start_datetime).format('YYYY-MM-DD') : ''}
+                        onChange={this.handleProjectFormChange}
+                        type="date"
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        variant="outlined"
+                        size="small"
+                        fullWidth
+                      />
+                    </Grid>
+                    <Grid item xs={6} sm={3}>
+                      <TextField
+                        label="Дата конца"
+                        name="end_datetime"
+                        value={projectForm.end_datetime ? moment(projectForm.end_datetime).format('YYYY-MM-DD') : ''}
+                        onChange={this.handleProjectFormChange}
+                        type="date"
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        variant="outlined"
+                        size="small"
+                        fullWidth
+                      />
+                    </Grid>
+                    <Grid item xs={6} sm={3}>
+                      <TextField
+                        label="Стоимость"
+                        name="price"
+                        value={projectForm.price || ''}
+                        onChange={this.handleProjectFormChange}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        variant="outlined"
+                        size="small"
+                        fullWidth
+                      />
+                    </Grid>
                   </Grid>
                   <Grid container item spacing={2}>
                     <Grid item xs={12} sm={6}>
@@ -301,9 +372,10 @@ class ProjectCreation extends Component {
               variant="outlined"
               helperText="Одно слово"
               size="small"
-              value={categoryForm.title}
-              onChange={(e, newValue) => {
-                this.setState({ categoryForm: { ...categoryForm, title: newValue } });
+              value={categoryForm.category_id}
+              onChange={(e) => {
+                console.log(e.target.value);
+                this.setState({ categoryForm: { ...categoryForm, category_id: e.target.value } });
               }}
               fullWidth
             />
@@ -314,11 +386,11 @@ class ProjectCreation extends Component {
               }}
               margin="dense"
               variant="outlined"
-              helperText="Одно слово"
               size="small"
               value={categoryForm.description}
-              onChange={(e, newValue) => {
-                this.setState({ categoryForm: { ...categoryForm, description: newValue } });
+              onChange={(e) => {
+                console.log(e.target.value);
+                this.setState({ categoryForm: { ...categoryForm, description: e.target.value } });
               }}
               fullWidth
             />

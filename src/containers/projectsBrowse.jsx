@@ -121,7 +121,7 @@ class ProjectCreation extends Component {
           <Grid item container spacing={3}>
             {projects
               && projects.map((project) => (
-                <Grid item key={project.id} xs={12} sd={6} md={4}>
+                <Grid item key={project.project_id} xs={12} sd={6} md={4}>
                   <ProjectCard project={project} reactionChange={reactionChange} />
                 </Grid>
               ))}

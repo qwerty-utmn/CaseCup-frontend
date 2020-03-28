@@ -11,7 +11,7 @@ const categories = (state = [], action) => {
       return action.payload;
     }
     case CREATE_CATEGORY: {
-      return action.payload;
+      return [...state, action.payload];
     }
     case DELETE_CATEGORY: {
       return action.payload;

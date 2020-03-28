@@ -50,18 +50,19 @@ class ProjectCard extends Component {
       <>
         {project && (
         <Card>
+          {project.creator && (
           <CardHeader
             style={{ paddingBottom: 0 }}
-            title={<Link href={`/projects/${project.id}`}>{project.name}</Link>}
+            title={<Link href={`/projects/${project.project_id}`}>{project.name}</Link>}
             subheader={(
               <Typography variant="body2">
                 от
                 {' '}
                 <Link
-                  href={`/profiles/${project.author.id}`}
+                  href={`/profiles/${project.creator.creator_id}`}
                   variant="h6"
                 >
-                  {`${project.author.surname} ${project.author.name}`}
+                  {`${project.creator.surname || ''} ${project.creator.name || ''}`}
                 </Link>
                 {' | '}
                 {moment(project.start_datetime).format('DD.MM.YYYY')}
@@ -69,15 +70,16 @@ class ProjectCard extends Component {
           )}
             avatar={(
               <Avatar
-                alt={`${project.author.surname}
-            ${project.author.name} 
-            ${project.author.middlename}`}
-                src={project.author.user_photo}
+                alt={`${project.creator.surname || ''}
+            ${project.creator.name || ''} 
+            ${project.creator.middlename || ''}`}
+                src={project.creator.user_photo || ''}
               >
-                {!project.author.user_photo ? getInitials(project.author) : ''}
+                {!project.creator.user_photo ? getInitials(project.creator) : ''}
               </Avatar>
             )}
           />
+          )}
           <CardContent>
             <Grid container spacing={1}>
               <Grid item>
@@ -107,7 +109,7 @@ class ProjectCard extends Component {
             {/* <IconButton>
               <ShareIcon />
             </IconButton> */}
-            <Button component={RouterLink} to={`/projects/${project.id}`}>
+            <Button component={RouterLink} to={`/projects/${project.project_id}`}>
               Узнать больше
             </Button>
           </CardActions>

@@ -17,9 +17,9 @@ export const getProjects = (filter = {}, sort = {}, search_string = '') => async
     //   method: 'post',
     //   headers: {
     //     'Content-type': 'application/json; charset=UTF-8',
-    //     body: JSON.stringify({ filter, sort, search_string }),
     //     Authorization: localStorage.getItem('token'),
     //   },
+    //     body: JSON.stringify({ filter, sort, search_string }),
     // });
     const response = await fetch(`http://${config.server}:${config.port}/projects`, {
       method: 'get',
@@ -33,13 +33,13 @@ export const getProjects = (filter = {}, sort = {}, search_string = '') => async
     if (!response.ok) {
       dispatch({
         type: GET_PROJECTS,
-        payload: json.data,
+        payload: json,
       });
       return;
     }
     dispatch({
       type: GET_PROJECTS,
-      payload: json.data,
+      payload: json,
     });
   } catch (err) {
     console.error(err);
@@ -52,10 +52,12 @@ export const createProject = (project) => async (dispatch) => {
       type: 'START_LOADING',
       payload: '',
     });
-    const response = await fetch(`http://${config.server}:${config.port}/projects/`, {
+    const response = await fetch(`http://${config.server}:${config.port}/projects/create`, {
       method: 'post',
-      'Content-type': 'application/json; charset=UTF-8',
-      Authorization: localStorage.getItem('token'),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Authorization: localStorage.getItem('token'),
+      },
       body: JSON.stringify(project),
     });
     const json = await response.json();
@@ -90,10 +92,14 @@ export const getProject = (id) => async (dispatch) => {
     if (!response.ok) {
       dispatch({
         type: GET_PROJECT,
-        payload: json.data,
+        payload: json,
       });
       return;
     }
+    dispatch({
+      type: GET_PROJECT,
+      payload: json,
+    });
   } catch (err) {
     console.error(err);
   }
@@ -109,9 +115,9 @@ export const updateProject = (project, id) => async (dispatch) => {
       method: 'put',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
-        body: JSON.stringify(project),
         Authorization: localStorage.getItem('token'),
       },
+      body: JSON.stringify(project),
     });
     const json = await response.json();
 
@@ -158,10 +164,12 @@ export const reactionChange = (projectId, reaction) => async (dispatch) => {
       type: 'START_LOADING',
       payload: '',
     });
-    const response = await fetch(`http://${config.server}:${config.port}/projects/${projectId}/reaction`, {
+    const response = await fetch(`http://${config.server}:${config.port}/projects/${projectId}/reaction/create`, {
       method: 'post',
-      'Content-type': 'application/json; charset=UTF-8',
-      Authorization: localStorage.getItem('token'),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Authorization: localStorage.getItem('token'),
+      },
       body: JSON.stringify(reaction),
     });
     const json = await response.json();
