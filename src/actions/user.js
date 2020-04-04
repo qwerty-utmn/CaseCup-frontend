@@ -1,4 +1,3 @@
-import { useHistory } from 'react-router-dom';
 import config from '../config';
 
 export const USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS';
@@ -8,7 +7,7 @@ export const GET_USER_PROJECTS = 'GET_USER_PROJECTS';
 export const GET_USER_MARKED_PROJECTS = 'GET_USER_MARKED_PROJECTS';
 export const UPDATE_USER = 'UPDATE_USER';
 
-export const submitLoginInformation = (credentials) => async (dispatch) => {
+export const submitLoginInformation = (credentials, history) => async (dispatch) => {
   try {
     dispatch({
       type: 'START_LOADING',
@@ -21,21 +20,21 @@ export const submitLoginInformation = (credentials) => async (dispatch) => {
       },
       body: JSON.stringify(credentials),
     });
-    const json = await response.json();
 
     if (response.ok) {
+      const token = await response.text();
+      localStorage.setItem('token', token);
       dispatch({
         type: 'USER_LOGIN_SUCCESS',
-        payload: json.user,
+        payload: {},
       });
-      const history = useHistory();
       history.push('/projects');
       return;
     }
 
     dispatch({
       type: 'USER_LOGIN_FAILURE',
-      payload: json.error,
+      payload: 'Неверное имя пользователя или пароль',
     });
   } catch (err) {
     console.error(err);
@@ -181,7 +180,7 @@ export const updateUser = (user) => async (dispatch) => {
 
 export const getUserByToken = (token) => async (dispatch) => {
   try {
-    const response = await fetch(`http://${config.server}:${config.port}/users/get_user_by_token`, {
+    const response = await fetch(`http://${config.server}:${config.port}/users/by_token`, {
       method: 'post',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
@@ -189,15 +188,12 @@ export const getUserByToken = (token) => async (dispatch) => {
       },
       body: JSON.stringify({ token }),
     });
-    const json = await response.json();
-
+    const user = await response.json();
     if (response.ok) {
       dispatch({
         type: 'USER_LOGIN_SUCCESS',
-        payload: json.user,
+        payload: user,
       });
-      const history = useHistory();
-      history.push('/projects');
       return;
     }
   } catch (err) {

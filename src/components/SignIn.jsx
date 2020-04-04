@@ -8,11 +8,13 @@ import {
   TextField,
 } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
+import { withRouter } from 'react-router-dom';
 import { submitLoginInformation } from '../actions/user';
 
 const SignIn = ({
   submitLoginInformation,
   user,
+  history,
 }) => {
   const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [errors, setErrors] = useState({});
@@ -42,8 +44,7 @@ const SignIn = ({
     e.preventDefault();
     console.log('errors :', errors);
     // if (Object.keys(errors).length === 0) {
-      console.log('credentials :', credentials);
-      submitLoginInformation(credentials);
+    submitLoginInformation(credentials, history);
     // }
   };
 
@@ -134,11 +135,11 @@ const SignIn = ({
   );
 };
 
-export default connect(
+export default withRouter(connect(
   (state) => ({
-    user: state.user,
+    user: state.currentUser,
   }),
   {
     submitLoginInformation,
   },
-)(SignIn);
+)(SignIn));

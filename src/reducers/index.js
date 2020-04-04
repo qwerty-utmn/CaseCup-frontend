@@ -5,7 +5,7 @@ import comments from './comments';
 import { projects, project } from './projects';
 
 const rootReducer = combineReducers({
-  user,
+  currentUser: user,
   categories,
   comments,
   projects,

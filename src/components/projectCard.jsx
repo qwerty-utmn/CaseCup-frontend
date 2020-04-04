@@ -46,7 +46,7 @@ class ProjectCard extends Component {
       && project.project_reaction
       && project.project_reaction.find((reaction) => reaction.user_id === currentUser.id);
 
-      return (
+    return (
       <>
         {project && (
         <Card>

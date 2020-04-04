@@ -8,14 +8,12 @@ import {
 } from '../actions/user';
 
 const INITIAL_STATE = {};
-const user = (state = INITIAL_STATE, action) => {
+const currentUser = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case USER_LOGIN_SUCCESS: {
       return {
         ...state,
-        currentUser: {
-          ...action.payload.user,
-        },
+        ...action.payload,
         error: '',
       };
     }
@@ -56,4 +54,4 @@ const user = (state = INITIAL_STATE, action) => {
   }
 };
 
-export default user;
+export default currentUser;

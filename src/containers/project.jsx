@@ -31,7 +31,7 @@ import MembersCard from '../components/membersCard';
 import CommentsBox from '../components/commentsBox';
 import ProjectSocialFeed from './projectSocialFeed';
 import { createComment } from '../actions/comments';
-import { getProject } from '../actions/projects';
+import { getProject, createReaction } from '../actions/projects';
 
 const rateButtonsStyles = {
   liked: {
@@ -74,6 +74,11 @@ class Project extends Component {
     console.log(project_id);
     project_id && this.props.getProject(project_id);
   }
+
+  handleThumbClick = (reaction) => {
+    const { project } = this.props;
+    this.props.createReaction(project.project_id, reaction);
+  };
 
   render() {
     const {
@@ -122,7 +127,11 @@ class Project extends Component {
       applyModalIsOpen,
       currentTab,
     } = this.state;
-    console.log('project', project);
+
+    const userReaction = project
+      && project.project_reaction
+      && project.project_reaction.find((reaction) => reaction.user_id === 1);
+
     return (
       <Container>
         {project && project.project_id && (
@@ -165,17 +174,17 @@ class Project extends Component {
                   />
                   Поделиться
                 </Button> */}
-                <IconButton onClick={this.handleThumbUpClick}>
+                <IconButton onClick={() => this.handleThumbClick(true)}>
                   <ThumbUpAlt
-                    style={project.reaction && project.reaction === 0
+                    style={userReaction && userReaction.reaction
                       ? rateButtonsStyles.liked
                       : rateButtonsStyles.none}
                   />
                 </IconButton>
                 <Typography>{project.reactionsCount}</Typography>
-                <IconButton onClick={this.handleThumbDownClick}>
+                <IconButton onClick={() => this.handleThumbClick(true)}>
                   <ThumbDownAlt
-                    style={project.reaction && project.reaction === 1
+                    style={userReaction && !userReaction.reaction
                       ? rateButtonsStyles.disliked
                       : rateButtonsStyles.none}
                   />
@@ -232,7 +241,11 @@ class Project extends Component {
                       <Grid
                         item
                       >
-                        <CommentsBox comments={project.comments} currentUser={currentUser} handleMessageSend={this.handleMessageSend} />
+                        <CommentsBox
+                          comments={project.comments}
+                          currentUser={currentUser}
+                          handleMessageSend={this.handleMessageSend}
+                        />
                       </Grid>
                     </Grid>
                   </Grid>
@@ -302,12 +315,16 @@ class Project extends Component {
     );
   }
 }
-const mapStateToProps = (store) => ({
-  project: store.project,
-  currentUser: store.currentUser,
-});
-const mapDispatchToProps = (dispatch) => ({
-  createComment: (content, userId) => dispatch(createComment(content, userId)),
-  getProject: (id) => dispatch(getProject(id)),
-});
-export default connect(mapStateToProps, mapDispatchToProps)(Project);
+
+export default connect(
+  (state) => ({
+    project: state.project,
+    currentUser: state.currentUser,
+  }),
+  (dispatch) => ({
+    createComment: (content, userId) => dispatch(createComment(content, userId)),
+    createReaction: (id, reaction) => dispatch(createReaction(id, reaction)),
+    getProject: (id) => dispatch(getProject(id)),
+
+  }),
+)(Project);
