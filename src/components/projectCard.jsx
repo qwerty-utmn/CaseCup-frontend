@@ -14,7 +14,6 @@ import {
 import moment from 'moment';
 import ThumbUpAlt from '@material-ui/icons/ThumbUpAlt';
 import ThumbDownAlt from '@material-ui/icons/ThumbDownAlt';
-import ShareIcon from '@material-ui/icons/Share';
 import { Link as RouterLink } from 'react-router-dom';
 import Label from './Label';
 import getInitials from '../heplers/getInitials';
@@ -35,16 +34,14 @@ class ProjectCard extends Component {
   handleThumbClick = (reaction) => {
     const { project } = this.props;
     this.props.createReaction(project.project_id, reaction);
+    this.props.getProject(project.project_id);
   };
 
   render() {
-    const { project } = this.props;
-    const currentUser = {
-      id: 1,
-    };
+    const { project, currentUser } = this.props;
     const userReaction = project
       && project.project_reaction
-      && project.project_reaction.find((reaction) => reaction.user_id === currentUser.id);
+      && project.project_reaction.find((reaction) => reaction.user_id === currentUser.user_id);
 
     return (
       <>

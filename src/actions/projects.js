@@ -37,10 +37,6 @@ export const getProjects = (filter = {}, sort = {}, search_string = '') => async
       });
       return;
     }
-    dispatch({
-      type: GET_PROJECTS,
-      payload: json,
-    });
   } catch (err) {
     console.error(err);
   }
@@ -96,10 +92,6 @@ export const getProject = (id) => async (dispatch) => {
       });
       return;
     }
-    dispatch({
-      type: GET_PROJECT,
-      payload: json,
-    });
   } catch (err) {
     console.error(err);
   }

@@ -30,7 +30,7 @@ ReactDOM.render(
             {/* <Route exact path="/projects" component={App} /> */}
             <App />
           </PrivateRoute>
-           {/* <Route exact path="/" component={App} /> */}
+          {/* <Route exact path="/" component={App} /> */}
           <PrivateRoute exact path="/projects">
             {/* <Route exact path="/projects" component={App} /> */}
             <App />

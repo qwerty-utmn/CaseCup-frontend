@@ -15,8 +15,8 @@ import {
 } from '@material-ui/core';
 import ProjectCard from '../components/projectCard';
 import smartEnding from '../heplers/wordSmartEnding';
-import { createReaction, getProjects } from '../actions/projects';
-
+import { createReaction, getProjects, getProject } from '../actions/projects';
+import { getUserByToken } from '../actions/user';
 
 class ProjectsBrowse extends Component {
   constructor(props) {
@@ -30,6 +30,10 @@ class ProjectsBrowse extends Component {
   }
 
   componentDidMount=() => {
+    if (!this.props.currentUser.user_id) {
+      const token = localStorage.getItem('token');
+      this.props.getUserByToken(token);
+    }
     this.props.getProjects();
   };
 
@@ -37,6 +41,7 @@ class ProjectsBrowse extends Component {
     const {
       createReaction,
       projects,
+      currentUser,
     } = this.props;
     const {
       selectedSort,
@@ -123,8 +128,10 @@ class ProjectsBrowse extends Component {
               && projects.map((project) => (
                 <Grid item key={project.project_id} xs={12} sd={6} md={4}>
                   <ProjectCard
+                    currentUser={currentUser}
                     project={project}
                     createReaction={createReaction}
+                    getProject={getProject}
                   />
                 </Grid>
               ))}
@@ -139,10 +146,12 @@ class ProjectsBrowse extends Component {
 export default connect(
   (state) => ({
     projects: state.projects,
+    currentUser: state.currentUser,
   }),
   (dispatch) => ({
     createReaction: (id, reaction) => dispatch(createReaction(id, reaction)),
     getProjects: (filter = {}, sort = {}, search_string = '') => dispatch(getProjects(filter, sort, search_string)),
+    getUserByToken: (token) => dispatch(getUserByToken(token)),
+    getProject: (id) => dispatch(getProject(id)),
   }),
-
 )(ProjectsBrowse);

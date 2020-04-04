@@ -4,22 +4,20 @@ import {
 } from 'react-router-dom';
 import checkAuth from '../heplers/checkAuth';
 
-const PrivateRoute = ({ children, ...rest }) => {
-  return (
-    <Route
-      {...rest}
-      render={({ location }) => (checkAuth() ? (
-        children
-      ) : (
-        <Redirect
-          to={{
-            pathname: '/signin',
-            state: { from: location },
-          }}
-        />
-      ))}
-    />
-  );
-};
+const PrivateRoute = ({ children, ...rest }) => (
+  <Route
+    {...rest}
+    render={({ location }) => (checkAuth() ? (
+      children
+    ) : (
+      <Redirect
+        to={{
+          pathname: '/signin',
+          state: { from: location },
+        }}
+      />
+    ))}
+  />
+);
 
 export default PrivateRoute;
