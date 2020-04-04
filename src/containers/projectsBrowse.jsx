@@ -12,6 +12,7 @@ import {
   ListItemText,
   MenuItem,
   Container,
+  TextField,
 } from '@material-ui/core';
 import ProjectCard from '../components/projectCard';
 import smartEnding from '../heplers/wordSmartEnding';
@@ -25,8 +26,13 @@ class ProjectsBrowse extends Component {
       selectedSort: 'Популярные',
       sortMenuOpened: false,
       anchorEl: null,
-      // projects: [],
+      searchInput: '',
     };
+  }
+
+  handleSearchChange=(e) => {
+    this.setState({ searchInput: e.target.value });
+    // this.props.getProjects();
   }
 
   componentDidMount=() => {
@@ -47,6 +53,7 @@ class ProjectsBrowse extends Component {
       selectedSort,
       anchorEl,
       sortMenuOpened,
+      searchInput,
     } = this.state;
     return (
       <Container>
@@ -83,44 +90,58 @@ class ProjectsBrowse extends Component {
               </Typography>
             </Grid>
             <Grid item>
-              <Button
-                style={{
-                  textTransform: 'none',
-                  letterSpacing: 0,
-                  marginRight: 3,
-                }}
-                onClick={(e) => {
-                  this.setState({ anchorEl: e.currentTarget });
-                  this.setState({ sortMenuOpened: true });
-                }}
-                htmlFor="sorting-menu"
-              >
-                {selectedSort}
-                <ArrowDropDownIcon />
-              </Button>
-              <Menu
-                anchorEl={anchorEl}
-                getContentAnchorEl={null}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-                transformOrigin={{ vertical: 'top', horizontal: 'center' }}
-                onClose={() => {
-                  this.setState({ sortMenuOpened: false });
-                }}
-                open={sortMenuOpened}
-                elevation={1}
-              >
-                {['Самые новые', 'Популярные'].map((option) => (
-                  <MenuItem
-                    key={option}
-                    onClick={() => {
-                      this.setState({ selectedSort: option });
+              <Grid container direction="row" alignItems="flex-end" containerjustify="right">
+                <Grid item>
+                  <Button
+                    style={{
+                      textTransform: 'none',
+                      letterSpacing: 0,
+                      marginRight: 3,
+                    }}
+                    onClick={(e) => {
+                      this.setState({ anchorEl: e.currentTarget });
+                      this.setState({ sortMenuOpened: true });
+                    }}
+                    htmlFor="sorting-menu"
+                  >
+                    {selectedSort}
+                    <ArrowDropDownIcon />
+                  </Button>
+                  <Menu
+                    anchorEl={anchorEl}
+                    getContentAnchorEl={null}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                    transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+                    onClose={() => {
                       this.setState({ sortMenuOpened: false });
                     }}
+                    open={sortMenuOpened}
+                    elevation={1}
                   >
-                    <ListItemText primary={option} />
-                  </MenuItem>
-                ))}
-              </Menu>
+                    {['Самые новые', 'Популярные'].map((option) => (
+                      <MenuItem
+                        key={option}
+                        onClick={() => {
+                          this.setState({ selectedSort: option });
+                          this.setState({ sortMenuOpened: false });
+                        }}
+                      >
+                        <ListItemText primary={option} />
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </Grid>
+                <Grid item>
+                  <TextField
+                    label="Поиск"
+                    size="small"
+                    value={searchInput}
+                    variant="outlined"
+                    onChange={this.handleSearchChange}
+                    fullWidth
+                  />
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
           <Grid item container spacing={3}>

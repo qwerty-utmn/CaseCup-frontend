@@ -24,7 +24,6 @@ import TabPanel from '../components/tabPanel';
 import {
   getUserInformation,
   updateUser,
-  updateUserPhoto,
   getUserProjects,
   getUserMarkedProjects,
 } from '../actions/user';
@@ -37,7 +36,7 @@ class Profile extends Component {
     this.state = {
       currentTab: 0,
       userForm: {
-        id: '',
+        user_id: '',
         name: '',
         username: '',
         surname: '',
@@ -47,19 +46,66 @@ class Profile extends Component {
     };
   }
 
+  componentDidMount=() => {
+    this.props.getUserInformation(this.props.match.params.profileId);
+    if (this.props.user.user_id && this.state.userForm.user_id !== this.props.user.user_id) {
+      this.setState({ userForm: { ...this.props.user } });
+    }
+  }
+
+  componentDidUpdate=() => {
+    if (this.props.user.user_id && this.state.userForm.user_id !== this.props.user.user_id) {
+      const { user_reactions, role, ...rest } = this.props.user;
+      this.setState({ userForm: { ...rest } });
+    }
+  }
+
   handlePhotoAdd=(e) => {
-    this.props.updateUserPhoto(this.props.match.params.profileId, this.state.user.user_photo);
+    console.log(e.target.files);
+    e.persist();
+    const reader = new FileReader();
+    reader.onload = () => {
+      console.log(reader.result);
+      const parts = reader.result.split(';base64,');
+      const contentType = parts[0].replace('data:', '');
+      const base64 = parts[1];
+      const byteArray = base64;
+      // const byteArray = Uint8Array.from(window.atob(base64), (c) => c.charCodeAt(0));
+      // console.log(window.btoa(byteArray));
+
+      this.setState((prevState) => ({
+        userForm: {
+          ...prevState.userForm,
+          user_photo: byteArray,
+        },
+      }));
+    };
+
+    reader.readAsDataURL(e.target.files[0]); // convert to base64 string
+  };
+
+  convertImageSrc=(arrayBufferView) => {
+    // const blob = new Blob([arrayBufferView], { type: 'image/jpeg' });
+    // const blob = new Blob(window.btoa(arrayBufferView), { type: 'image/jpeg' });
+    // const urlCreator = window.URL || window.webkitURL;
+    // const imageUrl = urlCreator.createObjectURL(blob);
+    const imageUrl = `data:image/jpeg;base64,${arrayBufferView}`;
+    return imageUrl;
+  }
+
+  handlePhotoRemove=() => {
+    this.setState((prevState) => ({
+      userForm: {
+        ...prevState.userForm,
+        user_photo: '',
+      },
+    }));
   };
 
   handleSaveButtonClick=() => {
-    this.props.updateUserPhoto(this.props.match.params.profileId, this.state.user);
+    console.log(this.state.userForm);
+    this.props.updateUser(this.state.userForm);
   };
-
-  componentDidMount() {
-    console.log(this.props);
-    this.props.getUserInformation(this.props.match.params.profileId);
-    if (this.state.userForm.id !== this.props.user.id) this.setState({ userForm: { ...this.props.user } });
-  }
 
   render() {
     const {
@@ -70,7 +116,6 @@ class Profile extends Component {
     } = this.props;
 
     const { currentTab, userForm } = this.state;
-
     return (
       <Container>
         {user && (
@@ -116,42 +161,38 @@ class Profile extends Component {
                             )}
                           interactive
                         > */}
-                              <Avatar variant="square" style={{ height: '200px', width: '200px' }} src={user.user_photo} alt={`${user.surname} ${user.name}  ${user.middlename}`}>
-                                {!user.user_photo ? getInitials(user) : ''}
+                              <Avatar variant="square" style={{ height: '200px', width: '200px' }} src={this.convertImageSrc(userForm.user_photo)} alt={`${userForm.surname} ${userForm.name}  ${userForm.middlename}`}>
+                                {!userForm.user_photo ? getInitials(user) : ''}
                               </Avatar>
                             </Grid>
                             {currentUser && user.id === currentUser.id && (
-                              <Grid item xs>
-                                <Grid container spacing={1} direction="row">
-                                  <Grid item xs>
-                                    <Button
-                                      variant="contained"
-                                      component="label"
-                                    >
-                                      Изменить
-                                      <input
-                                        type="file"
-                                        style={{ display: 'none' }}
-                                        onChange={this.handlePhotoAdd}
-                                      />
-                                    </Button>
-                                  </Grid>
-                                  <Grid item xs>
-                                    <Button
-                                      variant="contained"
-                                      component="label"
-                                    >
-                                      Удалить
-                                      <input
-                                        accept="image/*"
-                                        type="file"
-                                        style={{ display: 'none' }}
-                                        onChange={this.handlePhotoRemove}
-                                      />
-                                    </Button>
-                                  </Grid>
+                            <Grid item xs>
+                              <Grid container spacing={1} direction="row">
+                                <Grid item xs>
+                                  <Button
+                                    variant="contained"
+                                    component="label"
+                                  >
+                                    Изменить
+                                    <input
+                                      accept="image/*"
+                                      type="file"
+                                      style={{ display: 'none' }}
+                                      onChange={this.handlePhotoAdd}
+                                    />
+                                  </Button>
+                                </Grid>
+                                <Grid item xs>
+                                  <Button
+                                    variant="contained"
+                                    component="label"
+                                    onClick={this.handlePhotoRemove}
+                                  >
+                                    Удалить
+                                  </Button>
                                 </Grid>
                               </Grid>
+                            </Grid>
                             )}
                           </Grid>
                         </CardContent>
@@ -198,8 +239,8 @@ class Profile extends Component {
                                 size="small"
                                 value={userForm.surname}
                                 disabled={currentUser && user.id === currentUser.id}
-                                onChange={(e, newValue) => {
-                                  this.setState({ userForm: { ...userForm, surname: newValue } });
+                                onChange={(e) => {
+                                  this.setState({ userForm: { ...userForm, surname: e.target.value } });
                                 }}
                                 fullWidth
                               />
@@ -212,10 +253,10 @@ class Profile extends Component {
                                 }}
                                 variant="outlined"
                                 size="small"
-                                value={user.name}
+                                value={userForm.name}
                                 disabled={currentUser && user.id === currentUser.id}
-                                onChange={(e, newValue) => {
-                                  this.setState({ userForm: { ...userForm, name: newValue } });
+                                onChange={(e) => {
+                                  this.setState({ userForm: { ...userForm, name: e.target.value } });
                                 }}
                                 fullWidth
                               />
@@ -230,8 +271,8 @@ class Profile extends Component {
                                 size="small"
                                 value={userForm.middlename}
                                 disabled={currentUser && user.id === currentUser.id}
-                                onChange={(e, newValue) => {
-                                  this.setState({ userForm: { ...userForm, middlename: newValue } });
+                                onChange={(e) => {
+                                  this.setState({ userForm: { ...userForm, middlename: e.target.value } });
                                 }}
                                 fullWidth
                               />
@@ -246,8 +287,8 @@ class Profile extends Component {
                                 size="small"
                                 value={userForm.username}
                                 disabled={currentUser && user.id === currentUser.id}
-                                onChange={(e, newValue) => {
-                                  this.setState({ userForm: { ...userForm, username: newValue } });
+                                onChange={(e) => {
+                                  this.setState({ userForm: { ...userForm, username: e.target.value } });
                                 }}
                                 fullWidth
                               />
@@ -292,6 +333,5 @@ const mapDispatchToProps = (dispatch) => ({
   getUserMarkedProjects: (id) => dispatch(getUserMarkedProjects(id)),
   getUserProjects: (id) => dispatch(getUserProjects(id)),
   updateUser: (id, user) => dispatch(updateUser(id, user)),
-  updateUserPhoto: (id, photo) => dispatch(updateUserPhoto(id, photo)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

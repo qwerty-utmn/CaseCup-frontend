@@ -75,7 +75,27 @@ class ProjectCreation extends Component {
   };
 
   handleCreateProjectButtonClick=() => {
-    this.props.createProject(this.state.projectForm);
+    console.log(this.state);
+    console.log('this.readURL(this.state.projectForm.files[0])', this.readURL(this.state.projectForm.files[0]));
+    // this.props.createProject(this.state.projectForm);
+  }
+
+  readURL = (url) => {
+    const reader = new FileReader();
+    reader.onload = () => reader.result;
+
+    reader.readAsDataURL(url); // convert to base64 string
+  }
+
+  handleFilesChange=(e) => {
+    console.log(e.target.files);
+    e.persist();
+    this.setState((prevState) => ({
+      projectForm: {
+        ...prevState.projectForm,
+        files: e.target.files,
+      },
+    }));
   }
 
   handleProjectFormChange=(e) => {
@@ -86,12 +106,6 @@ class ProjectCreation extends Component {
         [e.target.name]: e.target.value,
       },
     }));
-    // this.setState({
-    //   projectForm: {
-    //     ...this.state.projectForm,
-    //     [e.target.name]: e.target.value,
-    //   },
-    // });
   }
 
   componentDidMount=() => {
@@ -272,7 +286,7 @@ class ProjectCreation extends Component {
                         <OutlinedInput
                           type="file"
                           notched
-                          labelWidth={136}
+                          labelWidth={120}
                           inputProps={{
                             accept: 'image/*',
                             id: 'raised-button-file',
@@ -303,11 +317,12 @@ class ProjectCreation extends Component {
                         <OutlinedInput
                           type="file"
                           notched
-                          multiple
-                          labelWidth={136}
+                          labelWidth={150}
+                          onChange={this.handleFilesChange}
                           inputProps={{
                             accept: '.doc,.pdf,.excel,.csv,.xml',
                             id: 'raised-button-file',
+                            multiple: true,
                           }}
                         />
                         {/* <label htmlFor="raised-button-file">

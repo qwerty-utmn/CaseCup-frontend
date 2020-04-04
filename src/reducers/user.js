@@ -35,9 +35,7 @@ const currentUser = (state = INITIAL_STATE, action) => {
     case GET_USER: {
       return {
         ...state,
-        user: {
-          ...action.payload.user,
-        },
+        ...action.payload.user,
       };
     }
     case UPDATE_USER: {

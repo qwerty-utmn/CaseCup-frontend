@@ -9,6 +9,7 @@ export const UPDATE_USER = 'UPDATE_USER';
 
 export const submitLoginInformation = (credentials, history) => async (dispatch) => {
   try {
+    console.log('credentials', credentials);
     dispatch({
       type: 'START_LOADING',
       payload: '',
@@ -20,7 +21,6 @@ export const submitLoginInformation = (credentials, history) => async (dispatch)
       },
       body: JSON.stringify(credentials),
     });
-
     if (response.ok) {
       const token = await response.text();
       localStorage.setItem('token', token);
@@ -55,11 +55,11 @@ export const getUserInformation = (id) => async (dispatch) => {
       },
     });
     const json = await response.json();
-
+    console.log(json);
     if (response.ok) {
       dispatch({
         type: 'GET_USER',
-        payload: json.user,
+        payload: { user: json },
       });
       return;
     }
@@ -122,41 +122,13 @@ export const getUserMarkedProjects = (id) => async (dispatch) => {
   }
 };
 
-export const updateUserPhoto = (id, photo) => async (dispatch) => {
-  try {
-    dispatch({
-      type: 'START_LOADING',
-      payload: '',
-    });
-    const response = await fetch(`http://${config.server}:${config.port}/users/${id}`, {
-      method: 'put',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-        Authorization: localStorage.getItem('token'),
-      },
-      body: JSON.stringify({ id, user_photo: photo }),
-    });
-    const json = await response.json();
-
-    if (response.ok) {
-      dispatch({
-        type: 'UPDATE_USER',
-        payload: json.user,
-      });
-      return;
-    }
-  } catch (err) {
-    console.error(err);
-  }
-};
-
 export const updateUser = (user) => async (dispatch) => {
   try {
     dispatch({
       type: 'START_LOADING',
       payload: '',
     });
-    const response = await fetch(`http://${config.server}:${config.port}/users/${user.id}`, {
+    const response = await fetch(`http://${config.server}:${config.port}/users/${user.user_id}`, {
       method: 'put',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
@@ -169,7 +141,7 @@ export const updateUser = (user) => async (dispatch) => {
     if (response.ok) {
       dispatch({
         type: 'UPDATE_USER',
-        payload: json.user,
+        payload: json,
       });
       return;
     }

@@ -10,7 +10,7 @@ import {
 import store from './store';
 import './index.css';
 import App from './App';
-import TopAppBar from './components/TopAppBar';
+import TopAppBar from './containers/TopAppBar';
 import ProjectCreation from './containers/projectCreation';
 import SignIn from './components/SignIn';
 import ProjectEdit from './containers/projectEdit';
@@ -51,7 +51,14 @@ ReactDOM.render(
             {/* <Route exact path="/projects" component={App} /> */}
             <Profile />
           </PrivateRoute>
-
+          {/* <PrivateRoute exact path="/" component={App} />
+          <PrivateRoute exact path="/projects" component={App} />
+          <PrivateRoute exact path="/projects/create" component={ProjectCreation} />
+          <PrivateRoute exact path="/projects/:projectId" component={Project} />
+          <PrivateRoute exact path="/projects/edit/:projectId" component={ProjectEdit}>
+            <ProjectEdit />
+          </PrivateRoute>
+          <PrivateRoute exact path="/profiles/:profileId" component={Profile} /> */}
           {/* <Route exact path="/projects/create" component={ProjectCreation} />
           <Route exact path="/projects/:projectId" component={Project} />
           <Route exact path="/projects/edit/:projectId" component={ProjectEdit} />
