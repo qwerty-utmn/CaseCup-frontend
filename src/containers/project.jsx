@@ -166,11 +166,19 @@ class Project extends Component {
                   Поделиться
                 </Button> */}
                 <IconButton onClick={this.handleThumbUpClick}>
-                  <ThumbUpAlt style={project.reaction && project.reaction === 0 ? rateButtonsStyles.liked : rateButtonsStyles.none} />
+                  <ThumbUpAlt
+                    style={project.reaction && project.reaction === 0
+                      ? rateButtonsStyles.liked
+                      : rateButtonsStyles.none}
+                  />
                 </IconButton>
                 <Typography>{project.reactionsCount}</Typography>
                 <IconButton onClick={this.handleThumbDownClick}>
-                  <ThumbDownAlt style={project.reaction && project.reaction === 1 ? rateButtonsStyles.disliked : rateButtonsStyles.none} />
+                  <ThumbDownAlt
+                    style={project.reaction && project.reaction === 1
+                      ? rateButtonsStyles.disliked
+                      : rateButtonsStyles.none}
+                  />
                 </IconButton>
                 <Button
                   style={{ color: '#FFFFFF', backgroundColor: '#4CAF50' }}

@@ -48,7 +48,7 @@ export const createComment = (content, userId) => async (dispatch) => {
     });
     const json = await response.json();
 
-    if (!response.ok) {
+    if (response.ok) {
       dispatch({
         type: CREATE_COMMENT,
         payload: json.data,

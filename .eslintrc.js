@@ -26,7 +26,7 @@ module.exports = {
   plugins: ['react'],
   rules: {
     // Warn
-    'no-console': 'warn',
+    'no-console': 'off',
     'react/prop-types': 'warn',
 
     // Off
@@ -36,7 +36,7 @@ module.exports = {
     // 'arrow-parens': 'off',
     // 'no-plusplus': 'off',
     // 'no-continue': 'off',
-    // camelcase: 'off',
+    camelcase: 'off',
     // 'no-param-reassign': 'off',
     // 'import/no-dynamic-require': 'off',
     // 'consistent-return': 'off',
@@ -52,7 +52,7 @@ module.exports = {
     // 'react/no-array-index-key': 'off',
     'react/prop-types': 'off',
     // 'react/sort-comp': 'off',
-    // 'react/destructuring-assignment': 'off',
+    'react/destructuring-assignment': 'off',
     // 'no-confusing-arrow': 'off',
     'react/jsx-filename-extension': 'off',
     // 'import/prefer-default-export': 'off',

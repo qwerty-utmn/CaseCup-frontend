@@ -15,7 +15,7 @@ export const getCategories = () => async (dispatch) => {
     });
     const json = await response.json();
 
-    if (!response.ok) {
+    if (response.ok) {
       dispatch({
         type: GET_CATEGORIES,
         payload: json,
@@ -44,7 +44,7 @@ export const createCategory = (category) => async (dispatch) => {
     });
     const json = await response.json();
 
-    if (!response.ok) {
+    if (response.ok) {
       dispatch({
         type: CREATE_CATEGORY,
         payload: json,
@@ -72,7 +72,7 @@ export const deleteCategory = (categoryId) => async (dispatch) => {
     });
     const json = await response.json();
 
-    if (!response.ok) {
+    if (response.ok) {
       dispatch({
         type: DELETE_CATEGORY,
         payload: json.data,

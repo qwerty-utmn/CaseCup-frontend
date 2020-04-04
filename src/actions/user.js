@@ -14,7 +14,7 @@ export const submitLoginInformation = (credentials) => async (dispatch) => {
       type: 'START_LOADING',
       payload: '',
     });
-    const response = await fetch(`http://${config.server}:${config.port}/login`, {
+    const response = await fetch(`http://${config.server}:${config.port}/auth`, {
       method: 'post',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
@@ -22,14 +22,14 @@ export const submitLoginInformation = (credentials) => async (dispatch) => {
       body: JSON.stringify(credentials),
     });
     const json = await response.json();
-
-    if (!json.error) {
+    console.log('response', response)
+    if (response.ok) {
       dispatch({
         type: 'USER_LOGIN_SUCCESS',
         payload: json.user,
       });
       const history = useHistory();
-      history.push('/requests');
+      history.push('/projects');
       return;
     }
 
@@ -57,7 +57,7 @@ export const getUserInformation = (id) => async (dispatch) => {
     });
     const json = await response.json();
 
-    if (!json.error) {
+    if (response.ok) {
       dispatch({
         type: 'GET_USER',
         payload: json.user,
@@ -84,7 +84,7 @@ export const getUserProjects = (id) => async (dispatch) => {
     });
     const json = await response.json();
 
-    if (!json.error) {
+    if (response.ok) {
       dispatch({
         type: 'GET_USER_PROJECTS',
         payload: json.projects,
@@ -111,7 +111,7 @@ export const getUserMarkedProjects = (id) => async (dispatch) => {
     });
     const json = await response.json();
 
-    if (!json.error) {
+    if (response.ok) {
       dispatch({
         type: 'GET_USER_PROJECTS',
         payload: json.projects,
@@ -139,7 +139,7 @@ export const updateUserPhoto = (id, photo) => async (dispatch) => {
     });
     const json = await response.json();
 
-    if (!json.error) {
+    if (response.ok) {
       dispatch({
         type: 'UPDATE_USER',
         payload: json.user,
@@ -167,11 +167,37 @@ export const updateUser = (user) => async (dispatch) => {
     });
     const json = await response.json();
 
-    if (!json.error) {
+    if (response.ok) {
       dispatch({
         type: 'UPDATE_USER',
         payload: json.user,
       });
+      return;
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const getUserByToken = (token) => async (dispatch) => {
+  try {
+    const response = await fetch(`http://${config.server}:${config.port}/users/get_user_by_token`, {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Authorization: localStorage.getItem('token'),
+      },
+      body: JSON.stringify({ token }),
+    });
+    const json = await response.json();
+
+    if (response.ok) {
+      dispatch({
+        type: 'USER_LOGIN_SUCCESS',
+        payload: json.user,
+      });
+      const history = useHistory();
+      history.push('/projects');
       return;
     }
   } catch (err) {

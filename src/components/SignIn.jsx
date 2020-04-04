@@ -40,9 +40,11 @@ const SignIn = ({
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    if (Object.keys(errors).length === 0) {
+    console.log('errors :', errors);
+    // if (Object.keys(errors).length === 0) {
+      console.log('credentials :', credentials);
       submitLoginInformation(credentials);
-    }
+    // }
   };
 
   return (

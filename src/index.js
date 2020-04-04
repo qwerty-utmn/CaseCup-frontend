@@ -14,23 +14,34 @@ import SignIn from './components/SignIn';
 import ProjectEdit from './containers/projectEdit';
 import Project from './containers/project';
 import Profile from './containers/profile';
-
+import { getUserByToken } from './actions/user';
 import theme from './theme';
 
-ReactDOM.render(
+const ensureAuthenticated = (nextState, replace, callback) => {
+  const { dispatch } = store;
+  const { currentUser } = store.getState();
+  const token = localStorage.getItem('token');
+  if (!currentUser.id && token) {
+    dispatch(getUserByToken(token));
+  } else if (!localStorage.getItem('token')) {
+    replace('/');
+  }
+  callback();
+};
 
+ReactDOM.render(
   <Provider store={store}>
     <ThemeProvider theme={theme}>
       <Router>
         <TopAppBar />
         <Switch>
-          <Route exact path="/" component={App} />
-          <Route exact path="/projects" component={App} />
-          <Route exact path="/projects/create" component={ProjectCreation} />
-          <Route exact path="/projects/:projectId" component={Project} />
-          <Route exact path="/projects/edit/:projectId" component={ProjectEdit} />
-          <Route exact path="/signin" component={SignIn} />
-          <Route exact path="/profiles/:profileId" component={Profile} />
+          <Route exact path="/" component={SignIn} />
+          <Route exact path="projects" component={App} onEnter={ensureAuthenticated}>
+            <Route path="create" component={ProjectCreation} />
+            <Route path=":projectId" component={Project} />
+            <Route path="edit/:projectId" component={ProjectEdit} />
+          </Route>
+          <Route exact path="/profiles/:profileId" component={Profile} onEnter={ensureAuthenticated} />
         </Switch>
       </Router>
     </ThemeProvider>

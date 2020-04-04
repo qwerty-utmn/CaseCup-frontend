@@ -30,7 +30,7 @@ export const getProjects = (filter = {}, sort = {}, search_string = '') => async
     });
     const json = await response.json();
     console.log('response', json);
-    if (!response.ok) {
+    if (response.ok) {
       dispatch({
         type: GET_PROJECTS,
         payload: json,
@@ -89,7 +89,7 @@ export const getProject = (id) => async (dispatch) => {
     });
     const json = await response.json();
 
-    if (!response.ok) {
+    if (response.ok) {
       dispatch({
         type: GET_PROJECT,
         payload: json,
@@ -121,7 +121,7 @@ export const updateProject = (project, id) => async (dispatch) => {
     });
     const json = await response.json();
 
-    if (!response.ok) {
+    if (response.ok) {
       dispatch({
         type: UPDATE_PROJECT,
         payload: json.data,
@@ -147,7 +147,7 @@ export const deleteProject = (id) => async (dispatch) => {
       },
     });
 
-    if (!response.ok) {
+    if (response.ok) {
       dispatch({
         type: DELETE_PROJECT,
       });
@@ -174,7 +174,7 @@ export const reactionChange = (projectId, reaction) => async (dispatch) => {
     });
     const json = await response.json();
 
-    if (!response.ok) {
+    if (response.ok) {
       dispatch({
         type: UPDATE_PROJECT,
         payload: json.data,
