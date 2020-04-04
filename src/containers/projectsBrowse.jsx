@@ -15,10 +15,10 @@ import {
 } from '@material-ui/core';
 import ProjectCard from '../components/projectCard';
 import smartEnding from '../heplers/wordSmartEnding';
-import { reactionChange, getProjects } from '../actions/projects';
+import { createReaction, getProjects } from '../actions/projects';
 
 
-class ProjectCreation extends Component {
+class ProjectsBrowse extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -35,7 +35,7 @@ class ProjectCreation extends Component {
 
   render() {
     const {
-      reactionChange,
+      createReaction,
       projects,
     } = this.props;
     const {
@@ -122,7 +122,10 @@ class ProjectCreation extends Component {
             {projects
               && projects.map((project) => (
                 <Grid item key={project.project_id} xs={12} sd={6} md={4}>
-                  <ProjectCard project={project} reactionChange={reactionChange} />
+                  <ProjectCard
+                    project={project}
+                    createReaction={createReaction}
+                  />
                 </Grid>
               ))}
           </Grid>
@@ -132,11 +135,14 @@ class ProjectCreation extends Component {
     );
   }
 }
-const mapStateToProps = (store) => ({
-  projects: store.projects,
-});
-const mapDispatchToProps = (dispatch) => ({
-  reactionChange: (id, reaction) => dispatch(reactionChange(id, reaction)),
-  getProjects: (filter = {}, sort = {}, search_string = '') => dispatch(getProjects(filter, sort, search_string)),
-});
-export default connect(mapStateToProps, mapDispatchToProps)(ProjectCreation);
+
+export default connect(
+  (state) => ({
+    projects: state.projects,
+  }),
+  (dispatch) => ({
+    createReaction: (id, reaction) => dispatch(createReaction(id, reaction)),
+    getProjects: (filter = {}, sort = {}, search_string = '') => dispatch(getProjects(filter, sort, search_string)),
+  }),
+
+)(ProjectsBrowse);

@@ -30,23 +30,23 @@ const rateButtonsStyles = {
     color: 'rgba(0, 0, 0, 0.3)',
   },
 };
+
 class ProjectCard extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  handleThumbUpClick=(e) => {
-    console.log(e);
-  };
-
-  handleThumbDownClick=(e) => {
-    console.log(e);
+  handleThumbClick = (reaction) => {
+    const { project } = this.props;
+    this.props.createReaction(project.project_id, reaction);
   };
 
   render() {
     const { project } = this.props;
+    const currentUser = {
+      id: 1,
+    };
+    const userReaction = project
+      && project.project_reaction
+      && project.project_reaction.find((reaction) => reaction.user_id === currentUser.id);
 
-    return (
+      return (
       <>
         {project && (
         <Card>
@@ -71,8 +71,8 @@ class ProjectCard extends Component {
             avatar={(
               <Avatar
                 alt={`${project.creator.surname || ''}
-            ${project.creator.name || ''} 
-            ${project.creator.middlename || ''}`}
+                  ${project.creator.name || ''} 
+                  ${project.creator.middlename || ''}`}
                 src={project.creator.user_photo || ''}
               >
                 {!project.creator.user_photo ? getInitials(project.creator) : ''}
@@ -99,12 +99,20 @@ class ProjectCard extends Component {
             </Grid>
           </CardContent>
           <CardActions disableSpacing style={{ paddingTop: 0 }}>
-            <IconButton onClick={this.handleThumbUpClick}>
-              <ThumbUpAlt style={project.reaction && project.reaction === 0 ? rateButtonsStyles.liked : rateButtonsStyles.none} />
+            <IconButton onClick={() => this.handleThumbClick(true)}>
+              <ThumbUpAlt
+                style={userReaction && userReaction.reaction
+                  ? rateButtonsStyles.liked
+                  : rateButtonsStyles.none}
+              />
             </IconButton>
             <Typography>{project.reactionsCount}</Typography>
-            <IconButton onClick={this.handleThumbDownClick}>
-              <ThumbDownAlt style={project.reaction && project.reaction === 1 ? rateButtonsStyles.disliked : rateButtonsStyles.none} />
+            <IconButton onClick={() => this.handleThumbClick(false)}>
+              <ThumbDownAlt
+                style={userReaction && !userReaction.reaction
+                  ? rateButtonsStyles.disliked
+                  : rateButtonsStyles.none}
+              />
             </IconButton>
             {/* <IconButton>
               <ShareIcon />

@@ -22,7 +22,7 @@ export const submitLoginInformation = (credentials) => async (dispatch) => {
       body: JSON.stringify(credentials),
     });
     const json = await response.json();
-    console.log('response', response)
+
     if (response.ok) {
       dispatch({
         type: 'USER_LOGIN_SUCCESS',
