@@ -196,7 +196,7 @@ class ProjectsBrowse extends Component {
                     ))}
                   </Menu>
                 </Grid>
-                <Grid item>
+                {/* <Grid item>
                   <FormControl fullWidth variant="outlined" margin="dense">
                     <InputLabel id="label" shrink>
                       Категории
@@ -253,7 +253,7 @@ class ProjectsBrowse extends Component {
                       ))}
                     </Select>
                   </FormControl>
-                </Grid>
+                </Grid> */}
                 <Grid item>
                   <Grid container direction="row" alignItems="center">
                     <Grid item>

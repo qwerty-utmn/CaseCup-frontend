@@ -100,7 +100,7 @@ export const createProject = (project) => async (dispatch) => {
         user_id: project.creator.user_id,
         role: 'Создатель',
       };
-      const responseMember = await fetch(`http://${config.server}:${config.port}/projects/${projectId}/add_member`, {
+      const responseMember = await fetch(`http://${config.server}:${config.port}/projects/${project.project_id}/add_member`, {
         method: 'post',
         headers: {
           'Content-type': 'application/json; charset=UTF-8',
