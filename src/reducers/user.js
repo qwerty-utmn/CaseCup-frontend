@@ -8,7 +8,7 @@ import {
 } from '../actions/user';
 
 const INITIAL_STATE = {};
-const currentUser = (state = INITIAL_STATE, action) => {
+export const currentUser = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case USER_LOGIN_SUCCESS: {
       return {
@@ -32,12 +32,6 @@ const currentUser = (state = INITIAL_STATE, action) => {
         },
       };
     }
-    case GET_USER: {
-      return {
-        ...state,
-        ...action.payload.user,
-      };
-    }
     case UPDATE_USER: {
       return {
         ...state,
@@ -52,4 +46,16 @@ const currentUser = (state = INITIAL_STATE, action) => {
   }
 };
 
-export default currentUser;
+export const user = (state = {}, action) => {
+  switch (action.type) {
+    case GET_USER: {
+      return {
+        ...state,
+        ...action.payload.user,
+      };
+    }
+    default: {
+      return state;
+    }
+  }
+};

@@ -56,7 +56,7 @@ class ProjectCard extends Component {
                 от
                 {' '}
                 <Link
-                  href={`/profiles/${project.creator.creator_id}`}
+                  href={`/profiles/${project.creator.user_id}`}
                   variant="h6"
                 >
                   {`${project.creator.surname || ''} ${project.creator.name || ''}`}
