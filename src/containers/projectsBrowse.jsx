@@ -22,24 +22,59 @@ import smartEnding from '../heplers/wordSmartEnding';
 import { createReaction, getProjects } from '../actions/projects';
 import { getUserByToken } from '../actions/user';
 
+const sortOptions = [
+  { name: 'Самые новые', value: 'project_id' },
+  { name: 'По лайкам', value: 'likes' },
+  { name: 'По дизлайкам', value: 'dislikes' },
+];
+
 class ProjectsBrowse extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedSort: 'Популярные',
+      sortField: 'Популярные',
       sortDirection: 'ASC',
       sortMenuOpened: false,
       anchorEl: null,
-      searchInput: '',
+      searchString: '',
+      sortFieldName: 'Сортировка',
     };
   }
 
-  handleSearchChange=(e) => {
-    this.setState({ searchInput: e.target.value });
-    // this.props.getProjects();
-  }
+  handleSearchChange = (e) => {
+    e.persist();
+    this.setState(
+      {
+        searchString: e.target.value,
+      },
+      () => this.getProjects(),
+    );
+  };
 
-  componentDidMount=() => {
+  getProjects = () => {
+    const { searchString, sortDirection, sortField } = this.state;
+    this.props.getProjects(sortField, sortDirection, searchString);
+  };
+
+  handleSortSelect = (name, value) => {
+    const { sortDirection, sortField } = this.state;
+    let newDirection = 'desc';
+    if (value === sortField) {
+      if (sortDirection === 'asc') {
+        newDirection = 'desc';
+      } else {
+        newDirection = 'ASC';
+      }
+    }
+    this.setState({
+      sortDirection: newDirection,
+      sortField: value,
+      sortFieldName: name,
+      sortMenuOpened: false,
+    }, () => this.getProjects());
+  };
+
+  componentDidMount = () => {
     if (!this.props.currentUser.user_id) {
       const token = localStorage.getItem('token');
       this.props.getUserByToken(token);
@@ -49,16 +84,14 @@ class ProjectsBrowse extends Component {
 
   render() {
     const {
-      createReaction,
-      projects,
-      currentUser,
-      getProjects,
+      createReaction, projects, currentUser, getProjects,
     } = this.props;
     const {
-      selectedSort,
+      sortField,
+      sortFieldName,
       anchorEl,
       sortMenuOpened,
-      searchInput,
+      searchString,
       sortDirection,
     } = this.state;
     return (
@@ -96,7 +129,12 @@ class ProjectsBrowse extends Component {
               </Typography>
             </Grid>
             <Grid item>
-              <Grid container direction="row" alignItems="flex-end" containerjustify="right">
+              <Grid
+                container
+                direction="row"
+                alignItems="flex-end"
+                containerjustify="right"
+              >
                 <Grid item>
                   <Button
                     style={{
@@ -110,7 +148,7 @@ class ProjectsBrowse extends Component {
                     }}
                     htmlFor="sorting-menu"
                   >
-                    {selectedSort}
+                    {sortFieldName}
                     <ArrowDropDownIcon />
                   </Button>
                   <Menu
@@ -124,17 +162,20 @@ class ProjectsBrowse extends Component {
                     open={sortMenuOpened}
                     elevation={1}
                   >
-                    {['Самые новые', 'Популярные'].map((option) => (
+                    {sortOptions.map(({ name, value }) => (
                       <MenuItem
-                        key={option}
+                        key={name}
                         onClick={() => {
-                          this.setState({ sortDirection: sortDirection === 'ASC' ? 'DESC' : 'ASC' });
-                          this.setState({ selectedSort: option });
-                          this.setState({ sortMenuOpened: false });
+                          this.handleSortSelect(name, value);
                         }}
                       >
-                        <ListItemText primary={option} />
-                        {option === selectedSort && (sortDirection === 'ASC' ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />)}
+                        <ListItemText primary={name} />
+                        {value === sortField
+                          && (sortDirection === 'ASC' ? (
+                            <ArrowUpwardIcon />
+                          ) : (
+                            <ArrowDownwardIcon />
+                          ))}
                       </MenuItem>
                     ))}
                   </Menu>
@@ -145,7 +186,7 @@ class ProjectsBrowse extends Component {
                       <TextField
                         label="Поиск"
                         size="small"
-                        value={searchInput}
+                        value={searchString}
                         variant="outlined"
                         onChange={this.handleSearchChange}
                         fullWidth
