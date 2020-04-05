@@ -41,7 +41,7 @@ class ProjectsBrowse extends Component {
     super(props);
     this.state = {
       sortField: 'likes',
-      sortDirection: 'ASC',
+      sortDirection: 'asc',
       sortMenuOpened: false,
       anchorEl: null,
       searchString: '',
@@ -187,7 +187,7 @@ class ProjectsBrowse extends Component {
                       >
                         <ListItemText primary={name} />
                         {value === sortField
-                          && (sortDirection === 'ASC' ? (
+                          && (sortDirection === 'asc' ? (
                             <ArrowUpwardIcon />
                           ) : (
                             <ArrowDownwardIcon />

@@ -53,7 +53,7 @@ class ProjectCard extends Component {
     return (
       <>
         {project && (
-        <Card>
+        <Card className={`${project.isBlocked ? 'blocked' : ''}`}>
           {project.creator && (
           <CardHeader
             style={{ paddingBottom: 0 }}

@@ -359,7 +359,7 @@ class ProjectCreation extends Component {
             </Card>
           </Grid>
           <Grid item>
-            {/* <MembersCard project_members={projectForm.project_members} /> */}
+            <MembersCard members={projectForm.project_members} /* handleMemberAdd *//>
           </Grid>
         </Grid>
         <Dialog
