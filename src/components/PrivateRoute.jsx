@@ -19,22 +19,5 @@ const PrivateRoute = ({ children, ...rest }) => (
     ))}
   />
 );
-// const PrivateRoute = ({ component, ...rest }) => {
-//   console.log(component);
-//   console.log(rest);
-//   return (
-//     <Route
-//       render={() => (checkAuth() ? (
-//         React.createElement(component, { ...rest })
-//       ) : (
-//         <Redirect
-//           to={{
-//             pathname: '/signin',
-//             state: { from: rest.location },
-//           }}
-//         />
-//       ))}
-//     />
-//   );
-// };
+
 export default PrivateRoute;

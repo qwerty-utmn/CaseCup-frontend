@@ -5,6 +5,7 @@ import {
   UPDATE_USER,
   GET_USER_MARKED_PROJECTS,
   GET_USER_PROJECTS,
+  CLEAR_USER,
 } from '../actions/user';
 
 const INITIAL_STATE = {};
@@ -39,6 +40,9 @@ export const currentUser = (state = INITIAL_STATE, action) => {
           ...action.payload.user,
         },
       };
+    }
+    case CLEAR_USER: {
+      return INITIAL_STATE;
     }
     default: {
       return state;

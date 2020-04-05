@@ -6,6 +6,7 @@ export const GET_USER = 'GET_USER';
 export const GET_USER_PROJECTS = 'GET_USER_PROJECTS';
 export const GET_USER_MARKED_PROJECTS = 'GET_USER_MARKED_PROJECTS';
 export const UPDATE_USER = 'UPDATE_USER';
+export const CLEAR_USER = 'CLEAR_USER';
 
 export const submitLoginInformation = (credentials, history) => async (dispatch) => {
   try {
@@ -171,4 +172,9 @@ export const getUserByToken = (token) => async (dispatch) => {
   } catch (err) {
     console.error(err);
   }
+};
+
+export const clearUser = (history) => (dispatch) => {
+  localStorage.removeItem('token');
+  history.push('/signin');
 };

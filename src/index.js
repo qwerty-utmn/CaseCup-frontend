@@ -18,6 +18,7 @@ import Project from './containers/project';
 import Profile from './containers/profile';
 import theme from './theme';
 import PrivateRoute from './components/PrivateRoute';
+import SignInRoute from './components/SignInRoute';
 
 ReactDOM.render(
   <Provider store={store}>
@@ -25,7 +26,9 @@ ReactDOM.render(
       <Router>
         <TopAppBar />
         <Switch>
-          <Route exact path="/signin" component={SignIn} />
+          <SignInRoute exact path="/signin">
+            <SignIn />
+          </SignInRoute>
           <PrivateRoute exact path="/">
             {/* <Route exact path="/projects" component={App} /> */}
             <App />

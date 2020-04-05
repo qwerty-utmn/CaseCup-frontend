@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter, Link as RouterLink } from 'react-router-dom';
 
-import { Link as RouterLink } from 'react-router-dom';
 import {
   Typography,
   Toolbar,
@@ -11,9 +11,15 @@ import {
 } from '@material-ui/core';
 import InputIcon from '@material-ui/icons/Input';
 import { white } from 'material-ui/styles/colors';
+import { clearUser } from '../actions/user';
 
 class TopAppBar extends Component {
+  signOut = () => {
+    this.props.clearUser(this.props.history);
+  }
+
   render() {
+    const isLoggedIn = localStorage.getItem('token');
     return (
       <AppBar position="static" style={{ marginBottom: '20px' }}>
         <Toolbar>
@@ -24,36 +30,45 @@ class TopAppBar extends Component {
                 <Typography variant="h2" style={{ color: white }}>Title</Typography>
               </RouterLink>
             </Grid>
-            <Grid item>
-              <Grid container direction="row" containerjustify="left" spacing={4}>
+            {isLoggedIn && (
+              <>
                 <Grid item>
-                  <RouterLink to="/projects">
-                    <Typography variant="h3" style={{ color: white }}>Проекты</Typography>
-                  </RouterLink>
+                  <Grid container direction="row" containerjustify="left" spacing={4}>
+                    <Grid item>
+                      <RouterLink to="/projects">
+                        <Typography variant="h3" style={{ color: white }}>Проекты</Typography>
+                      </RouterLink>
+                    </Grid>
+                    <Grid item>
+                      <RouterLink to={`profile/${this.props.currentUser.id}`}>
+                        <Typography variant="h2" style={{ color: white }}>Профиль</Typography>
+                      </RouterLink>
+                    </Grid>
+                  </Grid>
                 </Grid>
                 <Grid item>
-                  <RouterLink to={`profile/${this.props.currentUser.id}`}>
-                    <Typography variant="h2" style={{ color: white }}>Профиль</Typography>
-                  </RouterLink>
+                  <Button
+                    color="inherit"
+                    onClick={this.signOut}
+                  >
+                    <InputIcon style={{ marginRight: '5px' }} />
+                    Выйти
+                  </Button>
                 </Grid>
-              </Grid>
-            </Grid>
-            <Grid item>
-              <Button
-                color="inherit"
-              >
-                <InputIcon style={{ marginRight: '5px' }} />
-                Sign out
-              </Button>
-            </Grid>
+              </>
+            )}
           </Grid>
         </Toolbar>
       </AppBar>
     );
   }
 }
-const mapStateToProps = (store) => ({
-  currentUser: store.currentUser,
-});
 
-export default connect(mapStateToProps)(TopAppBar);
+export default withRouter(connect(
+  (state) => ({
+    currentUser: state.currentUser,
+  }),
+  (dispatch) => ({
+    clearUser: (history) => dispatch(clearUser(history)),
+  }),
+)(TopAppBar));
