@@ -55,6 +55,7 @@ class Project extends Component {
     super(props);
     this.state = {
       applyModalIsOpen: false,
+      role: '',
       currentTab: 0,
     };
   }
@@ -64,11 +65,14 @@ class Project extends Component {
   };
 
   handleCloseApplyModal=() => {
-    this.setState({ applyModalIsOpen: false });
+    this.setState({ applyModalIsOpen: false, role: '' });
   };
 
   handleApplyApplyModal=() => {
     this.setState({ applyModalIsOpen: false });
+    const { project, currentUser } = this.props;
+    const { role } = this.state;
+    this.props.becomeMember(project.project_id, currentUser.user_id, role);
   };
 
   handleMessageSend=(content) => {
@@ -104,11 +108,6 @@ class Project extends Component {
     this.props.getProject(project.project_id);
   };
 
-  handleBecomeMember = () => {
-    const { project, currentUser } = this.props;
-    this.props.becomeMember(project.project_id, currentUser);
-  };
-
   render() {
     const {
       project,
@@ -117,6 +116,7 @@ class Project extends Component {
     const {
       applyModalIsOpen,
       currentTab,
+      role,
     } = this.state;
 
     const userReaction = project
@@ -183,8 +183,7 @@ class Project extends Component {
                   {project.project_members && (!project.project_members.some((member) => member.user_id === currentUser.user_id)) && (
                   <Button
                     style={{ color: '#FFFFFF', backgroundColor: '#4CAF50' }}
-                    onClick={this.handleBecomeMember}
-                    // onClick={this.handleOpenApplyModal}
+                    onClick={this.handleOpenApplyModal}
                     variant="contained"
                   >
                     Принять участие
@@ -273,12 +272,12 @@ class Project extends Component {
                   {/* <ProjectSocialFeed /> */}
                 </TabPanel>
               </Box>
-              {/* <Dialog
+              <Dialog
                 maxWidth="lg"
                 onClose={this.handleCloseApplyModal}
                 open={applyModalIsOpen}
               >
-                <DialogTitle>
+                <DialogTitle disableTypography>
                   <Typography
                     gutterBottom
                     variant="h3"
@@ -287,19 +286,19 @@ class Project extends Component {
                   </Typography>
                 </DialogTitle>
                 <DialogContent>
-                  <DialogContentText>
-                    <Typography
-                      variant="subtitle2"
-                    >
-                      Чтобы подать заявку на участие в проекте, вам необходимо заполнить данную форму.
-                    </Typography>
+                  <DialogContentText variant="subtitle2">
+                    Чтобы подать заявку на участие в проекте, вам необходимо заполнить данную форму.
                   </DialogContentText>
                   <TextField
-                    autoFocus
-                    margin="dense"
-                    id="name"
-                    label=""
-                    type="email"
+                    label="Желаемая роль"
+                    name="role"
+                    value={role}
+                    onChange={(e) => this.setState({ role: e.target.value })}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    variant="outlined"
+                    size="small"
                     fullWidth
                   />
                 </DialogContent>
@@ -314,7 +313,7 @@ class Project extends Component {
                     Подать заявку
                   </Button>
                 </DialogActions>
-              </Dialog> */}
+              </Dialog>
             </>
           )}
         </>
@@ -330,7 +329,7 @@ export default withRouter(connect(
   }),
   (dispatch) => ({
     createComment: (content, userId, projectId, datetime) => dispatch(createComment(content, userId, projectId, datetime)),
-    becomeMember: (projectId, userId) => dispatch(becomeMember(projectId, userId)),
+    becomeMember: (projectId, userId, role) => dispatch(becomeMember(projectId, userId, role)),
     createReaction: (id, reaction, user_id) => dispatch(createReaction(id, reaction, user_id)),
     updateReaction: (id, reaction, user_id) => dispatch(updateReaction(id, reaction, user_id)),
     deleteReaction: (id, user_id) => dispatch(deleteReaction(id, user_id)),

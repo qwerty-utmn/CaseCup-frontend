@@ -49,7 +49,7 @@ class ProfileProjectCard extends Component {
             </Grid>
             <Grid item>
               <Typography variant="h5">
-                {project.price}
+                {+project.price}
               </Typography>
               <Typography variant="body2">
                 Цена проекта

@@ -2,11 +2,12 @@ import config from '../config';
 
 export const BECOME_MEMBER = 'BECOME_MEMBER';
 
-export const becomeMember = (projectId, userId) => async (dispatch) => {
+export const becomeMember = (projectId, userId, role) => async (dispatch) => {
   try {
     const member = {
-      user_id: userId,
-      role: 'Участник',
+      user: { user_id: userId },
+      // role: 'Участник',
+      // role,
     };
     const response = await fetch(`http://${config.server}:${config.port}/projects/${projectId}/add_member`, {
       method: 'post',

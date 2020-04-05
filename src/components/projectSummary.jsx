@@ -63,7 +63,7 @@ class ProjectSummary extends Component {
               >
                 <Typography variant="subtitle2">Дата создания</Typography>
                 <Typography variant="h6">
-                  {moment(project.startDate).format('DD MM YYYY')}
+                  {moment(project.start_datetime).format('DD MM YYYY')}
                 </Typography>
               </ListItem>
               <ListItem
@@ -73,7 +73,7 @@ class ProjectSummary extends Component {
               >
                 <Typography variant="subtitle2">Дедлайн</Typography>
                 <Typography variant="h6">
-                  {moment(project.endDate).format('DD MM YYYY')}
+                  {moment(project.end_datetime).format('DD MM YYYY')}
                 </Typography>
               </ListItem>
               <ListItem
@@ -83,7 +83,7 @@ class ProjectSummary extends Component {
               >
                 <Typography variant="subtitle2">Оценочная стоимость</Typography>
                 <Typography variant="h6">
-                  {`${project.price} РУБ`}
+                  {`${+project.price} РУБ`}
                 </Typography>
               </ListItem>
               <ListItem
@@ -100,7 +100,8 @@ class ProjectSummary extends Component {
                       {project.categories.map((category) => (
                         <Grid key={category.name} item>
                           <Label
-                            color={category.color}
+                            // color={category.color}
+                            color="#4CAF50"
                             style={{ marginLeft: 3 }}
                           >
                             {category.name}
