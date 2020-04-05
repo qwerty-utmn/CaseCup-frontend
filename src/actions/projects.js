@@ -73,6 +73,7 @@ export const createProject = (project) => async (dispatch) => {
     // console.log('files', files);
     // console.log('projectInfo', projectInfo);
     // console.log('JSON.stringify(projectInfo)', JSON.stringify(projectInfo));
+    projectInfo.categories = projectInfo.categories.map((cat) => ({ category_id: cat }));
     const responseProject = await fetch(`http://${config.server}:${config.port}/projects/create`, {
       method: 'post',
       headers: {
@@ -81,7 +82,7 @@ export const createProject = (project) => async (dispatch) => {
       },
       body: JSON.stringify(projectInfo),
     });
-    const newProject = await responseProject.json();
+    // const newProject = await responseProject.json();
 
     // if (!NewProject.error) {
     //   const postedFiles = await uploadFiles(files, NewProject.project_id);
@@ -108,7 +109,7 @@ export const createProject = (project) => async (dispatch) => {
         },
         body: JSON.stringify(member),
       });
-      const newMember = await responseMember.json();
+      // const newMember = await responseMember.json();
 
       // if (responseMember.ok) {
       //   dispatch({
@@ -117,10 +118,10 @@ export const createProject = (project) => async (dispatch) => {
       //   });
       //   return;
       // }
-      dispatch({
-        type: CREATE_PROJECT,
-        payload: newProject.data,
-      });
+      // dispatch({
+      //   type: CREATE_PROJECT,
+      //   payload: newProject.data,
+      // });
       return;
     }
   } catch (err) {
@@ -155,19 +156,31 @@ export const getProject = (id) => async (dispatch) => {
   }
 };
 
-export const updateProject = (project, id) => async (dispatch) => {
+export const updateProject = (project) => async (dispatch) => {
   try {
+    console.log(project);
     dispatch({
       type: 'START_LOADING',
       payload: '',
     });
-    const response = await fetch(`http://${config.server}:${config.port}/projects/${id}`, {
+    const {
+      project_reaction,
+      comments,
+      files,
+      ...projectInfo
+    } = project;
+    // console.log('files', files);
+    // console.log('projectInfo', projectInfo);
+    // console.log('JSON.stringify(projectInfo)', JSON.stringify(projectInfo));
+    projectInfo.categories = projectInfo.categories.map((cat) => ({ category_id: cat }));
+    console.log(projectInfo);
+    const response = await fetch(`http://${config.server}:${config.port}/projects/${projectInfo.project_id}`, {
       method: 'put',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
         Authorization: localStorage.getItem('token'),
       },
-      body: JSON.stringify(project),
+      body: JSON.stringify(projectInfo),
     });
     const json = await response.json();
 

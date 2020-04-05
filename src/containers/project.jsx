@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link as RouterLink } from 'react-router-dom';
+
 import {
   Typography,
   Grid,
@@ -201,8 +202,9 @@ class Project extends Component {
                   && (
                     <Button
                       style={{ color: '#FFFFFF', backgroundColor: '#4CAF50' }}
-                      onClick={this.handleOpenApplyModal}
                       variant="contained"
+                      component={RouterLink}
+                      to={`/projects/edit/${project.project_id}`}
                     >
                       Изменить
                     </Button>

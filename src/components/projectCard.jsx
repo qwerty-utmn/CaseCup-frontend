@@ -103,10 +103,10 @@ class ProjectCard extends Component {
                 {project.categories.map((category) => (
                   <Label
                     color={category.color}
-                    key={category.name}
+                    key={category.category_id}
                     style={{ marginLeft: 3 }}
                   >
-                    {category.name}
+                    {category.category_id}
                   </Label>
                 ))}
               </Grid>

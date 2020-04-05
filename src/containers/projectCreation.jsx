@@ -35,14 +35,14 @@ class ProjectCreation extends Component {
     super(props);
     this.state = {
       projectForm: {
-        project_members: [],
+        // project_members: [],
         title: '',
         description: '',
         start_datetime: '',
         end_datetime: '',
         // project_status: '',
         price: '',
-        selectedCategories: [],
+        categories: [],
         files: [],
       },
       categoryForm: {
@@ -155,7 +155,7 @@ class ProjectCreation extends Component {
                       <Select
                         multiple
                         labelId="label"
-                        value={projectForm.selectedCategories}
+                        value={projectForm.categories}
                         input={(
                           <OutlinedInput
                             notched
@@ -167,14 +167,14 @@ class ProjectCreation extends Component {
                           && this.setState({
                             projectForm: {
                               ...projectForm,
-                              selectedCategories: e.target.value,
+                              categories: e.target.value,
                             },
                           });
                         }}
                                                 // renderValue={selected => selected.join(', ')}
-                        renderValue={(selectedCategories) => (
+                        renderValue={(categories) => (
                           <div>
-                            {selectedCategories.map((cat) => (
+                            {categories.map((cat) => (
                               <Chip key={cat} label={cat} size="small" variant="outlined" style={{ marginRight: '2px' }} />
                             ))}
                           </div>
@@ -200,7 +200,7 @@ class ProjectCreation extends Component {
                         {categoriesId && categoriesId.map((cat) => (
                           <MenuItem key={cat} value={cat}>
                             <Checkbox
-                              checked={projectForm.selectedCategories.indexOf(cat) > -1}
+                              checked={projectForm.categories.indexOf(cat) > -1}
                             />
                             <ListItemText primary={cat} />
                           </MenuItem>
@@ -357,9 +357,6 @@ class ProjectCreation extends Component {
                 </Grid>
               </CardActions>
             </Card>
-          </Grid>
-          <Grid item>
-            <MembersCard members={projectForm.project_members} /* handleMemberAdd *//>
           </Grid>
         </Grid>
         <Dialog
