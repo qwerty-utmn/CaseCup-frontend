@@ -33,6 +33,7 @@ import CommentsBox from '../components/commentsBox';
 import ProjectSocialFeed from './projectSocialFeed';
 import { createComment } from '../actions/comments';
 import { getProject, createReaction } from '../actions/projects';
+import { getUserByToken } from '../actions/user';
 
 const rateButtonsStyles = {
   liked: {
@@ -71,9 +72,16 @@ class Project extends Component {
   };
 
   componentDidMount=() => {
+    const token = localStorage.getItem('token');
+    this.props.getUserByToken(token);
+
     const project_id = this.props.match.params.projectId;
     console.log(project_id);
-    project_id && this.props.getProject(project_id);
+    if (project_id) {
+      this.props.getProject(project_id);
+    } else {
+      this.props.history.push('/projects');
+    }
   }
 
   handleThumbClick = (reaction) => {
@@ -326,5 +334,6 @@ export default withRouter(connect(
     createComment: (content, userId) => dispatch(createComment(content, userId)),
     createReaction: (id, reaction) => dispatch(createReaction(id, reaction)),
     getProject: (id) => dispatch(getProject(id)),
+    getUserByToken: (token) => dispatch(getUserByToken(token)),
   }),
 )(Project));

@@ -27,6 +27,7 @@ import {
   updateUser,
   getUserProjects,
   getUserMarkedProjects,
+  getUserByToken,
 } from '../actions/user';
 import getInitials from '../heplers/getInitials';
 import binaryArrayToBase64 from '../heplers/binaryArrayToBase64';
@@ -47,21 +48,23 @@ class Profile extends Component {
     };
   }
 
-  componentDidMount=() => {
+  componentDidMount = () => {
+    const token = localStorage.getItem('token');
+    this.props.getUserByToken(token);
     this.props.getUserInformation(this.props.match.params.profileId);
     if (this.props.user.user_id && this.state.userForm.user_id !== this.props.user.user_id) {
       this.setState({ userForm: { ...this.props.user } });
     }
   }
 
-  componentDidUpdate=() => {
+  componentDidUpdate = () => {
     if (this.props.user.user_id && this.state.userForm.user_id !== this.props.user.user_id) {
       const { user_reactions, role, ...rest } = this.props.user;
       this.setState({ userForm: { ...rest } });
     }
   }
 
-  handlePhotoAdd=(e) => {
+  handlePhotoAdd = (e) => {
     console.log(e.target.files);
     e.persist();
     const reader = new FileReader();
@@ -86,7 +89,7 @@ class Profile extends Component {
   };
 
 
-  handlePhotoRemove=() => {
+  handlePhotoRemove = () => {
     this.setState((prevState) => ({
       userForm: {
         ...prevState.userForm,
@@ -95,7 +98,7 @@ class Profile extends Component {
     }));
   };
 
-  handleSaveButtonClick=() => {
+  handleSaveButtonClick = () => {
     console.log(this.state.userForm);
     this.props.updateUser(this.state.userForm);
   };
@@ -353,6 +356,6 @@ export default withRouter(connect(
     getUserMarkedProjects: (id) => dispatch(getUserMarkedProjects(id)),
     getUserProjects: (id) => dispatch(getUserProjects(id)),
     updateUser: (id, user) => dispatch(updateUser(id, user)),
-
+    getUserByToken: (token) => dispatch(getUserByToken(token)),
   }),
 )(Profile));
