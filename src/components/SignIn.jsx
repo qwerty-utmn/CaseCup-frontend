@@ -109,7 +109,7 @@ const SignIn = ({
             }}
           />
           {
-            user.error && (
+            user.errors && (
             <MuiAlert
               elevation={6}
               variant="filled"

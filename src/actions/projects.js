@@ -7,20 +7,13 @@ export const UPDATE_PROJECT = 'UPDATE_PROJECT';
 export const DELETE_PROJECT = 'DELETE_PROJECT';
 export const GET_CATEGORIES = 'GET_CATEGORIES';
 
-export const getProjects = (filter = '', sort = '', search = '') => async (dispatch) => {
+export const getProjects = (filter = 'start_datetime', sort = 'desc', search = '') => async (dispatch) => {
   try {
     dispatch({
       type: 'START_LOADING',
       payload: '',
     });
-    const url = new URL(`http://${config.server}:${config.port}/projects`);
-    const params = {
-      filter,
-      sort,
-      search,
-    };
-    url.search = new URLSearchParams(params);
-    const response = await fetch(url, {
+    const response = await fetch(`http://${config.server}:${config.port}/projects/by?filter=${filter}&sort=${sort}&search=${search}`, {
       method: 'get',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',

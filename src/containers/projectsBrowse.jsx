@@ -32,7 +32,7 @@ class ProjectsBrowse extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sortField: 'Популярные',
+      sortField: 'likes',
       sortDirection: 'ASC',
       sortMenuOpened: false,
       anchorEl: null,
@@ -63,7 +63,7 @@ class ProjectsBrowse extends Component {
       if (sortDirection === 'asc') {
         newDirection = 'desc';
       } else {
-        newDirection = 'ASC';
+        newDirection = 'asc';
       }
     }
     this.setState({
@@ -224,7 +224,7 @@ export default connect(
   }),
   (dispatch) => ({
     createReaction: (id, reaction) => dispatch(createReaction(id, reaction)),
-    getProjects: (filter = {}, sort = {}, search_string = '') => dispatch(getProjects(filter, sort, search_string)),
+    getProjects: (filter = 'start_datetime', sort = 'desc', search_string = '') => dispatch(getProjects(filter, sort, search_string)),
     getUserByToken: (token) => dispatch(getUserByToken(token)),
   }),
 )(ProjectsBrowse);
