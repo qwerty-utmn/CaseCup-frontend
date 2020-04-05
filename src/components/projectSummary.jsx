@@ -27,21 +27,21 @@ class ProjectSummary extends Component {
             avatar={(
               <Avatar
                 component={RouterLink}
-                to={`/profiles/${project.creator_id}`}
-                alt={`${project.author.surname} ${project.author.name}  ${project.author.middlename}`}
-                src={project.author.user_photo}
+                to={`/profiles/${project.creator.user_id}`}
+                alt={`${project.creator.surname} ${project.creator.name}  ${project.creator.middlename}`}
+                src={project.creator.user_photo}
               >
-                {!project.author.user_photo ? getInitials(project.author) : ''}
+                {!project.creator.user_photo ? getInitials(project.creator) : ''}
               </Avatar>
           )}
             disableTypography
             subheader={(
               <Typography
                 component={RouterLink}
-                to={`/profiles/${project.author.id}`}
+                to={`/profiles/${project.creator.id}`}
                 variant="h5"
               >
-                {project.author.name}
+                {project.creator.name}
               </Typography>
         )}
             title={(

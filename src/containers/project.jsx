@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import {
   Typography,
   Grid,
@@ -316,7 +317,7 @@ class Project extends Component {
   }
 }
 
-export default connect(
+export default withRouter(connect(
   (state) => ({
     project: state.project,
     currentUser: state.currentUser,
@@ -325,6 +326,5 @@ export default connect(
     createComment: (content, userId) => dispatch(createComment(content, userId)),
     createReaction: (id, reaction) => dispatch(createReaction(id, reaction)),
     getProject: (id) => dispatch(getProject(id)),
-
   }),
-)(Project);
+)(Project));
