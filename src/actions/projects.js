@@ -315,3 +315,11 @@ export const updateReaction = (project_id, reaction, user_id) => async (dispatch
     console.error(err);
   }
 };
+
+export const blockProject = (project_id) => async (dispatch) => {
+  try {
+
+  } catch (err) {
+    console.error(err);
+  }
+}
