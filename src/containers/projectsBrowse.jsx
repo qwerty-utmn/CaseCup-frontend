@@ -16,9 +16,17 @@ import {
   Container,
   TextField,
   IconButton,
+  Chip,
+  OutlinedInput,
+  FormControl,
+  InputLabel,
+  Select,
+  Checkbox,
 } from '@material-ui/core';
 import ProjectCard from '../components/projectCard';
 import smartEnding from '../heplers/wordSmartEnding';
+import { getCategories } from '../actions/categories';
+
 import { createReaction, getProjects } from '../actions/projects';
 import { getUserByToken } from '../actions/user';
 
@@ -38,6 +46,7 @@ class ProjectsBrowse extends Component {
       anchorEl: null,
       searchString: '',
       sortFieldName: 'Сортировка',
+      selectedCategories: [],
     };
   }
 
@@ -80,11 +89,16 @@ class ProjectsBrowse extends Component {
       this.props.getUserByToken(token);
     }
     this.props.getProjects();
+    this.props.getCategories();
   };
 
   render() {
     const {
-      createReaction, projects, currentUser, getProjects,
+      createReaction,
+      projects,
+      currentUser,
+      getProjects,
+      categories,
     } = this.props;
     const {
       sortField,
@@ -93,7 +107,9 @@ class ProjectsBrowse extends Component {
       sortMenuOpened,
       searchString,
       sortDirection,
+      selectedCategories,
     } = this.state;
+    const categoriesId = categories && categories.map((cat) => cat.category_id);
     return (
       <Container>
         <Grid container direction="column" spacing={3}>
@@ -181,6 +197,64 @@ class ProjectsBrowse extends Component {
                   </Menu>
                 </Grid>
                 <Grid item>
+                  <FormControl fullWidth variant="outlined" margin="dense">
+                    <InputLabel id="label" shrink>
+                      Категории
+                    </InputLabel>
+                    <Select
+                      multiple
+                      labelId="label"
+                      value={selectedCategories}
+                      input={(
+                        <OutlinedInput
+                          notched
+                          labelWidth={73}
+                        />
+                        )}
+                      onChange={(e, menuItem) => {
+                        menuItem.props.value
+                          && this.setState({
+                            selectedCategories: e.target.value,
+                          });
+                      }}
+                                                // renderValue={selected => selected.join(', ')}
+                      renderValue={(selectedCategories) => (
+                        <div>
+                          {selectedCategories.map((cat) => (
+                            <Chip key={cat} label={cat} size="small" variant="outlined" style={{ marginRight: '2px' }} />
+                          ))}
+                        </div>
+                      )}
+                      MenuProps={{
+                        MenuListProps: {
+                          style: {
+                            maxHeight: 250,
+                            padding: 0,
+                          },
+                        },
+                        getContentAnchorEl: null,
+                        anchorOrigin: {
+                          vertical: 'bottom',
+                          horizontal: 'left',
+                        },
+                        transformOrigin: {
+                          vertical: 'top',
+                          horizontal: 'left',
+                        },
+                      }}
+                    >
+                      {categoriesId && categoriesId.map((cat) => (
+                        <MenuItem key={cat} value={cat}>
+                          <Checkbox
+                            checked={selectedCategories.indexOf(cat) > -1}
+                          />
+                          <ListItemText primary={cat} />
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item>
                   <Grid container direction="row" alignItems="center">
                     <Grid item>
                       <TextField
@@ -221,9 +295,11 @@ export default connect(
   (state) => ({
     projects: state.projects,
     currentUser: state.currentUser,
+    categories: state.categories,
   }),
   (dispatch) => ({
     createReaction: (id, reaction) => dispatch(createReaction(id, reaction)),
+    getCategories: () => dispatch(getCategories()),
     getProjects: (filter = 'start_datetime', sort = 'desc', search_string = '') => dispatch(getProjects(filter, sort, search_string)),
     getUserByToken: (token) => dispatch(getUserByToken(token)),
   }),

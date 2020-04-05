@@ -32,11 +32,13 @@ export const CREATE_COMMENT = 'CREATE_COMMENT';
 //   }
 // };
 
-export const createComment = (content, userId) => async (dispatch) => {
+export const createComment = (content, userId, projectId, datetime) => async (dispatch) => {
   try {
     const comment = {
       content,
-      user_id: userId,
+      user: { user_id: userId },
+      created_datetime: datetime,
+      project_id: projectId,
     };
     const response = await fetch(`http://${config.server}:${config.port}/comments/create`, {
       method: 'post',

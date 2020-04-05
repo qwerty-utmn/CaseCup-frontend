@@ -21,6 +21,7 @@ import {
   CardHeader,
   Box,
 } from '@material-ui/core';
+import moment from 'moment';
 import ShareIcon from '@material-ui/icons/Share';
 import ThumbUpAlt from '@material-ui/icons/ThumbUpAlt';
 import ThumbDownAlt from '@material-ui/icons/ThumbDownAlt';
@@ -34,6 +35,7 @@ import ProjectSocialFeed from './projectSocialFeed';
 import { createComment } from '../actions/comments';
 import { getProject, createReaction } from '../actions/projects';
 import { getUserByToken } from '../actions/user';
+import { becomeMember } from '../actions/members';
 
 const rateButtonsStyles = {
   liked: {
@@ -67,8 +69,9 @@ class Project extends Component {
     this.setState({ applyModalIsOpen: false });
   };
 
-  handleMessageSend=(content, id) => {
-    this.props.createComment(content, id);
+  handleMessageSend=(content) => {
+    console.log('this.props.project', this.props.project);
+    this.props.createComment(content, this.props.currentUser.user_id, this.props.project.project_id, moment(Date.now()).format('YYYY-MM-DD'));
   };
 
   componentDidMount=() => {
@@ -89,49 +92,16 @@ class Project extends Component {
     this.props.createReaction(project.project_id, reaction);
   };
 
+  handleBecomeMember = () => {
+    const { project, currentUser } = this.props;
+    this.props.becomeMember(project.project_id, currentUser);
+  };
+
   render() {
     const {
       project,
       currentUser,
     } = this.props;
-    // const project = {
-    //   id: '2',
-    //   title: 'SECOND PROJECTJECT dasdasd',
-    //   reactionsCount: '1000',
-    //   author: {
-    //     id: '2',
-    //     name: 'ALexey',
-    //     surname: 'Baynov',
-    //     middlename: 'Sergeevich',
-    //     image: '',
-    //   },
-    //   price: '1000',
-    //   members: [],
-    //   startDate: '22.01.2019',
-    //   updatedAt: '22.01.2019',
-    //   endDate: '22.01.2019',
-    //   currentState: {
-    //     id: '0',
-    //     title: 'Обсуждение',
-    //     color: '#4CAF50',
-    //   },
-    //   description:
-    //     'We looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',
-    //   categories: [
-    //     { name: 'Компьютер', color: '#AAA' },
-    //     { name: 'Компьютер', color: '#AAA' },
-    //     { name: 'Компьютер', color: '#AAA' },
-    //     { name: 'Компьютер', color: '#AAA' },
-    //     { name: 'Компьютер', color: '#AAA' },
-    //   ],
-    // };
-    // const currentUser = {
-    //   id: '2',
-    //   name: 'ALexey',
-    //   surname: 'Baynov',
-    //   middlename: 'Sergeevich',
-    //   image: '',
-    // };
     const {
       applyModalIsOpen,
       currentTab,
@@ -140,186 +110,202 @@ class Project extends Component {
     const userReaction = project
       && project.project_reaction
       && project.project_reaction.find((reaction) => reaction.user_id === 1);
-
     return (
       <Container>
-        {project && project.project_id && (
-          <>
-            <Grid
-              alignItems="flex-end"
-              container
-              justify="space-between"
-              spacing={3}
-            >
-              <Grid item>
-                <Typography
-                  component="h2"
-                  gutterBottom
-                  variant="overline"
-                >
-                  Описание проекта
-                </Typography>
-                <Typography
-                  component="h1"
-                  gutterBottom
-                  variant="h3"
-                >
-                  {project.title}
-                </Typography>
-                <Label
-                  color={project.project_status.color || '#AAA'}
-                  variant="outlined"
-                >
-                  {project.project_status}
-                </Label>
+        <>
+          {project && project.project_id && (
+            <>
+              <Grid
+                alignItems="flex-end"
+                container
+                justify="space-between"
+                spacing={3}
+              >
+                <Grid item>
+                  <Typography
+                    component="h2"
+                    gutterBottom
+                    variant="overline"
+                  >
+                    Описание проекта
+                  </Typography>
+                  <Typography
+                    component="h1"
+                    gutterBottom
+                    variant="h3"
+                  >
+                    {project.title}
+                  </Typography>
+                  <Label
+                    color={project.project_status.color || '#AAA'}
+                    variant="outlined"
+                  >
+                    {project.project_status}
+                  </Label>
+                </Grid>
+                <Grid item style={{ display: 'flex', alignItems: 'center' }}>
+                  {/* <Button
+                    style={{ marginRight: '8px', backgroundColor: '#FFFFFF' }}
+                    variant="contained"
+                  >
+                    <ShareIcon
+                      style={{ marginRight: '4px' }}
+                    />
+                    Поделиться
+                  </Button> */}
+                  <IconButton style={{ marginRight: '8px' }} onClick={() => this.handleThumbClick(true)} size="small">
+                    <ThumbUpAlt
+                      style={userReaction && userReaction.reaction
+                        ? rateButtonsStyles.liked
+                        : rateButtonsStyles.none}
+                    />
+                  </IconButton>
+                  <Typography style={{ marginRight: '8px' }}>{project.likes - project.dislikes}</Typography>
+                  <IconButton style={{ marginRight: '8px' }} onClick={() => this.handleThumbClick(true)} size="small">
+                    <ThumbDownAlt
+                      style={userReaction && !userReaction.reaction
+                        ? rateButtonsStyles.disliked
+                        : rateButtonsStyles.none}
+                    />
+                  </IconButton>
+                  {project.project_members && (!project.project_members.some((member) => member.user_id === currentUser.user_id)) && (
+                  <Button
+                    style={{ color: '#FFFFFF', backgroundColor: '#4CAF50' }}
+                    onClick={this.handleBecomeMember}
+                    // onClick={this.handleOpenApplyModal}
+                    variant="contained"
+                  >
+                    Принять участие
+                  </Button>
+                  )}
+                  {project.creator.user_id === currentUser.user_id && (
+                  <Button
+                    style={{ color: '#FFFFFF', backgroundColor: '#4CAF50' }}
+                    onClick={this.handleOpenApplyModal}
+                    variant="contained"
+                  >
+                    Изменить
+                  </Button>
+                  )}
+                </Grid>
               </Grid>
-              <Grid item style={{ display: 'flex', alignItems: 'center' }}>
-                {/* <Button
-                  style={{ marginRight: '8px', backgroundColor: '#FFFFFF' }}
-                  variant="contained"
-                >
-                  <ShareIcon
-                    style={{ marginRight: '4px' }}
-                  />
-                  Поделиться
-                </Button> */}
-                <IconButton onClick={() => this.handleThumbClick(true)}>
-                  <ThumbUpAlt
-                    style={userReaction && userReaction.reaction
-                      ? rateButtonsStyles.liked
-                      : rateButtonsStyles.none}
-                  />
-                </IconButton>
-                <Typography>{project.reactionsCount}</Typography>
-                <IconButton onClick={() => this.handleThumbClick(true)}>
-                  <ThumbDownAlt
-                    style={userReaction && !userReaction.reaction
-                      ? rateButtonsStyles.disliked
-                      : rateButtonsStyles.none}
-                  />
-                </IconButton>
-                <Button
-                  style={{ color: '#FFFFFF', backgroundColor: '#4CAF50' }}
-                  onClick={this.handleOpenApplyModal}
-                  variant="contained"
-                >
-                  Принять участие
-                </Button>
-              </Grid>
-            </Grid>
-            <Tabs
-              value={currentTab}
-              onChange={(e, newValue) => {
-                this.setState({ currentTab: newValue });
-              }}
-            >
-              <Tab label="Основная информация" {...getTabProps(0)} />
-              <Tab label="Новости" {...getTabProps(1)} />
-            </Tabs>
-            <Divider />
-            <Box>
-              <TabPanel value={currentTab} index={0}>
-                <Grid
-                  container
-                  spacing={3}
-                >
+              <Tabs
+                value={currentTab}
+                onChange={(e, newValue) => {
+                  this.setState({ currentTab: newValue });
+                }}
+              >
+                <Tab label="Основная информация" {...getTabProps(0)} />
+                <Tab label="Новости" {...getTabProps(1)} />
+              </Tabs>
+              <Divider />
+              <Box>
+                <TabPanel value={currentTab} index={0}>
                   <Grid
-                    item
-                    lg={8}
-                    xl={9}
-                    xs={12}
+                    container
+                    spacing={3}
                   >
                     <Grid
-                      container
-                      spacing={3}
-                      direction="column"
+                      item
+                      lg={8}
+                      xl={9}
+                      xs={12}
                     >
                       <Grid
-                        item
+                        container
+                        spacing={3}
+                        direction="column"
                       >
-                        <Card>
-                          <CardHeader
-                            style={{ paddingBottom: 0 }}
-                            title="Описание"
+                        <Grid
+                          item
+                        >
+                          <Card>
+                            <CardHeader
+                              style={{ paddingBottom: 0 }}
+                              title="Описание"
+                            />
+                            <CardContent>
+                              <Typography>{project.description}</Typography>
+                            </CardContent>
+                          </Card>
+                        </Grid>
+                        <Grid
+                          item
+                        >
+                          <CommentsBox
+                            project={project}
+                            comments={project.comments}
+                            currentUser={currentUser}
+                            handleMessageSend={this.handleMessageSend}
                           />
-                          <CardContent>
-                            <Typography>{project.description}</Typography>
-                          </CardContent>
-                        </Card>
-                      </Grid>
-                      <Grid
-                        item
-                      >
-                        <CommentsBox
-                          comments={project.comments}
-                          currentUser={currentUser}
-                          handleMessageSend={this.handleMessageSend}
-                        />
+                        </Grid>
                       </Grid>
                     </Grid>
+                    <Grid
+                      item
+                      lg={4}
+                      xl={3}
+                      xs={12}
+                    >
+                      <ProjectSummary project={project} />
+                      <MembersCard
+                        currentUser={currentUser}
+                        project={project}
+                        project_members={project.project_members}
+                        style={{ marginTop: '24px' }}
+                      />
+                    </Grid>
                   </Grid>
-                  <Grid
-                    item
-                    lg={4}
-                    xl={3}
-                    xs={12}
-                  >
-                    <ProjectSummary project={project} />
-                    <MembersCard
-                      members={project.members}
-                      style={{ marginTop: '24px' }}
-                    />
-                  </Grid>
-                </Grid>
-              </TabPanel>
-              <TabPanel value={currentTab} index={1}>
-                {/* <ProjectSocialFeed /> */}
-              </TabPanel>
-            </Box>
-            <Dialog
-              maxWidth="lg"
-              onClose={this.handleCloseApplyModal}
-              open={applyModalIsOpen}
-            >
-              <DialogTitle>
-                <Typography
-                  gutterBottom
-                  variant="h3"
-                >
-                  Подача заявки на участие
-                </Typography>
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText>
+                </TabPanel>
+                <TabPanel value={currentTab} index={1}>
+                  {/* <ProjectSocialFeed /> */}
+                </TabPanel>
+              </Box>
+              {/* <Dialog
+                maxWidth="lg"
+                onClose={this.handleCloseApplyModal}
+                open={applyModalIsOpen}
+              >
+                <DialogTitle>
                   <Typography
-                    variant="subtitle2"
+                    gutterBottom
+                    variant="h3"
                   >
-                    Чтобы подать заявку на участие в проекте, вам необходимо заполнить данную форму.
+                    Подача заявки на участие
                   </Typography>
-                </DialogContentText>
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  id="name"
-                  label="Email Address"
-                  type="email"
-                  fullWidth
-                />
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={this.handleCloseApplyModal} color="primary">
-                  Отменить
-                </Button>
-                <Button
-                  onClick={this.handleApplyApplyModal}
-                  variant="contained"
-                >
-                  Подать заявку
-                </Button>
-              </DialogActions>
-            </Dialog>
-          </>
-        )}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    <Typography
+                      variant="subtitle2"
+                    >
+                      Чтобы подать заявку на участие в проекте, вам необходимо заполнить данную форму.
+                    </Typography>
+                  </DialogContentText>
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    id="name"
+                    label=""
+                    type="email"
+                    fullWidth
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={this.handleCloseApplyModal} color="primary">
+                    Отменить
+                  </Button>
+                  <Button
+                    onClick={this.handleApplyApplyModal}
+                    variant="contained"
+                  >
+                    Подать заявку
+                  </Button>
+                </DialogActions>
+              </Dialog> */}
+            </>
+          )}
+        </>
       </Container>
     );
   }
@@ -331,7 +317,8 @@ export default withRouter(connect(
     currentUser: state.currentUser,
   }),
   (dispatch) => ({
-    createComment: (content, userId) => dispatch(createComment(content, userId)),
+    createComment: (content, userId, projectId, datetime) => dispatch(createComment(content, userId, projectId, datetime)),
+    becomeMember: (projectId, userId) => dispatch(becomeMember(projectId, userId)),
     createReaction: (id, reaction) => dispatch(createReaction(id, reaction)),
     getProject: (id) => dispatch(getProject(id)),
     getUserByToken: (token) => dispatch(getUserByToken(token)),

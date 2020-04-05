@@ -35,12 +35,12 @@ class ProjectCreation extends Component {
     super(props);
     this.state = {
       projectForm: {
-        members: [],
+        project_members: [],
         title: '',
         description: '',
         start_datetime: '',
         end_datetime: '',
-        project_status: '',
+        // project_status: '',
         price: '',
         selectedCategories: [],
         files: [],
@@ -69,15 +69,12 @@ class ProjectCreation extends Component {
   };
 
   handleSubmitCreateCategoryModal=() => {
-    console.log(this.state);
     this.props.createCategory(this.state.categoryForm);
     this.setState({ createCategoryModalIsOpen: false });
   };
 
   handleCreateProjectButtonClick=() => {
-    console.log(this.state);
-    console.log('this.readURL(this.state.projectForm.files[0])', this.readURL(this.state.projectForm.files[0]));
-    // this.props.createProject(this.state.projectForm);
+    this.props.createProject({ ...this.state.projectForm, creator: { user_id: `${this.props.currentUser.user_id}` } });
   }
 
   readURL = (url) => {
@@ -88,7 +85,6 @@ class ProjectCreation extends Component {
   }
 
   handleFilesChange=(e) => {
-    console.log(e.target.files);
     e.persist();
     this.setState((prevState) => ({
       projectForm: {
@@ -103,7 +99,7 @@ class ProjectCreation extends Component {
     this.setState((prevState) => ({
       projectForm: {
         ...prevState.projectForm,
-        [e.target.name]: e.target.value,
+        [e.target.name]: e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1),
       },
     }));
   }
@@ -123,10 +119,6 @@ class ProjectCreation extends Component {
     } = this.props;
     const categoriesId = categories && categories.map((cat) => cat.category_id);
 
-    // const {
-    //   categories,
-    // } = this.props;
-    console.log(this.state);
     return (
       <Container>
         <Grid container direction="column" spacing={3}>
@@ -157,13 +149,19 @@ class ProjectCreation extends Component {
                   </Grid>
                   <Grid item>
                     <FormControl fullWidth variant="outlined" margin="dense">
-                      <InputLabel id="label" shrink style={{ background: white }}>
+                      <InputLabel id="label" shrink>
                         Категории
                       </InputLabel>
                       <Select
                         multiple
                         labelId="label"
                         value={projectForm.selectedCategories}
+                        input={(
+                          <OutlinedInput
+                            notched
+                            labelWidth={73}
+                          />
+                        )}
                         onChange={(e, menuItem) => {
                           menuItem.props.value
                           && this.setState({
@@ -317,7 +315,7 @@ class ProjectCreation extends Component {
                         <OutlinedInput
                           type="file"
                           notched
-                          labelWidth={150}
+                          labelWidth={160}
                           onChange={this.handleFilesChange}
                           inputProps={{
                             accept: '.doc,.pdf,.excel,.csv,.xml',
@@ -361,7 +359,7 @@ class ProjectCreation extends Component {
             </Card>
           </Grid>
           <Grid item>
-            <MembersCard members={projectForm.members} /* handleMemberAdd *//>
+            {/* <MembersCard project_members={projectForm.project_members} /> */}
           </Grid>
         </Grid>
         <Dialog
@@ -428,6 +426,7 @@ class ProjectCreation extends Component {
 }
 const mapStateToProps = (store) => ({
   categories: store.categories,
+  currentUser: store.currentUser,
 });
 const mapDispatchToProps = (dispatch) => ({
   getCategories: () => dispatch(getCategories()),

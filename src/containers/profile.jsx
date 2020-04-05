@@ -103,6 +103,16 @@ class Profile extends Component {
     this.props.updateUser(this.state.userForm);
   };
 
+  handleUserFormChange=(e) => {
+    e.persist();
+    this.setState((prevState) => ({
+      userForm: {
+        ...prevState.userForm,
+        [e.target.name]: e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1),
+      },
+    }));
+  }
+
   render() {
     const {
       user,
@@ -133,10 +143,10 @@ class Profile extends Component {
                   >
                     <Tab label="Основная информация" {...getTabProps(0)} />
                     <Tab
-                      label={currentUser && user.id === currentUser.id ? 'Мои проекты' : 'Проекты пользователя'}
+                      label={currentUser && user.user_id === currentUser.user_id ? 'Мои проекты' : 'Проекты пользователя'}
                       {...getTabProps(1)}
                     />
-                    {currentUser && user.id === currentUser.id && (
+                    {currentUser && user.user_id === currentUser.user_id && (
                       <Tab label="Оцененные проекты" {...getTabProps(2)} />
                     )}
                   </Tabs>
@@ -170,7 +180,7 @@ class Profile extends Component {
                                 {!userForm.user_photo ? getInitials(user) : ''}
                               </Avatar>
                             </Grid>
-                            {currentUser && user.id === currentUser.id && (
+                            {currentUser && user.user_id === currentUser.user_id && (
                             <Grid item xs>
                               <Grid container spacing={1} direction="row">
                                 <Grid item xs>
@@ -243,13 +253,9 @@ class Profile extends Component {
                                 variant="outlined"
                                 size="small"
                                 value={userForm.surname}
-                                disabled={currentUser && user.id === currentUser.id}
-                                onChange={(e) => {
-                                  this.setState({
-                                    userForm:
-                                     { ...userForm, surname: e.target.value },
-                                  });
-                                }}
+                                disabled={currentUser && user.user_id !== currentUser.user_id}
+                                name="surname"
+                                onChange={this.handleUserFormChange}
                                 fullWidth
                               />
                             </Grid>
@@ -262,14 +268,9 @@ class Profile extends Component {
                                 variant="outlined"
                                 size="small"
                                 value={userForm.name}
-                                disabled={currentUser && user.id === currentUser.id}
-                                onChange={(e) => {
-                                  this.setState({
-                                    userForm: {
-                                      ...userForm, name: e.target.value,
-                                    },
-                                  });
-                                }}
+                                disabled={currentUser && user.user_id !== currentUser.user_id}
+                                name="name"
+                                onChange={this.handleUserFormChange}
                                 fullWidth
                               />
                             </Grid>
@@ -282,15 +283,9 @@ class Profile extends Component {
                                 variant="outlined"
                                 size="small"
                                 value={userForm.middlename}
-                                disabled={currentUser && user.id === currentUser.id}
-                                onChange={(e) => {
-                                  this.setState({
-                                    userForm: {
-                                      ...userForm,
-                                      middlename: e.target.value,
-                                    },
-                                  });
-                                }}
+                                disabled={currentUser && user.user_id !== currentUser.user_id}
+                                name="middlename"
+                                onChange={this.handleUserFormChange}
                                 fullWidth
                               />
                             </Grid>
@@ -303,15 +298,9 @@ class Profile extends Component {
                                 variant="outlined"
                                 size="small"
                                 value={userForm.username}
-                                disabled={currentUser && user.id === currentUser.id}
-                                onChange={(e) => {
-                                  this.setState({
-                                    userForm: {
-                                      ...userForm,
-                                      username: e.target.value,
-                                    },
-                                  });
-                                }}
+                                disabled={currentUser && user.user_id !== currentUser.user_id}
+                                name="username"
+                                onChange={this.handleUserFormChange}
                                 fullWidth
                               />
                             </Grid>
@@ -319,15 +308,19 @@ class Profile extends Component {
                         </CardContent>
                       </Card>
                     </Grid>
+                    {currentUser && user.user_id === currentUser.user_id
+                    && (
                     <Grid item>
                       <Grid container justify="center">
                         <Grid item>
+
                           <Button color="primary" variant="contained" onClick={this.handleSaveButtonClick}>
                             Сохранить
                           </Button>
                         </Grid>
                       </Grid>
                     </Grid>
+                    )}
                   </Grid>
                 </Grid>
               </Grid>
@@ -335,7 +328,7 @@ class Profile extends Component {
             <TabPanel value={currentTab} tag="tabpanel-clientform" index={1}>
               <ProfileProjects getProjects={getUserProjects} user={user} />
             </TabPanel>
-            {currentUser && user.id === currentUser.id && (
+            {currentUser && user.user_id === currentUser.user_id && (
               <TabPanel value={currentTab} tag="tabpanel-clientform" index={1}>
                 <ProfileProjects getProjects={getUserMarkedProjects} user={currentUser} />
               </TabPanel>

@@ -17,7 +17,12 @@ import binaryArrayToBase64 from '../heplers/binaryArrayToBase64';
 
 class MembersCard extends Component {
   render() {
-    const { members, style } = this.props;
+    const {
+      project_members,
+      style,
+      currentUser,
+      project,
+    } = this.props;
     return (
       <Card
         style={{ ...style }}
@@ -32,15 +37,15 @@ class MembersCard extends Component {
         />
         <CardContent>
           <List>
-            {members.map((member) => (
+            {project_members && project_members.map((member) => (
               <ListItem
                 disableGutters
-                key={member.id}
+                key={member.user_id}
               >
                 <ListItemAvatar>
                   <Avatar
                     component={RouterLink}
-                    to={`/profiles/${member.id}`}
+                    to={`/profiles/${member.user_id}`}
                     alt={`${member.surname} ${member.name}  ${member.middlename}`}
                     src={binaryArrayToBase64(member.user_photo)}
                   >
@@ -56,9 +61,11 @@ class MembersCard extends Component {
             ))}
           </List>
         </CardContent>
+        {currentUser && currentUser.user_id === project.creator.user_id && (
         <CardActions disableSpacing>
           <Button fullWidth>Управлять</Button>
         </CardActions>
+        )}
       </Card>
     );
   }

@@ -17,6 +17,7 @@ import ThumbDownAlt from '@material-ui/icons/ThumbDownAlt';
 import { Link as RouterLink } from 'react-router-dom';
 import Label from './Label';
 import getInitials from '../heplers/getInitials';
+import binaryArrayToBase64 from '../heplers/binaryArrayToBase64';
 
 const rateButtonsStyles = {
   liked: {
@@ -31,10 +32,16 @@ const rateButtonsStyles = {
 };
 
 class ProjectCard extends Component {
-  handleThumbClick = (reaction) => {
+  handleThumbClick = (e) => {
     const { project } = this.props;
-    this.props.createReaction(project.project_id, reaction);
-    this.props.getProjects();
+    const prevReaction = project.project_reaction[0].reaction;
+    const curReaction = e.target.name === 'like';
+    console.log('prevReaction', prevReaction);
+    console.log('curReaction', curReaction);
+    console.log('+curReaction === prevReaction', +curReaction === prevReaction);
+    if (+curReaction === prevReaction) this.props.createReaction(project.project_id, null);
+    else this.props.createReaction(project.project_id, curReaction);
+    // this.props.getProject(project.project_id);
   };
 
   render() {
@@ -50,7 +57,14 @@ class ProjectCard extends Component {
           {project.creator && (
           <CardHeader
             style={{ paddingBottom: 0 }}
-            title={<Link href={`/projects/${project.project_id}`}>{project.name}</Link>}
+            title={(
+              <Typography
+                variant="h5"
+                noWrap
+              >
+                <Link href={`/projects/${project.project_id}`}>{project.title}</Link>
+              </Typography>
+)}
             subheader={(
               <Typography variant="body2">
                 от
@@ -70,7 +84,7 @@ class ProjectCard extends Component {
                 alt={`${project.creator.surname || ''}
                   ${project.creator.name || ''} 
                   ${project.creator.middlename || ''}`}
-                src={project.creator.user_photo || ''}
+                src={binaryArrayToBase64(project.creator.user_photo)}
               >
                 {!project.creator.user_photo ? getInitials(project.creator) : ''}
               </Avatar>
@@ -95,16 +109,16 @@ class ProjectCard extends Component {
               </Grid>
             </Grid>
           </CardContent>
-          <CardActions disableSpacing style={{ paddingTop: 0 }}>
-            <IconButton onClick={() => this.handleThumbClick(true)}>
+          <CardActions style={{ paddingTop: 0 }}>
+            <IconButton name="like" onClick={(e) => this.handleThumbClick(e)} size="small">
               <ThumbUpAlt
                 style={userReaction && userReaction.reaction
                   ? rateButtonsStyles.liked
                   : rateButtonsStyles.none}
               />
             </IconButton>
-            <Typography>{project.reactionsCount}</Typography>
-            <IconButton onClick={() => this.handleThumbClick(false)}>
+            <Typography>{project.likes - project.dislikes}</Typography>
+            <IconButton name="dislike" onClick={(e) => this.handleThumbClick(e)} size="small">
               <ThumbDownAlt
                 style={userReaction && !userReaction.reaction
                   ? rateButtonsStyles.disliked

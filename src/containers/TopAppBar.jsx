@@ -10,7 +10,6 @@ import {
   Button,
   Hidden,
   IconButton,
-  SwipeableDrawer,
   Drawer,
   List,
   ListItem,
@@ -101,10 +100,10 @@ class TopAppBar extends Component {
                   <Grid item>
                     <Button
                       style={{ color: white }}
+                      onClick={this.signOut}
                     >
                       <InputIcon
                         style={{ marginRight: '5px' }}
-                        onClick={this.signOut}
                       />
                       Выход
                     </Button>
@@ -146,7 +145,7 @@ class TopAppBar extends Component {
               <ListItemIcon><PersonOutlineRoundedIcon /></ListItemIcon>
               <ListItemText primary="Профиль" />
             </ListItem> */}
-            <ListItem button>
+            <ListItem button onClick={this.signOut}>
               <ListItemIcon>
                 <InputIcon />
               </ListItemIcon>

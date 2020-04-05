@@ -28,7 +28,7 @@ class ProjectSummary extends Component {
             avatar={(
               <Avatar
                 component={RouterLink}
-                to={`/profiles/${project.creator_id}`}
+                to={`/profiles/${project.creator.user_id}`}
                 alt={`${project.creator.surname} ${project.creator.name}  ${project.creator.middlename}`}
                 src={binaryArrayToBase64(project.creator.user_photo)}
               >
@@ -39,7 +39,7 @@ class ProjectSummary extends Component {
             subheader={(
               <Typography
                 component={RouterLink}
-                to={`/profiles/${project.creator.id}`}
+                to={`/profiles/${project.creator.user_id}`}
                 variant="h5"
               >
                 {project.creator.name}

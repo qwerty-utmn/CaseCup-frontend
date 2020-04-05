@@ -34,26 +34,92 @@ export const getProjects = (filter = 'start_datetime', sort = 'desc', search = '
   }
 };
 
+// export const uploadFiles = (files, projectId) => async (dispatch) => {
+//   try {
+//     const formData = new FormData();
+//     files.map((file) => {
+//       formData.append('file', file);
+//     });
+//     formData.append('project_id', projectId);
+//     const response = await fetch(`http://${config.server}:${config.port}/upload`, {
+//       method: 'post',
+//       headers: {
+//         'Content-type': 'multipart/form-data; charset=UTF-8',
+//         Authorization: localStorage.getItem('token'),
+//       },
+//       body: formData,
+//     });
+//     const json = await response.json();
+
+//     if (!json.error) {
+//       // dispatch({
+//       //   type: FILES_UPLOAD,
+//       //   payload: json.data,
+//       // });
+//       return json;
+//     }
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
+
 export const createProject = (project) => async (dispatch) => {
   try {
     dispatch({
       type: 'START_LOADING',
       payload: '',
     });
-    const response = await fetch(`http://${config.server}:${config.port}/projects/create`, {
+    const { files, ...projectInfo } = project;
+    // console.log('files', files);
+    // console.log('projectInfo', projectInfo);
+    // console.log('JSON.stringify(projectInfo)', JSON.stringify(projectInfo));
+    const responseProject = await fetch(`http://${config.server}:${config.port}/projects/create`, {
       method: 'post',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
         Authorization: localStorage.getItem('token'),
       },
-      body: JSON.stringify(project),
+      body: JSON.stringify(projectInfo),
     });
-    const json = await response.json();
+    const newProject = await responseProject.json();
 
-    if (!json.error) {
+    // if (!NewProject.error) {
+    //   const postedFiles = await uploadFiles(files, NewProject.project_id);
+
+
+    //   if (!postedFiles.error) {
+    //     dispatch({
+    //       type: CREATE_PROJECT,
+    //       payload: NewProject.data,
+    //     });
+    //     return;
+    //   }
+    // }
+    if (!responseProject.error) {
+      const member = {
+        user_id: project.creator.user_id,
+        role: 'Создатель',
+      };
+      const responseMember = await fetch(`http://${config.server}:${config.port}/projects/${projectId}/add_member`, {
+        method: 'post',
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+          Authorization: localStorage.getItem('token'),
+        },
+        body: JSON.stringify(member),
+      });
+      const newMember = await responseMember.json();
+
+      // if (responseMember.ok) {
+      //   dispatch({
+      //     type: BECOME_MEMBER,
+      //     payload: newMember,
+      //   });
+      //   return;
+      // }
       dispatch({
         type: CREATE_PROJECT,
-        payload: json.data,
+        payload: newProject.data,
       });
       return;
     }

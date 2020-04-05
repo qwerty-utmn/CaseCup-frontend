@@ -28,7 +28,10 @@ class CommentForm extends Component {
   };
 
   render() {
-    const { handleMessageSend, currentUser } = this.props;
+    const {
+      handleMessageSend,
+      currentUser,
+    } = this.props;
     const { multiline, message } = this.state;
     return (
       <Grid container alignItems="center" style={{ marginTop: '16px', paddingRight: '8px' }}>
@@ -37,7 +40,7 @@ class CommentForm extends Component {
             alt={`${currentUser.surname} ${currentUser.name}  ${currentUser.middlename}`}
             component={RouterLink}
             src={binaryArrayToBase64(currentUser.user_photo)}
-            to={`/profiles/${currentUser.id}`}
+            to={`/profiles/${currentUser.user_id}`}
           >
             {!currentUser.user_photo ? getInitials(currentUser) : ''}
           </Avatar>
@@ -63,7 +66,7 @@ class CommentForm extends Component {
           </Paper>
         </Grid>
         <Tooltip title="Отправить">
-          <IconButton color={message.length > 0 ? 'primary' : 'default'} onClick={() => handleMessageSend(message, currentUser.user_id)}>
+          <IconButton color={message.length > 0 ? 'primary' : 'default'} onClick={() => handleMessageSend(message)}>
             <SendIcon />
           </IconButton>
         </Tooltip>

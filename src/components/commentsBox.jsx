@@ -10,38 +10,13 @@ import Comment from './comment';
 
 class CommentsBox extends Component {
   render() {
-    const { style, currentUser, handleMessageSend } = this.props;
-    const comments = [{
-      id: '0',
-      creator_id: {
-        user_photo: null,
-        name: 'HUI',
-        surname: 'HUEVII',
-      },
-      created_at: '2020-02-18 05:58:48',
-      content: 'YA LOMAL STEKLOOOOO',
-    },
-    {
-      id: '1',
-      creator_id: {
-        user_photo: null,
-        name: 'HUI',
-        surname: 'HUEVII',
-      },
-      created_at: '2020-02-18 05:58:48',
-      content: 'YA LOMAL STEKLOOOOO',
-    },
-    {
-      id: '2',
-      creator_id: {
-        user_photo: null,
-        name: 'HUI',
-        surname: 'HUEVII',
-      },
-      created_at: '2020-02-18 05:58:48',
-      content: 'YA LOMAL STEKLOOOOO',
-    },
-    ];
+    const {
+      style,
+      currentUser,
+      handleMessageSend,
+      project,
+      comments,
+    } = this.props;
     return (
       <Card
         style={{ ...style }}
@@ -56,13 +31,13 @@ class CommentsBox extends Component {
               {comments.map((comment) => (
                 <Comment
                   comment={comment}
-                  key={comment.id}
+                  key={comment.comment_id}
                 />
               ))}
             </>
           )}
           <Divider />
-          <CommentForm currentUser={currentUser} handleMessageSend={handleMessageSend} />
+          <CommentForm project={project} currentUser={currentUser} handleMessageSend={handleMessageSend} />
         </CardContent>
       </Card>
     );

@@ -25,7 +25,7 @@ class ProfileProjectCard extends Component {
           <Grid container justify="space-between">
             <Grid item>
               <Avatar
-                alt={`${project.creator.surname} ${project.creator.name}  ${project.creator.middlename}`}
+                alt={`${project.creator.surname} ${project.creator.name} ${project.creator.middlename}`}
                 src={binaryArrayToBase64(project.creator.user_photo)}
               >
                 {!project.creator.user_photo ? getInitials(project.creator) : ''}
@@ -57,11 +57,11 @@ class ProfileProjectCard extends Component {
             </Grid>
             <Grid item>
               <Typography variant="h5">
-                {project.members ? project.members.length : '0'}
+                {project.project_members ? project.project_members.length : '0'}
               </Typography>
               <Typography variant="body2">
                 {smartEnding(
-                  project.members.lenght,
+                  project.project_members.lenght,
                   ['', 'a', 'ов'],
                   'участник',
                 )}
@@ -69,7 +69,7 @@ class ProfileProjectCard extends Component {
             </Grid>
             <Grid item>
               <Typography variant="h5">
-                {moment(project.startDate).format('DD.MM.YYYY')}
+                {moment(project.start_datetime).format('DD.MM.YYYY')}
               </Typography>
               <Typography variant="body2">
                 Дата начала
@@ -77,7 +77,7 @@ class ProfileProjectCard extends Component {
             </Grid>
             <Grid item>
               <Typography variant="h5">
-                {moment(project.endDate).format('DD.MM.YYYY')}
+                {moment(project.end_datetime).format('DD.MM.YYYY')}
               </Typography>
               <Typography variant="body2">
                 Дата окончания
@@ -85,7 +85,7 @@ class ProfileProjectCard extends Component {
             </Grid>
             <Grid item>
               <Typography variant="h5">
-                {project.currentState}
+                {project.project_status}
               </Typography>
               <Typography variant="body2">
                 Текущий этап(стадия?)
@@ -96,7 +96,7 @@ class ProfileProjectCard extends Component {
                 color="primary"
                 variant="contained"
                 component={RouterLink}
-                to={`/projects/${project.id}`}
+                to={`/projects/${project.project_id}`}
               >
                 Посмотреть
               </Button>
@@ -110,7 +110,7 @@ class ProfileProjectCard extends Component {
           <IconButton>
             <ShareIcon />
           </IconButton>
-          <Button component={RouterLink} to={`/projects/${project.id}`}>
+          <Button component={RouterLink} to={`/projects/${project.project_id}`}>
             Узнать больше
           </Button>
         </CardActions> */}
