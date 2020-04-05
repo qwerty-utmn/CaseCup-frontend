@@ -33,7 +33,9 @@ import MembersCard from '../components/membersCard';
 import CommentsBox from '../components/commentsBox';
 import ProjectSocialFeed from './projectSocialFeed';
 import { createComment } from '../actions/comments';
-import { getProject, createReaction } from '../actions/projects';
+import {
+  getProject, createReaction, updateReaction, deleteReaction,
+} from '../actions/projects';
 import { getUserByToken } from '../actions/user';
 import { becomeMember } from '../actions/members';
 
@@ -88,8 +90,18 @@ class Project extends Component {
   }
 
   handleThumbClick = (reaction) => {
-    const { project } = this.props;
-    this.props.createReaction(project.project_id, reaction);
+    const { project, currentUser } = this.props;
+    const prevUserReaction = project.project_reaction.find((item) => item.user_id === currentUser.user_id);
+    if (prevUserReaction) {
+      if (prevUserReaction.reaction === +reaction) {
+        this.props.deleteReaction(project.project_id, currentUser.user_id);
+      } else {
+        this.props.updateReaction(project.project_id, reaction, currentUser.user_id);
+      }
+    } else {
+      this.props.createReaction(project.project_id, reaction, currentUser.user_id);
+    }
+    this.props.getProject(project.project_id);
   };
 
   handleBecomeMember = () => {
@@ -161,7 +173,7 @@ class Project extends Component {
                     />
                   </IconButton>
                   <Typography style={{ marginRight: '8px' }}>{project.likes - project.dislikes}</Typography>
-                  <IconButton style={{ marginRight: '8px' }} onClick={() => this.handleThumbClick(true)} size="small">
+                  <IconButton style={{ marginRight: '8px' }} onClick={() => this.handleThumbClick(false)} size="small">
                     <ThumbDownAlt
                       style={userReaction && !userReaction.reaction
                         ? rateButtonsStyles.disliked
@@ -319,7 +331,9 @@ export default withRouter(connect(
   (dispatch) => ({
     createComment: (content, userId, projectId, datetime) => dispatch(createComment(content, userId, projectId, datetime)),
     becomeMember: (projectId, userId) => dispatch(becomeMember(projectId, userId)),
-    createReaction: (id, reaction) => dispatch(createReaction(id, reaction)),
+    createReaction: (id, reaction, user_id) => dispatch(createReaction(id, reaction, user_id)),
+    updateReaction: (id, reaction, user_id) => dispatch(updateReaction(id, reaction, user_id)),
+    deleteReaction: (id, user_id) => dispatch(deleteReaction(id, user_id)),
     getProject: (id) => dispatch(getProject(id)),
     getUserByToken: (token) => dispatch(getUserByToken(token)),
   }),

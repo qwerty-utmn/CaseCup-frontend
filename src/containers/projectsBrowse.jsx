@@ -27,7 +27,9 @@ import ProjectCard from '../components/projectCard';
 import smartEnding from '../heplers/wordSmartEnding';
 import { getCategories } from '../actions/categories';
 
-import { createReaction, getProjects } from '../actions/projects';
+import {
+  createReaction, getProjects, updateReaction, deleteReaction,
+} from '../actions/projects';
 import { getUserByToken } from '../actions/user';
 
 const sortOptions = [
@@ -95,6 +97,8 @@ class ProjectsBrowse extends Component {
   render() {
     const {
       createReaction,
+      updateReaction,
+      deleteReaction,
       projects,
       currentUser,
       getProjects,
@@ -279,6 +283,8 @@ class ProjectsBrowse extends Component {
                     currentUser={currentUser}
                     project={project}
                     createReaction={createReaction}
+                    updateReaction={updateReaction}
+                    deleteReaction={deleteReaction}
                     getProjects={getProjects}
                   />
                 </Grid>
@@ -298,9 +304,11 @@ export default connect(
     categories: state.categories,
   }),
   (dispatch) => ({
-    createReaction: (id, reaction) => dispatch(createReaction(id, reaction)),
+    createReaction: (id, reaction, user_id) => dispatch(createReaction(id, reaction, user_id)),
     getCategories: () => dispatch(getCategories()),
     getProjects: (filter = 'start_datetime', sort = 'desc', search_string = '') => dispatch(getProjects(filter, sort, search_string)),
     getUserByToken: (token) => dispatch(getUserByToken(token)),
+    updateReaction: (id, reaction, user_id) => dispatch(updateReaction(id, reaction, user_id)),
+    deleteReaction: (id, user_id) => dispatch(deleteReaction(id, user_id)),
   }),
 )(ProjectsBrowse);

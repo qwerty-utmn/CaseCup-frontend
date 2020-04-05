@@ -208,7 +208,7 @@ export const deleteProject = (id) => async (dispatch) => {
   }
 };
 
-export const createReaction = (project_id, reaction) => async (dispatch) => {
+export const createReaction = (project_id, reaction, user_id) => async (dispatch) => {
   try {
     dispatch({
       type: 'START_LOADING',
@@ -223,7 +223,70 @@ export const createReaction = (project_id, reaction) => async (dispatch) => {
       body: JSON.stringify({
         project_id,
         reaction: +reaction,
-        user_id: 1,
+        user_id,
+      }),
+    });
+    const json = await response.json();
+
+    if (response.ok) {
+      dispatch({
+        type: UPDATE_PROJECT,
+        payload: json.data,
+      });
+      return;
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const deleteReaction = (project_id, user_id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: 'START_LOADING',
+      payload: '',
+    });
+    const response = await fetch(`http://${config.server}:${config.port}/reactions/remove`, {
+      method: 'delete',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Authorization: localStorage.getItem('token'),
+      },
+      body: JSON.stringify({
+        project_id,
+        user_id,
+      }),
+    });
+    const json = await response.json();
+
+    if (response.ok) {
+      dispatch({
+        type: UPDATE_PROJECT,
+        payload: json,
+      });
+      return;
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const updateReaction = (project_id, reaction, user_id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: 'START_LOADING',
+      payload: '',
+    });
+    const response = await fetch(`http://${config.server}:${config.port}/reactions/update`, {
+      method: 'put',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Authorization: localStorage.getItem('token'),
+      },
+      body: JSON.stringify({
+        project_id,
+        reaction: +reaction,
+        user_id,
       }),
     });
     const json = await response.json();

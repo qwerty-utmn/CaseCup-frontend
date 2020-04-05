@@ -32,16 +32,19 @@ const rateButtonsStyles = {
 };
 
 class ProjectCard extends Component {
-  handleThumbClick = (e) => {
-    const { project } = this.props;
-    const prevReaction = project.project_reaction[0].reaction;
-    const curReaction = e.target.name === 'like';
-    console.log('prevReaction', prevReaction);
-    console.log('curReaction', curReaction);
-    console.log('+curReaction === prevReaction', +curReaction === prevReaction);
-    if (+curReaction === prevReaction) this.props.createReaction(project.project_id, null);
-    else this.props.createReaction(project.project_id, curReaction);
-    // this.props.getProject(project.project_id);
+  handleThumbClick = (reaction) => {
+    const { project, currentUser } = this.props;
+    const prevUserReaction = project.project_reaction.find((item) => item.user_id === currentUser.user_id);
+    if (prevUserReaction) {
+      if (prevUserReaction.reaction === +reaction) {
+        this.props.deleteReaction(project.project_id, currentUser.user_id);
+      } else {
+        this.props.updateReaction(project.project_id, reaction, currentUser.user_id);
+      }
+    } else {
+      this.props.createReaction(project.project_id, reaction, currentUser.user_id);
+    }
+    this.props.getProjects();
   };
 
   render() {
@@ -64,7 +67,7 @@ class ProjectCard extends Component {
               >
                 <Link href={`/projects/${project.project_id}`}>{project.title}</Link>
               </Typography>
-)}
+            )}
             subheader={(
               <Typography variant="body2">
                 от
@@ -110,7 +113,7 @@ class ProjectCard extends Component {
             </Grid>
           </CardContent>
           <CardActions style={{ paddingTop: 0 }}>
-            <IconButton name="like" onClick={(e) => this.handleThumbClick(e)} size="small">
+            <IconButton name="like" onClick={() => this.handleThumbClick(true)} size="small">
               <ThumbUpAlt
                 style={userReaction && userReaction.reaction
                   ? rateButtonsStyles.liked
@@ -118,7 +121,7 @@ class ProjectCard extends Component {
               />
             </IconButton>
             <Typography>{project.likes - project.dislikes}</Typography>
-            <IconButton name="dislike" onClick={(e) => this.handleThumbClick(e)} size="small">
+            <IconButton name="dislike" onClick={() => this.handleThumbClick(false)} size="small">
               <ThumbDownAlt
                 style={userReaction && !userReaction.reaction
                   ? rateButtonsStyles.disliked
