@@ -34,7 +34,7 @@ class ProjectCard extends Component {
   handleThumbClick = (reaction) => {
     const { project } = this.props;
     this.props.createReaction(project.project_id, reaction);
-    this.props.getProject(project.project_id);
+    this.props.getProjects();
   };
 
   render() {

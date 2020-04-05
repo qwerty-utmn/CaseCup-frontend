@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import {
   Container,
   Grid,
@@ -128,9 +129,13 @@ class Profile extends Component {
                     }}
                   >
                     <Tab label="Основная информация" {...getTabProps(0)} />
-                    <Tab label={currentUser && user.id === currentUser.id ? 'Мои проекты' : 'Проекты пользователя'} {...getTabProps(1)} />
+                    <Tab
+                      label={currentUser && user.id === currentUser.id ? 'Мои проекты' : 'Проекты пользователя'}
+                      {...getTabProps(1)}
+                    />
                     {currentUser && user.id === currentUser.id && (
-                    <Tab label="Оцененные проекты" {...getTabProps(2)} />)}
+                      <Tab label="Оцененные проекты" {...getTabProps(2)} />
+                    )}
                   </Tabs>
                   <Divider />
                 </Grid>
@@ -237,7 +242,10 @@ class Profile extends Component {
                                 value={userForm.surname}
                                 disabled={currentUser && user.id === currentUser.id}
                                 onChange={(e) => {
-                                  this.setState({ userForm: { ...userForm, surname: e.target.value } });
+                                  this.setState({
+                                    userForm:
+                                     { ...userForm, surname: e.target.value },
+                                  });
                                 }}
                                 fullWidth
                               />
@@ -253,7 +261,11 @@ class Profile extends Component {
                                 value={userForm.name}
                                 disabled={currentUser && user.id === currentUser.id}
                                 onChange={(e) => {
-                                  this.setState({ userForm: { ...userForm, name: e.target.value } });
+                                  this.setState({
+                                    userForm: {
+                                      ...userForm, name: e.target.value,
+                                    },
+                                  });
                                 }}
                                 fullWidth
                               />
@@ -269,7 +281,12 @@ class Profile extends Component {
                                 value={userForm.middlename}
                                 disabled={currentUser && user.id === currentUser.id}
                                 onChange={(e) => {
-                                  this.setState({ userForm: { ...userForm, middlename: e.target.value } });
+                                  this.setState({
+                                    userForm: {
+                                      ...userForm,
+                                      middlename: e.target.value,
+                                    },
+                                  });
                                 }}
                                 fullWidth
                               />
@@ -285,7 +302,12 @@ class Profile extends Component {
                                 value={userForm.username}
                                 disabled={currentUser && user.id === currentUser.id}
                                 onChange={(e) => {
-                                  this.setState({ userForm: { ...userForm, username: e.target.value } });
+                                  this.setState({
+                                    userForm: {
+                                      ...userForm,
+                                      username: e.target.value,
+                                    },
+                                  });
                                 }}
                                 fullWidth
                               />
@@ -311,9 +333,9 @@ class Profile extends Component {
               <ProfileProjects getProjects={getUserProjects} user={user} />
             </TabPanel>
             {currentUser && user.id === currentUser.id && (
-            <TabPanel value={currentTab} tag="tabpanel-clientform" index={1}>
-              <ProfileProjects getProjects={getUserMarkedProjects} user={currentUser} />
-            </TabPanel>
+              <TabPanel value={currentTab} tag="tabpanel-clientform" index={1}>
+                <ProfileProjects getProjects={getUserMarkedProjects} user={currentUser} />
+              </TabPanel>
             )}
           </>
         )}
@@ -321,14 +343,16 @@ class Profile extends Component {
     );
   }
 }
-const mapStateToProps = (store) => ({
-  user: store.user,
-  currentUser: store.currentUser,
-});
-const mapDispatchToProps = (dispatch) => ({
-  getUserInformation: (id) => dispatch(getUserInformation(id)),
-  getUserMarkedProjects: (id) => dispatch(getUserMarkedProjects(id)),
-  getUserProjects: (id) => dispatch(getUserProjects(id)),
-  updateUser: (id, user) => dispatch(updateUser(id, user)),
-});
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+export default withRouter(connect(
+  (store) => ({
+    user: store.user,
+    currentUser: store.currentUser,
+  }),
+  (dispatch) => ({
+    getUserInformation: (id) => dispatch(getUserInformation(id)),
+    getUserMarkedProjects: (id) => dispatch(getUserMarkedProjects(id)),
+    getUserProjects: (id) => dispatch(getUserProjects(id)),
+    updateUser: (id, user) => dispatch(updateUser(id, user)),
+
+  }),
+)(Profile));

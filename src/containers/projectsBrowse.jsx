@@ -19,7 +19,7 @@ import {
 } from '@material-ui/core';
 import ProjectCard from '../components/projectCard';
 import smartEnding from '../heplers/wordSmartEnding';
-import { createReaction, getProjects, getProject } from '../actions/projects';
+import { createReaction, getProjects } from '../actions/projects';
 import { getUserByToken } from '../actions/user';
 
 class ProjectsBrowse extends Component {
@@ -52,6 +52,7 @@ class ProjectsBrowse extends Component {
       createReaction,
       projects,
       currentUser,
+      getProjects,
     } = this.props;
     const {
       selectedSort,
@@ -163,7 +164,7 @@ class ProjectsBrowse extends Component {
                     currentUser={currentUser}
                     project={project}
                     createReaction={createReaction}
-                    getProject={getProject}
+                    getProjects={getProjects}
                   />
                 </Grid>
               ))}
@@ -184,6 +185,5 @@ export default connect(
     createReaction: (id, reaction) => dispatch(createReaction(id, reaction)),
     getProjects: (filter = {}, sort = {}, search_string = '') => dispatch(getProjects(filter, sort, search_string)),
     getUserByToken: (token) => dispatch(getUserByToken(token)),
-    getProject: (id) => dispatch(getProject(id)),
   }),
 )(ProjectsBrowse);
