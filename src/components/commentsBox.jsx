@@ -37,7 +37,11 @@ class CommentsBox extends Component {
             </>
           )}
           <Divider />
-          <CommentForm project={project} currentUser={currentUser} handleMessageSend={handleMessageSend} />
+          <CommentForm
+            project={project}
+            currentUser={currentUser}
+            handleMessageSend={handleMessageSend}
+          />
         </CardContent>
       </Card>
     );

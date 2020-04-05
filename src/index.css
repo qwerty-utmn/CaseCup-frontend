@@ -24,3 +24,13 @@ code {
   width: 80%;
   margin: 20px auto 8px !important;
 }
+
+.blocked-card{
+  background-color: #eaeaea	 !important;
+}
+
+#root {
+  background-color: white;
+  min-height: 100vh;
+  height: 100%;
+}

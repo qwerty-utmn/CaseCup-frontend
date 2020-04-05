@@ -53,10 +53,10 @@ class ProjectCard extends Component {
       && project.project_reaction
       && project.project_reaction.find((reaction) => reaction.user_id === currentUser.user_id);
 
-    return (
+      return (
       <>
         {project && (
-        <Card className={`${project.isBlocked ? 'blocked' : ''}`}>
+        <Card className={`${project.isBlocked ? 'blocked-card' : ''}`}>
           {project.creator && (
           <CardHeader
             style={{ paddingBottom: 0 }}
@@ -113,24 +113,25 @@ class ProjectCard extends Component {
             </Grid>
           </CardContent>
           <CardActions style={{ paddingTop: 0 }}>
-            <IconButton name="like" onClick={() => this.handleThumbClick(true)} size="small">
-              <ThumbUpAlt
-                style={userReaction && userReaction.reaction
-                  ? rateButtonsStyles.liked
-                  : rateButtonsStyles.none}
-              />
-            </IconButton>
-            <Typography>{project.likes - project.dislikes}</Typography>
-            <IconButton name="dislike" onClick={() => this.handleThumbClick(false)} size="small">
-              <ThumbDownAlt
-                style={userReaction && !userReaction.reaction
-                  ? rateButtonsStyles.disliked
-                  : rateButtonsStyles.none}
-              />
-            </IconButton>
-            {/* <IconButton>
-              <ShareIcon />
-            </IconButton> */}
+            {!project.isBlocked && (
+              <>
+                <IconButton name="like" onClick={() => this.handleThumbClick(true)} size="small">
+                  <ThumbUpAlt
+                    style={userReaction && userReaction.reaction
+                      ? rateButtonsStyles.liked
+                      : rateButtonsStyles.none}
+                  />
+                </IconButton>
+                <Typography>{project.likes - project.dislikes}</Typography>
+                <IconButton name="dislike" onClick={() => this.handleThumbClick(false)} size="small">
+                  <ThumbDownAlt
+                    style={userReaction && !userReaction.reaction
+                      ? rateButtonsStyles.disliked
+                      : rateButtonsStyles.none}
+                  />
+                </IconButton>
+              </>
+            )}
             <Button component={RouterLink} to={`/projects/${project.project_id}`}>
               Узнать больше
             </Button>

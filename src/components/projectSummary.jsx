@@ -34,7 +34,7 @@ class ProjectSummary extends Component {
               >
                 {!project.creator.user_photo ? getInitials(project.creator) : ''}
               </Avatar>
-          )}
+            )}
             disableTypography
             subheader={(
               <Typography
@@ -42,9 +42,9 @@ class ProjectSummary extends Component {
                 to={`/profiles/${project.creator.user_id}`}
                 variant="h5"
               >
-                {project.creator.name}
+                {`${project.creator.surname} ${project.creator.name}`}
               </Typography>
-        )}
+            )}
             title={(
               <Typography
                 display="block"
@@ -52,7 +52,7 @@ class ProjectSummary extends Component {
               >
                 Автор проекта
               </Typography>
-        )}
+             )}
           />
           <CardContent style={{ paddingTop: 0 }}>
             <List>

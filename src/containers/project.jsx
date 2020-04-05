@@ -165,38 +165,47 @@ class Project extends Component {
                     />
                     Поделиться
                   </Button> */}
-                  <IconButton style={{ marginRight: '8px' }} onClick={() => this.handleThumbClick(true)} size="small">
-                    <ThumbUpAlt
-                      style={userReaction && userReaction.reaction
-                        ? rateButtonsStyles.liked
-                        : rateButtonsStyles.none}
-                    />
-                  </IconButton>
-                  <Typography style={{ marginRight: '8px' }}>{project.likes - project.dislikes}</Typography>
-                  <IconButton style={{ marginRight: '8px' }} onClick={() => this.handleThumbClick(false)} size="small">
-                    <ThumbDownAlt
-                      style={userReaction && !userReaction.reaction
-                        ? rateButtonsStyles.disliked
-                        : rateButtonsStyles.none}
-                    />
-                  </IconButton>
-                  {project.project_members && (!project.project_members.some((member) => member.user_id === currentUser.user_id)) && (
-                  <Button
-                    style={{ color: '#FFFFFF', backgroundColor: '#4CAF50' }}
-                    onClick={this.handleOpenApplyModal}
-                    variant="contained"
-                  >
-                    Принять участие
-                  </Button>
+                  {!project.isBlocked && (
+                    <>
+                      <IconButton style={{ marginRight: '8px' }} onClick={() => this.handleThumbClick(true)} size="small">
+                        <ThumbUpAlt
+                          style={userReaction && userReaction.reaction
+                            ? rateButtonsStyles.liked
+                            : rateButtonsStyles.none}
+                        />
+                      </IconButton>
+                      <Typography style={{ marginRight: '8px' }}>{project.likes - project.dislikes}</Typography>
+                      <IconButton style={{ marginRight: '8px' }} onClick={() => this.handleThumbClick(false)} size="small">
+                        <ThumbDownAlt
+                          style={userReaction && !userReaction.reaction
+                            ? rateButtonsStyles.disliked
+                            : rateButtonsStyles.none}
+                        />
+                      </IconButton>
+                    </>
                   )}
-                  {project.creator.user_id === currentUser.user_id && (
-                  <Button
-                    style={{ color: '#FFFFFF', backgroundColor: '#4CAF50' }}
-                    onClick={this.handleOpenApplyModal}
-                    variant="contained"
-                  >
-                    Изменить
-                  </Button>
+                  {project.project_members
+                  && (!project.project_members.some((member) => member.user_id === currentUser.user_id))
+                  && !project.isBlocked
+                  && (
+                    <Button
+                      style={{ color: '#FFFFFF', backgroundColor: '#4CAF50', marginRight: '15px' }}
+                      onClick={this.handleOpenApplyModal}
+                      variant="contained"
+                    >
+                      Принять участие
+                    </Button>
+                  )}
+                  {project.creator.user_id === currentUser.user_id
+                  && !project.isBlocked
+                  && (
+                    <Button
+                      style={{ color: '#FFFFFF', backgroundColor: '#4CAF50' }}
+                      onClick={this.handleOpenApplyModal}
+                      variant="contained"
+                    >
+                      Изменить
+                    </Button>
                   )}
                 </Grid>
               </Grid>
@@ -207,7 +216,6 @@ class Project extends Component {
                 }}
               >
                 <Tab label="Основная информация" {...getTabProps(0)} />
-                <Tab label="Новости" {...getTabProps(1)} />
               </Tabs>
               <Divider />
               <Box>

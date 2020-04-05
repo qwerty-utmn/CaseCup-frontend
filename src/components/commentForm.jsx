@@ -31,9 +31,10 @@ class CommentForm extends Component {
     const {
       handleMessageSend,
       currentUser,
+      project,
     } = this.props;
     const { multiline, message } = this.state;
-    return (
+    return project.isBlocked ? (
       <Grid container alignItems="center" style={{ marginTop: '16px', paddingRight: '8px' }}>
         <Grid item>
           <Avatar
@@ -80,7 +81,7 @@ class CommentForm extends Component {
           </IconButton>
         </Tooltip>
       </Grid>
-    );
+    ) : null;
   }
 }
 
