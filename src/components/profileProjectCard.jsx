@@ -83,14 +83,14 @@ class ProfileProjectCard extends Component {
                 Дата окончания
               </Typography>
             </Grid>
-            <Grid item>
+            {/* <Grid item>
               <Typography variant="h5">
                 {project.project_status}
               </Typography>
               <Typography variant="body2">
                 Текущий этап(стадия?)
               </Typography>
-            </Grid>
+            </Grid> */}
             <Grid item>
               <Button
                 color="primary"

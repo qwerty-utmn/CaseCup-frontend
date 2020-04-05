@@ -28,9 +28,9 @@ export const currentUser = (state = INITIAL_STATE, action) => {
     case GET_USER_MARKED_PROJECTS: {
       return {
         ...state,
-        userProjects: {
-          ...action.payload.projects,
-        },
+        userProjects: [
+          ...action.payload,
+        ],
       };
     }
     case UPDATE_USER: {

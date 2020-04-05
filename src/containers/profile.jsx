@@ -146,9 +146,9 @@ class Profile extends Component {
                       label={currentUser && user.user_id === currentUser.user_id ? 'Мои проекты' : 'Проекты пользователя'}
                       {...getTabProps(1)}
                     />
-                    {currentUser && user.user_id === currentUser.user_id && (
+                    {/* {currentUser && user.user_id === currentUser.user_id && (
                       <Tab label="Оцененные проекты" {...getTabProps(2)} />
-                    )}
+                    )} */}
                   </Tabs>
                   <Divider />
                 </Grid>
@@ -328,11 +328,11 @@ class Profile extends Component {
             <TabPanel value={currentTab} tag="tabpanel-clientform" index={1}>
               <ProfileProjects getProjects={getUserProjects} user={user} />
             </TabPanel>
-            {currentUser && user.user_id === currentUser.user_id && (
+            {/* {currentUser && user.user_id === currentUser.user_id && (
               <TabPanel value={currentTab} tag="tabpanel-clientform" index={1}>
                 <ProfileProjects getProjects={getUserMarkedProjects} user={currentUser} />
               </TabPanel>
-            )}
+            )} */}
           </>
         )}
       </Container>

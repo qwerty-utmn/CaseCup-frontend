@@ -25,6 +25,6 @@ class ProfileProjects extends Component {
   }
 }
 const mapStateToProps = (store) => ({
-  userProjects: store.userProjects,
+  userProjects: store.currentUser.userProjects,
 });
 export default connect(mapStateToProps)(ProfileProjects);

@@ -87,7 +87,7 @@ export const getUserProjects = (id) => async (dispatch) => {
     if (response.ok) {
       dispatch({
         type: 'GET_USER_PROJECTS',
-        payload: json.projects,
+        payload: json,
       });
       return;
     }

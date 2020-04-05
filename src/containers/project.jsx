@@ -152,7 +152,7 @@ class Project extends Component {
                     color={project.project_status.color || '#AAA'}
                     variant="outlined"
                   >
-                    {project.project_status}
+                    {`${project.isBlocked ? 'Заблокирован' : 'Новый'}`}
                   </Label>
                 </Grid>
                 <Grid item style={{ display: 'flex', alignItems: 'center' }}>
