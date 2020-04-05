@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter, Link as RouterLink } from 'react-router-dom';
 
-import { Link as RouterLink } from 'react-router-dom';
 import {
   Typography,
   Toolbar,
@@ -24,6 +24,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import PersonOutlineRoundedIcon from '@material-ui/icons/PersonOutlineRounded';
 import ListRoundedIcon from '@material-ui/icons/ListRounded';
 import { white } from 'material-ui/styles/colors';
+import { clearUser } from '../actions/user';
 
 class TopAppBar extends Component {
   constructor(props) {
@@ -33,7 +34,12 @@ class TopAppBar extends Component {
     };
   }
 
+  signOut = () => {
+    this.props.clearUser(this.props.history);
+  }
+
   render() {
+    const isLoggedIn = localStorage.getItem('token');
     const { driverIsOpen } = this.state;
     return (
       <AppBar position="static" style={{ marginBottom: '20px' }}>
@@ -43,13 +49,14 @@ class TopAppBar extends Component {
               <Grid container direction="row" alignItems="center" justify="flex-start" spacing={1}>
                 <Grid item>
                   <Hidden smUp>
+                    {isLoggedIn && (
                     <IconButton
                       color="inherit"
                       onClick={() => this.setState((prevState) => ({ driverIsOpen: !prevState.driverIsOpen }))}
                     >
                       <MenuIcon />
                     </IconButton>
-
+                    )}
                   </Hidden>
                 </Grid>
                 <Hidden xsDown>
@@ -67,6 +74,7 @@ class TopAppBar extends Component {
 
               </Grid>
             </Grid>
+            {isLoggedIn && (
             <Grid item>
               <Hidden xsDown>
                 <Grid container direction="row" alignItems="center" justify="flex-end" spacing={1}>
@@ -94,13 +102,17 @@ class TopAppBar extends Component {
                     <Button
                       style={{ color: white }}
                     >
-                      <InputIcon style={{ marginRight: '5px' }} />
+                      <InputIcon
+                        style={{ marginRight: '5px' }}
+                        onClick={this.signOut}
+                      />
                       Выход
                     </Button>
                   </Grid>
                 </Grid>
               </Hidden>
             </Grid>
+            )}
           </Grid>
         </Toolbar>
         <Drawer
@@ -147,8 +159,12 @@ class TopAppBar extends Component {
     );
   }
 }
-const mapStateToProps = (store) => ({
-  currentUser: store.currentUser,
-});
 
-export default connect(mapStateToProps)(TopAppBar);
+export default withRouter(connect(
+  (state) => ({
+    currentUser: state.currentUser,
+  }),
+  (dispatch) => ({
+    clearUser: (history) => dispatch(clearUser(history)),
+  }),
+)(TopAppBar));
