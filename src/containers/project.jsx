@@ -35,7 +35,11 @@ import CommentsBox from '../components/commentsBox';
 import ProjectSocialFeed from './projectSocialFeed';
 import { createComment } from '../actions/comments';
 import {
-  getProject, createReaction, updateReaction, deleteReaction,
+  getProject,
+  createReaction,
+  updateReaction,
+  deleteReaction,
+  blockProject,
 } from '../actions/projects';
 import { getUserByToken } from '../actions/user';
 import { becomeMember } from '../actions/members';
@@ -185,12 +189,23 @@ class Project extends Component {
                       </IconButton>
                     </>
                   )}
+                  {!project.isBlocked
+                  && currentUser.user_id === 1
+                  && (
+                    <Button
+                      style={{ color: '#FFFFFF', backgroundColor: '#8e1717', marginRight: '15px' }}
+                      onClick={this.props.blockProject(project.project_id)}
+                      variant="contained"
+                    >
+                      Заблокировать
+                    </Button>
+                  )}
                   {project.project_members
-                  && (!project.project_members.some((member) => member.user_id === currentUser.user_id))
+                  && !project.project_members.some((member) => member.user_id === currentUser.user_id)
                   && !project.isBlocked
                   && (
                     <Button
-                      style={{ color: '#FFFFFF', backgroundColor: '#4CAF50', marginRight: '15px' }}
+                      style={{ color: '#FFFFFF', backgroundColor: '#4CAF50' }}
                       onClick={this.handleOpenApplyModal}
                       variant="contained"
                     >
@@ -344,6 +359,7 @@ export default withRouter(connect(
     updateReaction: (id, reaction, user_id) => dispatch(updateReaction(id, reaction, user_id)),
     deleteReaction: (id, user_id) => dispatch(deleteReaction(id, user_id)),
     getProject: (id) => dispatch(getProject(id)),
+    blockProject: (id) => dispatch(blockProject(id)),
     getUserByToken: (token) => dispatch(getUserByToken(token)),
   }),
 )(Project));

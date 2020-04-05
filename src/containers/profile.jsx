@@ -213,29 +213,6 @@ class Profile extends Component {
                         </CardContent>
                       </Card>
                     </Grid>
-                    <Grid item>
-                      <Card>
-                        <CardHeader title="Статистика" style={{ paddingBottom: 0 }} />
-                        <Divider />
-                        <CardContent style={{ paddingTop: 0 }}>
-                          <Table>
-                            <TableBody>
-                              {user.stats
-                          && user.stats.map((stat) => (
-                            <TableRow key={stat.name}>
-                              <TableCell>
-                                {stat.name}
-                              </TableCell>
-                              <TableCell>
-                                {stat.count}
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                            </TableBody>
-                          </Table>
-                        </CardContent>
-                      </Card>
-                    </Grid>
                   </Grid>
                 </Grid>
                 <Grid item xs={12} sm={5}>

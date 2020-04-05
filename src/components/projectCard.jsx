@@ -53,67 +53,73 @@ class ProjectCard extends Component {
       && project.project_reaction
       && project.project_reaction.find((reaction) => reaction.user_id === currentUser.user_id);
 
-      return (
+    return (
       <>
         {project && (
-        <Card className={`${project.isBlocked ? 'blocked-card' : ''}`}>
-          {project.creator && (
-          <CardHeader
-            style={{ paddingBottom: 0 }}
-            title={(
-              <Typography
-                variant="h5"
-                noWrap
-              >
-                <Link href={`/projects/${project.project_id}`}>{project.title}</Link>
-              </Typography>
-            )}
-            subheader={(
-              <Typography variant="body2">
-                от
-                {' '}
-                <Link
-                  href={`/profiles/${project.creator.user_id}`}
-                  variant="h6"
+          <Card className={`${project.isBlocked ? 'blocked-card' : ''}`}>
+            {project.creator && (
+            <CardHeader
+              style={{ paddingBottom: 0 }}
+              title={(
+                <Typography
+                  variant="h5"
+                  noWrap
                 >
-                  {`${project.creator.surname || ''} ${project.creator.name || ''}`}
-                </Link>
-                {' | '}
-                {moment(project.start_datetime).format('DD.MM.YYYY')}
-              </Typography>
-          )}
-            avatar={(
-              <Avatar
-                alt={`${project.creator.surname || ''}
+                  <Link href={`/projects/${project.project_id}`}>{project.title}</Link>
+                </Typography>
+               )}
+              subheader={(
+                <Typography variant="body2">
+                  от
+                  {' '}
+                  <Link
+                    href={`/profiles/${project.creator.user_id}`}
+                    variant="h6"
+                  >
+                    {`${project.creator.surname || ''} ${project.creator.name || ''}`}
+                  </Link>
+                  {' | '}
+                  {moment(project.start_datetime).format('DD.MM.YYYY')}
+                </Typography>
+              )}
+              avatar={(
+                <Avatar
+                  alt={`${project.creator.surname || ''}
                   ${project.creator.name || ''} 
                   ${project.creator.middlename || ''}`}
-                src={binaryArrayToBase64(project.creator.user_photo)}
-              >
-                {!project.creator.user_photo ? getInitials(project.creator) : ''}
-              </Avatar>
+                  src={binaryArrayToBase64(project.creator.user_photo)}
+                >
+                  {!project.creator.user_photo ? getInitials(project.creator) : ''}
+                </Avatar>
+              )}
+            />
             )}
-          />
-          )}
-          <CardContent>
-            <Grid container spacing={1}>
-              <Grid item>
-                <Typography variant="subtitle2">{project.description}</Typography>
-              </Grid>
-              <Grid item>
-                {project.categories.map((category) => (
-                  <Label
-                    color={category.color}
-                    key={category.category_id}
-                    style={{ marginLeft: 3 }}
+            <CardContent>
+              <Grid container spacing={1}>
+                <Grid item>
+                  <Typography
+                    variant="subtitle2"
+                    style={{ maxHeight: '100px', overflow: 'hidden' }}
                   >
-                    {category.category_id}
-                  </Label>
-                ))}
+                    {project.description}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  {project.categories.map((category) => (
+                    <Label
+                      color="#AAA"
+                      key={category.category_id}
+                      style={{ marginLeft: 3 }}
+                      variant="outlined"
+                    >
+                      {category.category_id}
+                    </Label>
+                  ))}
+                </Grid>
               </Grid>
-            </Grid>
-          </CardContent>
-          <CardActions style={{ paddingTop: 0 }}>
-            {!project.isBlocked && (
+            </CardContent>
+            <CardActions style={{ paddingTop: 0 }}>
+              {!project.isBlocked && (
               <>
                 <IconButton name="like" onClick={() => this.handleThumbClick(true)} size="small">
                   <ThumbUpAlt
@@ -131,12 +137,12 @@ class ProjectCard extends Component {
                   />
                 </IconButton>
               </>
-            )}
-            <Button component={RouterLink} to={`/projects/${project.project_id}`}>
-              Узнать больше
-            </Button>
-          </CardActions>
-        </Card>
+              )}
+              <Button component={RouterLink} to={`/projects/${project.project_id}`}>
+                Узнать больше
+              </Button>
+            </CardActions>
+          </Card>
         )}
       </>
     );

@@ -34,7 +34,7 @@ class CommentForm extends Component {
       project,
     } = this.props;
     const { multiline, message } = this.state;
-    return project.isBlocked ? (
+    return !project.isBlocked ? (
       <Grid container alignItems="center" style={{ marginTop: '16px', paddingRight: '8px' }}>
         <Grid item>
           <Avatar
@@ -72,14 +72,14 @@ class CommentForm extends Component {
           </IconButton>
         </Tooltip>
         <Divider style={{ width: 1, height: 24 }} />
-        <Tooltip title="Добавить картинку">
+        {/* <Tooltip title="Добавить картинку">
           <IconButton
             edge="end"
             // onClick={handleAttach}
           >
             <AddPhotoIcon />
           </IconButton>
-        </Tooltip>
+        </Tooltip> */}
       </Grid>
     ) : null;
   }
