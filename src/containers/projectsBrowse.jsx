@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 import AddIcon from '@material-ui/icons/Add';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
 import {
   Menu,
@@ -13,6 +15,7 @@ import {
   MenuItem,
   Container,
   TextField,
+  IconButton,
 } from '@material-ui/core';
 import ProjectCard from '../components/projectCard';
 import smartEnding from '../heplers/wordSmartEnding';
@@ -24,6 +27,7 @@ class ProjectsBrowse extends Component {
     super(props);
     this.state = {
       selectedSort: 'Популярные',
+      sortDirection: 'ASC',
       sortMenuOpened: false,
       anchorEl: null,
       searchInput: '',
@@ -54,6 +58,7 @@ class ProjectsBrowse extends Component {
       anchorEl,
       sortMenuOpened,
       searchInput,
+      sortDirection,
     } = this.state;
     return (
       <Container>
@@ -122,24 +127,30 @@ class ProjectsBrowse extends Component {
                       <MenuItem
                         key={option}
                         onClick={() => {
+                          this.setState({ sortDirection: sortDirection === 'ASC' ? 'DESC' : 'ASC' });
                           this.setState({ selectedSort: option });
                           this.setState({ sortMenuOpened: false });
                         }}
                       >
                         <ListItemText primary={option} />
+                        {option === selectedSort && (sortDirection === 'ASC' ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />)}
                       </MenuItem>
                     ))}
                   </Menu>
                 </Grid>
                 <Grid item>
-                  <TextField
-                    label="Поиск"
-                    size="small"
-                    value={searchInput}
-                    variant="outlined"
-                    onChange={this.handleSearchChange}
-                    fullWidth
-                  />
+                  <Grid container direction="row" alignItems="center">
+                    <Grid item>
+                      <TextField
+                        label="Поиск"
+                        size="small"
+                        value={searchInput}
+                        variant="outlined"
+                        onChange={this.handleSearchChange}
+                        fullWidth
+                      />
+                    </Grid>
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
