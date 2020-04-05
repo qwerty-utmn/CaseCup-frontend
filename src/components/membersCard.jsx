@@ -13,6 +13,7 @@ import {
 } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import getInitials from '../heplers/getInitials';
+import binaryArrayToBase64 from '../heplers/binaryArrayToBase64';
 
 class MembersCard extends Component {
   render() {
@@ -41,7 +42,7 @@ class MembersCard extends Component {
                     component={RouterLink}
                     to={`/profiles/${member.id}`}
                     alt={`${member.surname} ${member.name}  ${member.middlename}`}
-                    src={member.user_photo}
+                    src={binaryArrayToBase64(member.user_photo)}
                   >
                     {!member.user_photo ? getInitials(member) : ''}
                   </Avatar>

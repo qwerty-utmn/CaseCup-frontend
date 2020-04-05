@@ -12,6 +12,7 @@ import {
 import SendIcon from '@material-ui/icons/Send';
 import AddPhotoIcon from '@material-ui/icons/AddPhotoAlternate';
 import getInitials from '../heplers/getInitials';
+import binaryArrayToBase64 from '../heplers/binaryArrayToBase64';
 
 class CommentForm extends Component {
   constructor(props) {
@@ -35,10 +36,10 @@ class CommentForm extends Component {
           <Avatar
             alt={`${currentUser.surname} ${currentUser.name}  ${currentUser.middlename}`}
             component={RouterLink}
-            src={currentUser.user_photo}
+            src={binaryArrayToBase64(currentUser.user_photo)}
             to={`/profiles/${currentUser.id}`}
           >
-            {!currentUser.user_photo ? getInitials(currentUser.id) : ''}
+            {!currentUser.user_photo ? getInitials(currentUser) : ''}
           </Avatar>
         </Grid>
         <Grid item style={{ flexGrow: 1, marginLeft: '8px' }}>

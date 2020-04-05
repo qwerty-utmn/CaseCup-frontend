@@ -28,7 +28,7 @@ import {
   getUserMarkedProjects,
 } from '../actions/user';
 import getInitials from '../heplers/getInitials';
-
+import binaryArrayToBase64 from '../heplers/binaryArrayToBase64';
 
 class Profile extends Component {
   constructor(props) {
@@ -81,17 +81,9 @@ class Profile extends Component {
       }));
     };
 
-    reader.readAsDataURL(e.target.files[0]); // convert to base64 string
+    reader.readAsDataURL(e.target.files[0]);
   };
 
-  convertImageSrc=(arrayBufferView) => {
-    // const blob = new Blob([arrayBufferView], { type: 'image/jpeg' });
-    // const blob = new Blob(window.btoa(arrayBufferView), { type: 'image/jpeg' });
-    // const urlCreator = window.URL || window.webkitURL;
-    // const imageUrl = urlCreator.createObjectURL(blob);
-    const imageUrl = `data:image/jpeg;base64,${arrayBufferView}`;
-    return imageUrl;
-  }
 
   handlePhotoRemove=() => {
     this.setState((prevState) => ({
@@ -161,7 +153,12 @@ class Profile extends Component {
                             )}
                           interactive
                         > */}
-                              <Avatar variant="square" style={{ height: '200px', width: '200px' }} src={this.convertImageSrc(userForm.user_photo)} alt={`${userForm.surname} ${userForm.name}  ${userForm.middlename}`}>
+                              <Avatar
+                                variant="square"
+                                style={{ height: '200px', width: '200px' }}
+                                src={binaryArrayToBase64(userForm.user_photo)}
+                                alt={`${userForm.surname} ${userForm.name}  ${userForm.middlename}`}
+                              >
                                 {!userForm.user_photo ? getInitials(user) : ''}
                               </Avatar>
                             </Grid>

@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core';
 import Label from './Label';
 import getInitials from '../heplers/getInitials';
+import binaryArrayToBase64 from '../heplers/binaryArrayToBase64';
 
 class ProjectSummary extends Component {
   render() {
@@ -27,9 +28,9 @@ class ProjectSummary extends Component {
             avatar={(
               <Avatar
                 component={RouterLink}
-                to={`/profiles/${project.creator.user_id}`}
+                to={`/profiles/${project.creator_id}`}
                 alt={`${project.creator.surname} ${project.creator.name}  ${project.creator.middlename}`}
-                src={project.creator.user_photo}
+                src={binaryArrayToBase64(project.creator.user_photo)}
               >
                 {!project.creator.user_photo ? getInitials(project.creator) : ''}
               </Avatar>
@@ -49,7 +50,7 @@ class ProjectSummary extends Component {
                 display="block"
                 variant="overline"
               >
-                Автор предложения
+                Автор проекта
               </Typography>
         )}
           />

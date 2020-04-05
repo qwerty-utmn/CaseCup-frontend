@@ -12,6 +12,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import moment from 'moment';
 import smartEnding from '../heplers/wordSmartEnding';
 import getInitials from '../heplers/getInitials';
+import binaryArrayToBase64 from '../heplers/binaryArrayToBase64';
 
 
 class ProfileProjectCard extends Component {
@@ -23,7 +24,10 @@ class ProfileProjectCard extends Component {
         <CardContent>
           <Grid container justify="space-between">
             <Grid item>
-              <Avatar alt={`${project.creator.surname} ${project.creator.name}  ${project.creator.middlename}`} src="">
+              <Avatar
+                alt={`${project.creator.surname} ${project.creator.name}  ${project.creator.middlename}`}
+                src={binaryArrayToBase64(project.creator.user_photo)}
+              >
                 {!project.creator.user_photo ? getInitials(project.creator) : ''}
               </Avatar>
             </Grid>

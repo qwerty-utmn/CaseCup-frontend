@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core';
 
 import getInitials from '../heplers/getInitials';
+import binaryArrayToBase64 from '../heplers/binaryArrayToBase64';
 
 const styles = {
   bubble: {
@@ -28,7 +29,7 @@ class Comment extends Component {
           <Avatar
             alt={`${comment.creator_id.surname} ${comment.creator_id.name}  ${comment.creator_id.middlename}`}
             component={RouterLink}
-            src={comment.creator_id.user_photo}
+            src={binaryArrayToBase64(comment.creator_id.user_photo)}
             to={`/profiles/${comment.creator_id}`}
           >
             {!comment.creator_id.user_photo ? getInitials(comment.creator_id) : ''}
