@@ -316,9 +316,23 @@ export const updateReaction = (project_id, reaction, user_id) => async (dispatch
   }
 };
 
-export const blockProject = (project_id) => async (dispatch) => {
+export const removeMember = (project_id, user_id) => async (dispatch) => {
   try {
-
+    dispatch({
+      type: 'START_LOADING',
+      payload: '',
+    });
+    await fetch(`http://${config.server}:${config.port}/projects/${project_id}/remove_member`, {
+      method: 'delete',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Authorization: localStorage.getItem('token'),
+      },
+      body: JSON.stringify({
+        project_id,
+        user_id,
+      }),
+    });
   } catch (err) {
     console.error(err);
   }

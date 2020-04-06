@@ -76,6 +76,7 @@ class ProjectEdit extends Component {
 
   handleUpdateProjectButtonClick=() => {
     this.props.updateProject({ ...this.state.projectForm, creator: { user_id: `${this.props.currentUser.user_id}` } });
+    this.props.history.push(`/projects/${this.state.projectForm.project_id}`);
   }
 
   readURL = (url) => {

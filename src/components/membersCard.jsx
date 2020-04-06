@@ -61,7 +61,7 @@ class MembersCard extends Component {
             ))}
           </List>
         </CardContent>
-        {currentUser && currentUser.user_id === project.creator.user_id && !project.isBlocked && (
+        {currentUser && currentUser.user_id === project.creator.user_id && !project._blocked && (
           <CardActions disableSpacing>
             <Button fullWidth>Управлять</Button>
           </CardActions>

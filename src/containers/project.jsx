@@ -23,7 +23,6 @@ import {
   Box,
 } from '@material-ui/core';
 import moment from 'moment';
-import ShareIcon from '@material-ui/icons/Share';
 import ThumbUpAlt from '@material-ui/icons/ThumbUpAlt';
 import ThumbDownAlt from '@material-ui/icons/ThumbDownAlt';
 import Label from '../components/Label';
@@ -32,14 +31,14 @@ import TabPanel from '../components/tabPanel';
 import ProjectSummary from '../components/projectSummary';
 import MembersCard from '../components/membersCard';
 import CommentsBox from '../components/commentsBox';
-import ProjectSocialFeed from './projectSocialFeed';
 import { createComment } from '../actions/comments';
 import {
   getProject,
   createReaction,
   updateReaction,
   deleteReaction,
-  blockProject,
+  updateProject,
+  removeMember,
 } from '../actions/projects';
 import { getUserByToken } from '../actions/user';
 import { becomeMember } from '../actions/members';
@@ -157,7 +156,7 @@ class Project extends Component {
                     color={project.project_status.color || '#AAA'}
                     variant="outlined"
                   >
-                    {`${project.isBlocked ? 'Заблокирован' : 'Новый'}`}
+                    {`${project._blocked ? 'Заблокирован' : 'Новый'}`}
                   </Label>
                 </Grid>
                 <Grid item style={{ display: 'flex', alignItems: 'center' }}>
@@ -170,7 +169,7 @@ class Project extends Component {
                     />
                     Поделиться
                   </Button> */}
-                  {!project.isBlocked && (
+                  {!project._blocked && (
                     <>
                       <IconButton style={{ marginRight: '8px' }} onClick={() => this.handleThumbClick(true)} size="small">
                         <ThumbUpAlt
@@ -189,12 +188,20 @@ class Project extends Component {
                       </IconButton>
                     </>
                   )}
-                  {!project.isBlocked
+                  {!project._blocked
                   && currentUser.user_id === 1
                   && (
                     <Button
                       style={{ color: '#FFFFFF', backgroundColor: '#8e1717', marginRight: '15px' }}
-                      onClick={this.props.blockProject(project.project_id)}
+                      onClick={() => {
+                        this.props.updateProject({
+                          ...project,
+                          categories: project.categories.map((item) => item.category_id),
+                          _blocked: true,
+                        // creator: { user_id: `${this.props.currentUser.user_id}` },
+                        });
+                        this.props.getProject(project.project_id);
+                      }}
                       variant="contained"
                     >
                       Заблокировать
@@ -202,7 +209,7 @@ class Project extends Component {
                   )}
                   {project.project_members
                   && !project.project_members.some((member) => member.user_id === currentUser.user_id)
-                  && !project.isBlocked
+                  && !project._blocked
                   && (
                     <Button
                       style={{ color: '#FFFFFF', backgroundColor: '#4CAF50' }}
@@ -212,8 +219,23 @@ class Project extends Component {
                       Принять участие
                     </Button>
                   )}
+                  {project.project_members
+                  && project.project_members.some((member) => member.user_id === currentUser.user_id)
+                  && !project._blocked
+                  && (
+                    <Button
+                      style={{ color: '#FFFFFF', backgroundColor: '#4CAF50' }}
+                      onClick={() => {
+                        this.props.removeMember(project.project_id, currentUser.user_id);
+                        this.props.getProject(project.project_id);
+                      }}
+                      variant="contained"
+                    >
+                      Покинуть проект
+                    </Button>
+                  )}
                   {project.creator.user_id === currentUser.user_id
-                  && !project.isBlocked
+                  && !project._blocked
                   && (
                     <Button
                       style={{ color: '#FFFFFF', backgroundColor: '#4CAF50' }}
@@ -359,7 +381,8 @@ export default withRouter(connect(
     updateReaction: (id, reaction, user_id) => dispatch(updateReaction(id, reaction, user_id)),
     deleteReaction: (id, user_id) => dispatch(deleteReaction(id, user_id)),
     getProject: (id) => dispatch(getProject(id)),
-    blockProject: (id) => dispatch(blockProject(id)),
+    updateProject: (project) => dispatch(updateProject(project)),
     getUserByToken: (token) => dispatch(getUserByToken(token)),
+    removeMember: (project_id, user_id) => dispatch(removeMember(project_id, user_id)),
   }),
 )(Project));

@@ -56,7 +56,7 @@ class ProjectCard extends Component {
     return (
       <>
         {project && (
-          <Card className={`${project.isBlocked ? 'blocked-card' : ''}`}>
+          <Card className={`${project._blocked ? 'blocked-card' : ''}`}>
             {project.creator && (
             <CardHeader
               style={{ paddingBottom: 0 }}
@@ -119,7 +119,7 @@ class ProjectCard extends Component {
               </Grid>
             </CardContent>
             <CardActions style={{ paddingTop: 0 }}>
-              {!project.isBlocked && (
+              {!project._blocked && (
               <>
                 <IconButton name="like" onClick={() => this.handleThumbClick(true)} size="small">
                   <ThumbUpAlt

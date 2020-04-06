@@ -34,7 +34,7 @@ class CommentForm extends Component {
       project,
     } = this.props;
     const { multiline, message } = this.state;
-    return !project.isBlocked ? (
+    return !project._blocked ? (
       <Grid container alignItems="center" style={{ marginTop: '16px', paddingRight: '8px' }}>
         <Grid item>
           <Avatar
