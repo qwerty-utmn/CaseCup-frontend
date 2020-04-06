@@ -337,4 +337,4 @@ export const removeMember = (project_id, user_id) => async (dispatch) => {
   } catch (err) {
     console.error(err);
   }
-}
+};

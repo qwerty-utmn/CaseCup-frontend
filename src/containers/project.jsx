@@ -237,8 +237,8 @@ class Project extends Component {
                       Принять участие
                     </Button>
                   )}
-                  {project.project_members
-                  && project.project_members.some((member) => member.user_id === currentUser.user_id)
+                  {(project.creator.user_id !== currentUser.user_id) && project.project_members
+                  && project.project_members.some((member) => member.user.user_id === currentUser.user_id)
                   && !project._blocked
                   && (
                     <Button
