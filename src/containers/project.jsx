@@ -375,6 +375,7 @@ class Project extends Component {
                   <Button
                     onClick={this.handleApplyApplyModal}
                     variant="contained"
+                    style={{ color: '#FFFFFF', backgroundColor: '#4CAF50' }}
                   >
                     Подать заявку
                   </Button>

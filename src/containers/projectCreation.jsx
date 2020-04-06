@@ -277,7 +277,7 @@ class ProjectCreation extends Component {
                       />
                     </Grid>
                   </Grid>
-                  <Grid container item spacing={2}>
+                  {/* <Grid container item spacing={2}>
                     <Grid item xs={12} sm={6}>
                       <FormControl variant="outlined" margin="dense" fullWidth>
                         <InputLabel shrink>Обложка проекта</InputLabel>
@@ -290,24 +290,7 @@ class ProjectCreation extends Component {
                             id: 'raised-button-file',
                           }}
                         />
-                        {/* <label htmlFor="raised-button-file">
-                                                    <Button variant="raised" component="span" >
-                                                        Upload
-                                                    </Button>
-                                                </label> */}
                       </FormControl>
-                      {/* <input
-                                                accept="image/*"
-                                                style={{ display: 'none' }}
-                                                id="raised-button-file"
-                                                multiple
-                                                type="file"
-                                            />
-                                            <label htmlFor="raised-button-file">
-                                                <Button variant="raised" component="span" >
-                                                    Upload
-                                            </Button>
-                                            </label> */}
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <FormControl variant="outlined" margin="dense" fullWidth>
@@ -323,26 +306,9 @@ class ProjectCreation extends Component {
                             multiple: true,
                           }}
                         />
-                        {/* <label htmlFor="raised-button-file">
-                                                    <Button variant="raised" component="span" >
-                                                        Upload
-                                                    </Button>
-                                                </label> */}
                       </FormControl>
-                      {/* <input
-                                                accept="image/*"
-                                                style={{ display: 'none' }}
-                                                id="raised-button-file"
-                                                multiple
-                                                type="file"
-                                            />
-                                            <label htmlFor="raised-button-file">
-                                                <Button variant="raised" component="span" >
-                                                    Upload
-                                            </Button>
-                                            </label> */}
                     </Grid>
-                  </Grid>
+                  </Grid> */}
                 </Grid>
               </CardContent>
               <CardActions style={{ paddingTop: 0 }}>
