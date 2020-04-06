@@ -97,8 +97,9 @@ class Project extends Component {
   };
 
   handleMessageSend=(content) => {
-    console.log('this.props.project', this.props.project);
-    this.props.createComment(content, this.props.currentUser.user_id, this.props.project.project_id, moment(Date.now()).format('YYYY-MM-DD'));
+    const { project, currentUser } = this.props;
+    this.props.createComment(content, currentUser.user_id, project.project_id, moment(Date.now()).format('YYYY-MM-DD'));
+    this.props.getProject(project.project_id);
   };
 
   componentDidMount=() => {
@@ -375,6 +376,7 @@ class Project extends Component {
                   <Button
                     onClick={this.handleApplyApplyModal}
                     variant="contained"
+                    style={{ color: '#FFFFFF', backgroundColor: '#4CAF50' }}
                   >
                     Подать заявку
                   </Button>
