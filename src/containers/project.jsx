@@ -21,6 +21,7 @@ import {
   IconButton,
   CardHeader,
   Box,
+  Avatar,
 } from '@material-ui/core';
 import moment from 'moment';
 import ThumbUpAlt from '@material-ui/icons/ThumbUpAlt';
@@ -41,6 +42,8 @@ import {
   removeMember,
 } from '../actions/projects';
 import { getUserByToken } from '../actions/user';
+import ManageModal from '../components/manageModal';
+
 import { becomeMember } from '../actions/members';
 
 const rateButtonsStyles = {
@@ -61,8 +64,22 @@ class Project extends Component {
       applyModalIsOpen: false,
       role: '',
       currentTab: 0,
+      manageModalIsOpen: false,
     };
   }
+
+  handleSubmitManageModal=() => {
+  };
+
+  handleOpenManageModal=() => {
+    this.setState({
+      manageModalIsOpen: true,
+    });
+  };
+
+  handleCloseManageModal=() => {
+    this.setState({ manageModalIsOpen: false });
+  };
 
   handleOpenApplyModal=() => {
     this.setState({ applyModalIsOpen: true });
@@ -121,6 +138,7 @@ class Project extends Component {
       applyModalIsOpen,
       currentTab,
       role,
+      manageModalIsOpen,
     } = this.state;
 
     const userReaction = project
@@ -208,7 +226,7 @@ class Project extends Component {
                     </Button>
                   )}
                   {project.project_members
-                  && !project.project_members.some((member) => member.user_id === currentUser.user_id)
+                  && !project.project_members.some((member) => member.user.user_id === currentUser.user_id)
                   && !project._blocked
                   && (
                     <Button
@@ -311,6 +329,7 @@ class Project extends Component {
                         project={project}
                         project_members={project.project_members}
                         style={{ marginTop: '24px' }}
+                        handleManageClick={this.handleOpenManageModal}
                       />
                     </Grid>
                   </Grid>
@@ -361,6 +380,12 @@ class Project extends Component {
                   </Button>
                 </DialogActions>
               </Dialog>
+              <ManageModal
+                handleSubmitManageModal={this.handleSubmitManageModal}
+                handleCloseManageModal={this.handleCloseManageModal}
+                manageModalIsOpen={manageModalIsOpen}
+                project_members={project.project_members}
+              />
             </>
           )}
         </>

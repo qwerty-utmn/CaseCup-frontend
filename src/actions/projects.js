@@ -82,7 +82,7 @@ export const createProject = (project) => async (dispatch) => {
       },
       body: JSON.stringify(projectInfo),
     });
-    // const newProject = await responseProject.json();
+    const newProject = await responseProject.json();
 
     // if (!NewProject.error) {
     //   const postedFiles = await uploadFiles(files, NewProject.project_id);
@@ -99,9 +99,10 @@ export const createProject = (project) => async (dispatch) => {
     if (!responseProject.error) {
       const member = {
         user_id: project.creator.user_id,
+        project_id: newProject.project_id,
         role: 'Создатель',
       };
-      const responseMember = await fetch(`http://${config.server}:${config.port}/projects/${project.project_id}/add_member`, {
+      const responseMember = await fetch(`http://${config.server}:${config.port}/projects/${newProject.project_id}/add_member`, {
         method: 'post',
         headers: {
           'Content-type': 'application/json; charset=UTF-8',

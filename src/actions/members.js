@@ -5,9 +5,9 @@ export const BECOME_MEMBER = 'BECOME_MEMBER';
 export const becomeMember = (projectId, userId, role) => async (dispatch) => {
   try {
     const member = {
-      user: { user_id: userId },
-      // role: 'Участник',
-      // role,
+      user_id: userId,
+      project_id: projectId,
+      role,
     };
     const response = await fetch(`http://${config.server}:${config.port}/projects/${projectId}/add_member`, {
       method: 'post',

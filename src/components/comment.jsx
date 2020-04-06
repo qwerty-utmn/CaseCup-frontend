@@ -30,7 +30,7 @@ class Comment extends Component {
             alt={`${comment.user.surname} ${comment.user.name}  ${comment.user.middlename}`}
             component={RouterLink}
             src={binaryArrayToBase64(comment.user.user_photo)}
-            to={`/profiles/${comment.user}`}
+            to={`/profiles/${comment.user.user_id}`}
           >
             {!comment.user.user_photo ? getInitials(comment.user) : ''}
           </Avatar>
@@ -41,7 +41,7 @@ class Comment extends Component {
               <Link
                 color="textPrimary"
                 component={RouterLink}
-                to={`/profiles/${comment.user}`}
+                to={`/profiles/${comment.user.user_id}`}
                 variant="h6"
               >
                 {`${comment.user.surname} ${comment.user.name}`}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link as RouterLink } from 'react-router-dom';
 
 import {
   Grid,
@@ -27,6 +27,8 @@ import {
   DialogTitle,
 } from '@material-ui/core';
 import MembersCard from '../components/membersCard';
+import ManageModal from '../components/manageModal';
+
 import { getCategories, createCategory, deleteCategory } from '../actions/categories';
 import { updateProject, getProject } from '../actions/projects';
 
@@ -51,6 +53,7 @@ class ProjectEdit extends Component {
         description: '',
       },
       createCategoryModalIsOpen: false,
+      manageModalIsOpen: false,
     };
   }
 
@@ -63,6 +66,19 @@ class ProjectEdit extends Component {
       },
       createCategoryModalIsOpen: true,
     }));
+  };
+
+  handleOpenManageModal=() => {
+    this.setState({
+      manageModalIsOpen: true,
+    });
+  };
+
+  handleSubmitManageModal=() => {
+  };
+
+  handleCloseManageModal=() => {
+    this.setState({ manageModalIsOpen: false });
   };
 
   handleCloseCreateCategoryModal=() => {
@@ -114,7 +130,6 @@ class ProjectEdit extends Component {
   componentDidUpdate=() => {
     if (this.props.project && this.props.project.project_id && this.state.projectForm.project_id !== this.props.project.project_id) {
       const {
-        members,
         role,
         categories,
         ...rest
@@ -128,11 +143,13 @@ class ProjectEdit extends Component {
     const {
       projectForm,
       createCategoryModalIsOpen,
+      manageModalIsOpen,
       categoryForm,
     } = this.state;
     const {
       categories,
       project,
+      currentUser,
     } = this.props;
     console.log('projectForm', projectForm);
     const categoriesId = categories && categories.map((cat) => cat.category_id);
@@ -377,7 +394,12 @@ class ProjectEdit extends Component {
             </Card>
           </Grid>
           <Grid item>
-            <MembersCard members={projectForm.project_members} /* handleMemberAdd *//>
+            <MembersCard
+              project_members={projectForm.project_members}
+              project={project}
+              currentUser={currentUser}
+              handleManageClick={this.handleOpenManageModal}
+            />
           </Grid>
         </Grid>
         <Dialog
@@ -438,6 +460,12 @@ class ProjectEdit extends Component {
             </Button>
           </DialogActions>
         </Dialog>
+        <ManageModal
+          handleSubmitManageModal={this.handleSubmitManageModal}
+          handleCloseManageModal={this.handleCloseManageModal}
+          manageModalIsOpen={manageModalIsOpen}
+          project_members={projectForm.project_members}
+        />
       </Container>
     );
   }
