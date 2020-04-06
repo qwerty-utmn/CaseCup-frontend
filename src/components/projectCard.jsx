@@ -95,7 +95,7 @@ class ProjectCard extends Component {
             />
             )}
             <CardContent>
-              <Grid container spacing={1}>
+              <Grid container direction="column" spacing={1}>
                 <Grid item>
                   <Typography
                     variant="subtitle2"
