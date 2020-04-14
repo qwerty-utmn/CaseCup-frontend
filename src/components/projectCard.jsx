@@ -37,12 +37,12 @@ class ProjectCard extends Component {
     const prevUserReaction = project.project_reaction.find((item) => item.user_id === currentUser.user_id);
     if (prevUserReaction) {
       if (prevUserReaction.reaction === +reaction) {
-        this.props.deleteReaction(project.project_id, reaction, currentUser.user_id);
+        this.props.deleteReaction(project.project_id, reaction, currentUser.user_id, false);
       } else {
-        this.props.updateReaction(project.project_id, reaction, currentUser.user_id);
+        this.props.updateReaction(project.project_id, reaction, currentUser.user_id, false);
       }
     } else {
-      this.props.createReaction(project.project_id, reaction, currentUser.user_id);
+      this.props.createReaction(project.project_id, reaction, currentUser.user_id, false);
     }
   };
 

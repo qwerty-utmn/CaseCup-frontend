@@ -7,6 +7,9 @@ import {
   CREATE_REACTION_LOCAL,
   UPDATE_REACTION_LOCAL,
   DELETE_REACTION_LOCAL,
+  CREATE_PROJECT_REACTION,
+  DELETE_PROJECT_REACTION,
+  UPDATE_PROJECT_REACTION,
 } from '../actions/projects';
 
 export const projects = (state = [], action) => {
@@ -78,6 +81,46 @@ export const project = (state = {}, action) => {
     }
     case DELETE_PROJECT: {
       return {};
+    }
+    case CREATE_PROJECT_REACTION: {
+      return {
+        ...state,
+        project_reaction: [
+          ...state.project_reaction,
+          {
+            user_id: action.payload.user_id,
+            project_id: action.payload.project_id,
+            reaction: action.payload.reaction,
+          },
+        ],
+        likes: action.payload.reaction ? state.likes + 1 : state.likes,
+        dislikes: !action.payload.reaction ? state.dislikes + 1 : state.dislikes,
+      };
+    }
+    case UPDATE_PROJECT_REACTION: {
+      return {
+        ...state,
+        project_reaction: [
+          ...state.project_reaction.filter((item) => item.user_id !== action.payload.user_id),
+          {
+            user_id: action.payload.user_id,
+            project_id: action.payload.project_id,
+            reaction: action.payload.reaction,
+          },
+        ],
+        likes: action.payload.reaction ? state.likes + 1 : state.likes - 1,
+        dislikes: !action.payload.reaction ? state.dislikes + 1 : state.dislikes - 1,
+      };
+    }
+    case DELETE_PROJECT_REACTION: {
+      return {
+        ...state,
+        project_reaction: state.project_reaction
+          .filter((reaction) => reaction.user_id !== action.payload.user_id),
+        likes: action.payload.reaction ? state.likes - 1 : state.likes,
+        dislikes: !action.payload.reaction ? state.dislikes + 1 : state.dislikes,
+
+      };
     }
     default: {
       return state;

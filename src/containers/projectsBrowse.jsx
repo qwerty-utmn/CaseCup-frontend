@@ -336,11 +336,11 @@ export default connect(
     categories: state.categories,
   }),
   (dispatch) => ({
-    createReaction: (id, reaction, user_id) => dispatch(createReaction(id, reaction, user_id)),
+    createReaction: (id, reaction, user_id, single) => dispatch(createReaction(id, reaction, user_id, single)),
     getCategories: () => dispatch(getCategories()),
     getProjects: (filter = 'start_datetime', sort = 'desc', search_string = '') => dispatch(getProjects(filter, sort, search_string)),
     getUserByToken: (token) => dispatch(getUserByToken(token)),
-    updateReaction: (id, reaction, user_id) => dispatch(updateReaction(id, reaction, user_id)),
-    deleteReaction: (id, reaction, user_id) => dispatch(deleteReaction(id, reaction, user_id)),
+    updateReaction: (id, reaction, user_id, single) => dispatch(updateReaction(id, reaction, user_id, single)),
+    deleteReaction: (id, reaction, user_id, single) => dispatch(deleteReaction(id, reaction, user_id, single)),
   }),
 )(ProjectsBrowse);
