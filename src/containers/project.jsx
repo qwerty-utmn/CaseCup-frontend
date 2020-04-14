@@ -68,41 +68,41 @@ class Project extends Component {
     };
   }
 
-  handleSubmitManageModal=() => {
+  handleSubmitManageModal = () => {
   };
 
-  handleOpenManageModal=() => {
+  handleOpenManageModal = () => {
     this.setState({
       manageModalIsOpen: true,
     });
   };
 
-  handleCloseManageModal=() => {
+  handleCloseManageModal = () => {
     this.setState({ manageModalIsOpen: false });
   };
 
-  handleOpenApplyModal=() => {
+  handleOpenApplyModal = () => {
     this.setState({ applyModalIsOpen: true });
   };
 
-  handleCloseApplyModal=() => {
+  handleCloseApplyModal = () => {
     this.setState({ applyModalIsOpen: false, role: '' });
   };
 
-  handleApplyApplyModal=() => {
+  handleApplyApplyModal = () => {
     this.setState({ applyModalIsOpen: false });
     const { project, currentUser } = this.props;
     const { role } = this.state;
     this.props.becomeMember(project.project_id, currentUser.user_id, role);
   };
 
-  handleMessageSend=(content) => {
+  handleMessageSend = (content) => {
     const { project, currentUser } = this.props;
-    this.props.createComment(content, currentUser.user_id, project.project_id, moment(Date.now()).format('YYYY-MM-DD'));
-    this.props.getProject(project.project_id);
+    this.props.createComment(content, currentUser, project.project_id, moment(Date.now()).format('YYYY-MM-DD'));
+    // this.props.getProject(project.project_id);
   };
 
-  componentDidMount=() => {
+  componentDidMount = () => {
     const token = localStorage.getItem('token');
     this.props.getUserByToken(token);
 
@@ -401,7 +401,7 @@ export default withRouter(connect(
     currentUser: state.currentUser,
   }),
   (dispatch) => ({
-    createComment: (content, userId, projectId, datetime) => dispatch(createComment(content, userId, projectId, datetime)),
+    createComment: (content, user, projectId, datetime) => dispatch(createComment(content, user, projectId, datetime)),
     becomeMember: (projectId, userId, role) => dispatch(becomeMember(projectId, userId, role)),
     createReaction: (id, reaction, user_id, single) => dispatch(createReaction(id, reaction, user_id, single)),
     updateReaction: (id, reaction, user_id, single) => dispatch(updateReaction(id, reaction, user_id, single)),

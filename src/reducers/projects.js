@@ -11,6 +11,9 @@ import {
   DELETE_PROJECT_REACTION,
   UPDATE_PROJECT_REACTION,
 } from '../actions/projects';
+import {
+  CREATE_PROJECT_COMMENT,
+} from '../actions/comments';
 
 export const projects = (state = [], action) => {
   switch (action.type) {
@@ -120,6 +123,20 @@ export const project = (state = {}, action) => {
         likes: action.payload.reaction ? state.likes - 1 : state.likes,
         dislikes: !action.payload.reaction ? state.dislikes + 1 : state.dislikes,
 
+      };
+    }
+    case CREATE_PROJECT_COMMENT: {
+      return {
+        ...state,
+        comments: [
+          ...state.comments,
+          {
+            project_id: action.payload.project_id,
+            content: action.payload.content,
+            created_datetime: action.payload.created_datetime,
+            user: action.payload.user,
+          },
+        ],
       };
     }
     default: {
