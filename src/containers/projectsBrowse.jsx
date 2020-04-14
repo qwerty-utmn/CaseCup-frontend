@@ -341,6 +341,6 @@ export default connect(
     getProjects: (filter = 'start_datetime', sort = 'desc', search_string = '') => dispatch(getProjects(filter, sort, search_string)),
     getUserByToken: (token) => dispatch(getUserByToken(token)),
     updateReaction: (id, reaction, user_id) => dispatch(updateReaction(id, reaction, user_id)),
-    deleteReaction: (id, user_id) => dispatch(deleteReaction(id, user_id)),
+    deleteReaction: (id, reaction, user_id) => dispatch(deleteReaction(id, reaction, user_id)),
   }),
 )(ProjectsBrowse);

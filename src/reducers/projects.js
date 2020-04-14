@@ -4,12 +4,57 @@ import {
   UPDATE_PROJECT,
   DELETE_PROJECT,
   CREATE_PROJECT,
+  CREATE_REACTION_LOCAL,
+  UPDATE_REACTION_LOCAL,
+  DELETE_REACTION_LOCAL,
 } from '../actions/projects';
 
 export const projects = (state = [], action) => {
   switch (action.type) {
     case GET_PROJECTS: {
       return action.payload;
+    }
+    case CREATE_REACTION_LOCAL: {
+      return state.map((project) => (project.project_id === action.payload.project_id
+        ? {
+          ...project,
+          project_reaction: [
+            ...project.project_reaction,
+            {
+              user_id: action.payload.user_id,
+              project_id: action.payload.project_id,
+              reaction: action.payload.reaction,
+            },
+          ],
+          likes: action.payload.reaction ? project.likes + 1 : action.payload.reaction,
+          dislikes: !action.payload.reaction ? project.dislikes + 1 : project.dislikes,
+        } : project));
+    }
+    case UPDATE_REACTION_LOCAL: {
+      return state.map((project) => (project.project_id === action.payload.project_id
+        ? {
+          ...project,
+          project_reaction: [
+            ...project.project_reaction.filter((item) => item.user_id !== action.payload.user_id),
+            {
+              user_id: action.payload.user_id,
+              project_id: action.payload.project_id,
+              reaction: action.payload.reaction,
+            },
+          ],
+          likes: action.payload.reaction ? project.likes + 1 : project.likes - 1,
+          dislikes: !action.payload.reaction ? project.dislikes + 1 : project.dislikes - 1,
+        } : project));
+    }
+    case DELETE_REACTION_LOCAL: {
+      return state.map((project) => (project.project_id === action.payload.project_id
+        ? {
+          ...project,
+          project_reaction: project.project_reaction
+            .filter((reaction) => reaction.user_id !== action.payload.user_id),
+          likes: action.payload.reaction ? project.likes - 1 : project.likes,
+          dislikes: !action.payload.reaction ? project.dislikes + 1 : project.dislikes,
+        } : project));
     }
     default: {
       return state;

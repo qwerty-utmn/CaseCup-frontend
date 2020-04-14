@@ -2,12 +2,17 @@ import config from '../config';
 
 export const GET_PROJECTS = 'GET_PROJECTS';
 export const GET_PROJECT = 'GET_PROJECT';
+
 export const CREATE_PROJECT = 'CREATE_PROJECT';
 export const UPDATE_PROJECT = 'UPDATE_PROJECT';
 export const DELETE_PROJECT = 'DELETE_PROJECT';
+
 export const GET_CATEGORIES = 'GET_CATEGORIES';
 export const OPEN_ALERT = 'OPEN_ALERT';
 
+export const CREATE_REACTION_LOCAL = 'CREATE_REACTION_LOCAL';
+export const UPDATE_REACTION_LOCAL = 'UPDATE_REACTION_LOCAL';
+export const DELETE_REACTION_LOCAL = 'DELETE_REACTION_LOCAL';
 
 export const getProjects = (filter = 'start_datetime', sort = 'desc', search = '') => async (dispatch) => {
   try {
@@ -240,6 +245,14 @@ export const createReaction = (project_id, reaction, user_id) => async (dispatch
       type: 'START_LOADING',
       payload: '',
     });
+    dispatch({
+      type: CREATE_REACTION_LOCAL,
+      payload: {
+        project_id,
+        user_id,
+        reaction,
+      },
+    });
     const response = await fetch(`http://${config.server}:${config.port}/reactions/create`, {
       method: 'post',
       headers: {
@@ -266,11 +279,19 @@ export const createReaction = (project_id, reaction, user_id) => async (dispatch
   }
 };
 
-export const deleteReaction = (project_id, user_id) => async (dispatch) => {
+export const deleteReaction = (project_id, reaction, user_id) => async (dispatch) => {
   try {
     dispatch({
       type: 'START_LOADING',
       payload: '',
+    });
+    dispatch({
+      type: DELETE_REACTION_LOCAL,
+      payload: {
+        project_id,
+        user_id,
+        reaction,
+      },
     });
     const response = await fetch(`http://${config.server}:${config.port}/reactions/remove`, {
       method: 'delete',
@@ -302,6 +323,14 @@ export const updateReaction = (project_id, reaction, user_id) => async (dispatch
     dispatch({
       type: 'START_LOADING',
       payload: '',
+    });
+    dispatch({
+      type: UPDATE_REACTION_LOCAL,
+      payload: {
+        project_id,
+        user_id,
+        reaction,
+      },
     });
     const response = await fetch(`http://${config.server}:${config.port}/reactions/update`, {
       method: 'put',
