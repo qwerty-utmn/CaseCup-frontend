@@ -302,7 +302,7 @@ class Project extends Component {
                               title="Описание"
                             />
                             <CardContent>
-                              <Typography>{project.description}</Typography>
+                              <Typography style={{ wordBreak: 'break-all' }}>{project.description}</Typography>
                             </CardContent>
                           </Card>
                         </Grid>

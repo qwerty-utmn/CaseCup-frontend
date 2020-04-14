@@ -1,5 +1,6 @@
 import config from '../config';
 
+export const OPEN_ALERT = 'OPEN_ALERT';
 export const GET_CATEGORIES = 'GET_CATEGORIES';
 export const CREATE_CATEGORY = 'CREATE_CATEGORY';
 export const DELETE_CATEGORY = 'DELETE_CATEGORY';
@@ -49,6 +50,12 @@ export const createCategory = (category) => async (dispatch) => {
         type: CREATE_CATEGORY,
         payload: json,
       });
+      dispatch({
+        type: OPEN_ALERT,
+        payload: {
+          message: { text: 'Категория создана', type: 'success' },
+        },
+      });
       return;
     }
     dispatch({
@@ -76,6 +83,12 @@ export const deleteCategory = (categoryId) => async (dispatch) => {
       dispatch({
         type: DELETE_CATEGORY,
         payload: json.data,
+      });
+      dispatch({
+        type: OPEN_ALERT,
+        payload: {
+          message: { text: 'Категория удалена', type: 'success' },
+        },
       });
       return;
     }

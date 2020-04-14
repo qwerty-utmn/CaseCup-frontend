@@ -7,6 +7,7 @@ export const GET_USER_PROJECTS = 'GET_USER_PROJECTS';
 export const GET_USER_MARKED_PROJECTS = 'GET_USER_MARKED_PROJECTS';
 export const UPDATE_USER = 'UPDATE_USER';
 export const CLEAR_USER = 'CLEAR_USER';
+export const OPEN_ALERT = 'OPEN_ALERT';
 
 export const submitLoginInformation = (credentials, history) => async (dispatch) => {
   try {
@@ -143,6 +144,12 @@ export const updateUser = (user) => async (dispatch) => {
       dispatch({
         type: 'UPDATE_USER',
         payload: json,
+      });
+      dispatch({
+        type: OPEN_ALERT,
+        payload: {
+          message: { text: 'Данные пользователя успешно обновлены', type: 'success' },
+        },
       });
       return;
     }

@@ -64,6 +64,7 @@ class ProjectCard extends Component {
                 <Typography
                   variant="h5"
                   noWrap
+                  style={{ maxWidth: '300px' }}
                 >
                   <Link href={`/projects/${project.project_id}`}>{project.title}</Link>
                 </Typography>
@@ -99,7 +100,8 @@ class ProjectCard extends Component {
                 <Grid item>
                   <Typography
                     variant="subtitle2"
-                    style={{ maxHeight: '100px', overflow: 'hidden' }}
+
+                    style={{ maxHeight: '80px', overflow: 'hidden', wordBreak: 'break-all' }}
                   >
                     {project.description}
                   </Typography>

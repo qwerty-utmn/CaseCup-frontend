@@ -26,7 +26,10 @@ export const project = (state = {}, action) => {
       return action.payload;
     }
     case UPDATE_PROJECT: {
-      return action.payload;
+      return {
+        ...state,
+        ...action.payload,
+      };
     }
     case DELETE_PROJECT: {
       return {};

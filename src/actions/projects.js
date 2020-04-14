@@ -6,6 +6,8 @@ export const CREATE_PROJECT = 'CREATE_PROJECT';
 export const UPDATE_PROJECT = 'UPDATE_PROJECT';
 export const DELETE_PROJECT = 'DELETE_PROJECT';
 export const GET_CATEGORIES = 'GET_CATEGORIES';
+export const OPEN_ALERT = 'OPEN_ALERT';
+
 
 export const getProjects = (filter = 'start_datetime', sort = 'desc', search = '') => async (dispatch) => {
   try {
@@ -112,17 +114,14 @@ export const createProject = (project) => async (dispatch) => {
       });
       // const newMember = await responseMember.json();
 
-      // if (responseMember.ok) {
-      //   dispatch({
-      //     type: BECOME_MEMBER,
-      //     payload: newMember,
-      //   });
-      //   return;
-      // }
-      // dispatch({
-      //   type: CREATE_PROJECT,
-      //   payload: newProject.data,
-      // });
+      if (responseMember.ok) {
+        dispatch({
+          type: OPEN_ALERT,
+          payload: {
+            message: { text: 'Проект успешно создан', type: 'success' },
+          },
+        });
+      }
       return;
     }
   } catch (err) {
@@ -190,6 +189,13 @@ export const updateProject = (project) => async (dispatch) => {
         type: UPDATE_PROJECT,
         payload: json.data,
       });
+      console.log('OPEN_ALERT');
+      dispatch({
+        type: OPEN_ALERT,
+        payload: {
+          message: { text: 'Проект успешно обновлен', type: 'success' },
+        },
+      });
       return;
     }
   } catch (err) {
@@ -214,6 +220,12 @@ export const deleteProject = (id) => async (dispatch) => {
     if (response.ok) {
       dispatch({
         type: DELETE_PROJECT,
+      });
+      dispatch({
+        type: OPEN_ALERT,
+        payload: {
+          message: { text: 'Проект успешно удален', type: 'success' },
+        },
       });
       return;
     }

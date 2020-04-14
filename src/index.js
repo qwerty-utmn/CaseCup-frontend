@@ -19,12 +19,15 @@ import Profile from './containers/profile';
 import theme from './theme';
 import PrivateRoute from './components/PrivateRoute';
 import SignInRoute from './components/SignInRoute';
+import AlertContainer from './containers/alertContainer';
+
 
 ReactDOM.render(
   <Provider store={store}>
     <ThemeProvider theme={theme}>
       <Router>
         <TopAppBar />
+        <AlertContainer />
         <Switch>
           <SignInRoute exact path="/signin">
             <SignIn />
