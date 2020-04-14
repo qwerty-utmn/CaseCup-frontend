@@ -74,7 +74,7 @@ export const getProjects = (filter = 'start_datetime', sort = 'desc', search = '
 //   }
 // };
 
-export const createProject = (project) => async (dispatch) => {
+export const createProject = (project, history) => async (dispatch) => {
   try {
     dispatch({
       type: 'START_LOADING',
@@ -94,7 +94,7 @@ export const createProject = (project) => async (dispatch) => {
       body: JSON.stringify(projectInfo),
     });
     const newProject = await responseProject.json();
-
+    history.push(`/projects/${newProject.project_id}`);
     // if (!NewProject.error) {
     //   const postedFiles = await uploadFiles(files, NewProject.project_id);
 

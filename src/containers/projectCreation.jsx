@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-
+import { withRouter } from 'react-router-dom';
 import {
   Grid,
   Typography,
@@ -74,7 +74,7 @@ class ProjectCreation extends Component {
   };
 
   handleCreateProjectButtonClick=() => {
-    this.props.createProject({ ...this.state.projectForm, creator: { user_id: `${this.props.currentUser.user_id}` } });
+    this.props.createProject({ ...this.state.projectForm, creator: { user_id: `${this.props.currentUser.user_id}` } }, this.props.history);
   }
 
   readURL = (url) => {
@@ -393,11 +393,11 @@ const mapStateToProps = (store) => ({
 });
 const mapDispatchToProps = (dispatch) => ({
   getCategories: () => dispatch(getCategories()),
-  createProject: (project) => dispatch(createProject(project)),
+  createProject: (project, history) => dispatch(createProject(project, history)),
   createCategory: (category) => dispatch(createCategory(category)),
   deleteCategory: (categoryId) => dispatch(deleteCategory(categoryId)),
   // logout: () => dispatch(logout()),
   // removeErrors: () => dispatch(removeErrors())
 
 });
-export default connect(mapStateToProps, mapDispatchToProps)(ProjectCreation);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProjectCreation));
