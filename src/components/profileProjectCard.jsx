@@ -61,7 +61,7 @@ class ProfileProjectCard extends Component {
               </Typography>
               <Typography variant="body2">
                 {smartEnding(
-                  project.project_members.lenght,
+                  project.project_members.length,
                   ['', 'a', 'ов'],
                   'участник',
                 )}

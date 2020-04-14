@@ -19,6 +19,7 @@ import binaryArrayToBase64 from '../heplers/binaryArrayToBase64';
 class ProjectSummary extends Component {
   render() {
     const { project } = this.props;
+    console.log(project.updatedAt);
     return (
       <>
         {project && (

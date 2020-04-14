@@ -275,10 +275,11 @@ class ProjectsBrowse extends Component {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item container spacing={3}>
-            {projects
+          <Grid item xs={12} sd={6} md={4}>
+            <Grid container direction="column" spacing={3}>
+              {projects
               && projects.map((project) => (
-                <Grid item key={project.project_id} xs={12} sd={6} md={4}>
+                <Grid item key={project.project_id}>
                   <ProjectCard
                     currentUser={currentUser}
                     project={project}
@@ -289,6 +290,37 @@ class ProjectsBrowse extends Component {
                   />
                 </Grid>
               ))}
+            </Grid>
+            <Grid container direction="column" spacing={3}>
+              {projects
+              && projects.map((project) => (
+                <Grid item key={project.project_id}>
+                  <ProjectCard
+                    currentUser={currentUser}
+                    project={project}
+                    createReaction={createReaction}
+                    updateReaction={updateReaction}
+                    deleteReaction={deleteReaction}
+                    getProjects={getProjects}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+            <Grid container direction="column" spacing={3}>
+              {projects
+              && projects.map((project) => (
+                <Grid item key={project.project_id}>
+                  <ProjectCard
+                    currentUser={currentUser}
+                    project={project}
+                    createReaction={createReaction}
+                    updateReaction={updateReaction}
+                    deleteReaction={deleteReaction}
+                    getProjects={getProjects}
+                  />
+                </Grid>
+              ))}
+            </Grid>
           </Grid>
           <Grid item>{/* <Pagination count={10} size="large" /> */}</Grid>
         </Grid>
