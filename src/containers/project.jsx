@@ -21,7 +21,6 @@ import {
   IconButton,
   CardHeader,
   Box,
-  Avatar,
 } from '@material-ui/core';
 import moment from 'moment';
 import ThumbUpAlt from '@material-ui/icons/ThumbUpAlt';
@@ -71,8 +70,9 @@ class Project extends Component {
 
   handleSubmitManageModal=(roles) => {
     const { project_members } = this.props.project;
-    const membersToUpdate = project_members.map((member, index) => ({ ...member, role: roles[index] })).filter((member, index) => (project_members[index].role !== roles[index]));
-    console.log(membersToUpdate);
+    const membersToUpdate = project_members.map(
+      (member, index) => ({ ...member, role: roles[index] }),
+    ).filter((member, index) => (project_members[index].role !== roles[index]));
     membersToUpdate.forEach((member) => {
       this.props.updateMember(this.props.project.project_id, member.user_id, member.role);
     });
@@ -117,7 +117,6 @@ class Project extends Component {
     this.props.getUserByToken(token);
 
     const project_id = this.props.match.params.projectId;
-    console.log(project_id);
     if (project_id) {
       this.props.getProject(project_id);
     } else {
@@ -127,7 +126,9 @@ class Project extends Component {
 
   handleThumbClick = (reaction) => {
     const { project, currentUser } = this.props;
-    const prevUserReaction = project.project_reaction.find((item) => item.user_id === currentUser.user_id);
+    const prevUserReaction = project.project_reaction.find(
+      (item) => item.user_id === currentUser.user_id,
+    );
     if (prevUserReaction) {
       if (prevUserReaction.reaction === +reaction) {
         this.props.deleteReaction(project.project_id, currentUser.user_id);
@@ -237,7 +238,9 @@ class Project extends Component {
                     </Button>
                   )}
                   {project.project_members
-                  && !project.project_members.some((member) => member.user.user_id === currentUser.user_id)
+                  && !project.project_members.some(
+                    (member) => member.user.user_id === currentUser.user_id,
+                  )
                   && !project._blocked
                   && (
                     <Button
@@ -249,7 +252,9 @@ class Project extends Component {
                     </Button>
                   )}
                   {(project.creator.user_id !== currentUser.user_id) && project.project_members
-                  && project.project_members.some((member) => member.user.user_id === currentUser.user_id)
+                  && project.project_members.some(
+                    (member) => member.user.user_id === currentUser.user_id,
+                  )
                   && !project._blocked
                   && (
                     <Button
@@ -412,7 +417,9 @@ export default withRouter(connect(
     currentUser: state.currentUser,
   }),
   (dispatch) => ({
-    createComment: (content, userId, projectId, datetime) => dispatch(createComment(content, userId, projectId, datetime)),
+    createComment: (content, userId, projectId, datetime) => dispatch(
+      createComment(content, userId, projectId, datetime),
+    ),
     becomeMember: (projectId, userId, role) => dispatch(becomeMember(projectId, userId, role)),
     createReaction: (id, reaction, user_id) => dispatch(createReaction(id, reaction, user_id)),
     updateReaction: (id, reaction, user_id) => dispatch(updateReaction(id, reaction, user_id)),

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { withRouter, Link as RouterLink } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 import {
   Grid,
@@ -76,8 +76,10 @@ class ProjectEdit extends Component {
 
   handleSubmitManageModal=(roles) => {
     const { project_members } = this.props.project;
-    const membersToUpdate = project_members.map((member, index) => ({ ...member, role: roles[index] })).filter((member, index) => (project_members[index].role !== roles[index]));
-    console.log(membersToUpdate);
+    const membersToUpdate = project_members.map(
+      (member, index) => (
+        { ...member, role: roles[index] }),
+    ).filter((member, index) => (project_members[index].role !== roles[index]));
     membersToUpdate.forEach((member) => {
       this.props.updateMember(this.props.project.project_id, member.user_id, member.role);
     });
@@ -137,7 +139,9 @@ class ProjectEdit extends Component {
   }
 
   componentDidUpdate=() => {
-    if (this.props.project && this.props.project.project_id && this.state.projectForm.project_id !== this.props.project.project_id) {
+    if (this.props.project
+      && this.props.project.project_id
+      && this.state.projectForm.project_id !== this.props.project.project_id) {
       const {
         role,
         categories,
@@ -160,7 +164,6 @@ class ProjectEdit extends Component {
       project,
       currentUser,
     } = this.props;
-    console.log('projectForm', projectForm);
     const categoriesId = categories && categories.map((cat) => cat.category_id);
 
     return (
@@ -207,13 +210,14 @@ class ProjectEdit extends Component {
                           />
                         )}
                         onChange={(e, menuItem) => {
-                          menuItem.props.value
-                          && this.setState({
-                            projectForm: {
-                              ...projectForm,
-                              categories: e.target.value,
-                            },
-                          });
+                          if (menuItem.props.value) {
+                            this.setState({
+                              projectForm: {
+                                ...projectForm,
+                                categories: e.target.value,
+                              },
+                            });
+                          }
                         }}
                                                 // renderValue={selected => selected.join(', ')}
                         renderValue={(categories) => (
@@ -402,7 +406,6 @@ class ProjectEdit extends Component {
               size="small"
               value={categoryForm.category_id}
               onChange={(e) => {
-                console.log(e.target.value);
                 this.setState({ categoryForm: { ...categoryForm, category_id: e.target.value } });
               }}
               fullWidth
@@ -417,7 +420,6 @@ class ProjectEdit extends Component {
               size="small"
               value={categoryForm.description}
               onChange={(e) => {
-                console.log(e.target.value);
                 this.setState({ categoryForm: { ...categoryForm, description: e.target.value } });
               }}
               fullWidth

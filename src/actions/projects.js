@@ -23,7 +23,6 @@ export const getProjects = (filter = 'start_datetime', sort = 'desc', search = '
       },
     });
     const json = await response.json();
-    console.log('response', json);
     if (response.ok) {
       dispatch({
         type: GET_PROJECTS,
@@ -72,9 +71,6 @@ export const createProject = (project) => async (dispatch) => {
       payload: '',
     });
     const { files, ...projectInfo } = project;
-    // console.log('files', files);
-    // console.log('projectInfo', projectInfo);
-    // console.log('JSON.stringify(projectInfo)', JSON.stringify(projectInfo));
     projectInfo.categories = projectInfo.categories.map((cat) => ({ category_id: cat }));
     const responseProject = await fetch(`http://${config.server}:${config.port}/projects/create`, {
       method: 'post',
@@ -158,7 +154,6 @@ export const getProject = (id) => async (dispatch) => {
 
 export const updateProject = (project) => async (dispatch) => {
   try {
-    console.log(project);
     dispatch({
       type: 'START_LOADING',
       payload: '',
@@ -169,11 +164,7 @@ export const updateProject = (project) => async (dispatch) => {
       files,
       ...projectInfo
     } = project;
-    // console.log('files', files);
-    // console.log('projectInfo', projectInfo);
-    // console.log('JSON.stringify(projectInfo)', JSON.stringify(projectInfo));
     projectInfo.categories = projectInfo.categories.map((cat) => ({ category_id: cat }));
-    console.log(projectInfo);
     const response = await fetch(`http://${config.server}:${config.port}/projects/${projectInfo.project_id}`, {
       method: 'put',
       headers: {
@@ -189,7 +180,6 @@ export const updateProject = (project) => async (dispatch) => {
         type: UPDATE_PROJECT,
         payload: json.data,
       });
-      console.log('OPEN_ALERT');
       dispatch({
         type: OPEN_ALERT,
         payload: {

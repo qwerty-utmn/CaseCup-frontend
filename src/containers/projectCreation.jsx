@@ -25,8 +25,6 @@ import {
   DialogContent,
   DialogTitle,
 } from '@material-ui/core';
-import { white } from 'material-ui/styles/colors';
-import MembersCard from '../components/membersCard';
 import { getCategories, createCategory, deleteCategory } from '../actions/categories';
 import { createProject } from '../actions/projects';
 
@@ -163,13 +161,14 @@ class ProjectCreation extends Component {
                           />
                         )}
                         onChange={(e, menuItem) => {
-                          menuItem.props.value
-                          && this.setState({
-                            projectForm: {
-                              ...projectForm,
-                              categories: e.target.value,
-                            },
-                          });
+                          if (menuItem.props.value) {
+                            this.setState({
+                              projectForm: {
+                                ...projectForm,
+                                categories: e.target.value,
+                              },
+                            });
+                          }
                         }}
                                                 // renderValue={selected => selected.join(', ')}
                         renderValue={(categories) => (
@@ -350,7 +349,6 @@ class ProjectCreation extends Component {
               size="small"
               value={categoryForm.category_id}
               onChange={(e) => {
-                console.log(e.target.value);
                 this.setState({ categoryForm: { ...categoryForm, category_id: e.target.value } });
               }}
               fullWidth
@@ -365,7 +363,6 @@ class ProjectCreation extends Component {
               size="small"
               value={categoryForm.description}
               onChange={(e) => {
-                console.log(e.target.value);
                 this.setState({ categoryForm: { ...categoryForm, description: e.target.value } });
               }}
               fullWidth

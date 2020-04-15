@@ -42,7 +42,6 @@ const SignIn = ({
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    console.log('errors :', errors);
     // if (Object.keys(errors).length === 0) {
     submitLoginInformation(credentials, history);
     // }

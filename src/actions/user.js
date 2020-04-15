@@ -11,7 +11,6 @@ export const OPEN_ALERT = 'OPEN_ALERT';
 
 export const submitLoginInformation = (credentials, history) => async (dispatch) => {
   try {
-    console.log('credentials', credentials);
     dispatch({
       type: 'START_LOADING',
       payload: '',
@@ -57,7 +56,6 @@ export const getUserInformation = (id) => async (dispatch) => {
       },
     });
     const json = await response.json();
-    console.log(json);
     if (response.ok) {
       dispatch({
         type: 'GET_USER',

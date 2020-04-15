@@ -22,7 +22,6 @@ class AlertContainer extends Component {
   }
 
   render() {
-    console.log('>>>>>>>');
     return (
       <Snackbar
         open={this.props.alert.setAlertOpen}

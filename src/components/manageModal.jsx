@@ -10,7 +10,6 @@ import {
   DialogContent,
   DialogTitle,
   Avatar,
-  Divider,
 } from '@material-ui/core';
 
 import getInitials from '../heplers/getInitials';
@@ -26,8 +25,6 @@ class ManageModal extends Component {
 
   componentDidMount=() => {
     const { project_members } = this.props;
-    console.log('componentDidMount', project_members && project_members.length > 0);
-
     if (project_members && project_members.length > 0) {
       this.setState({ roles: project_members.map((member) => (member.role)) });
     }
@@ -56,7 +53,6 @@ class ManageModal extends Component {
       manageModalIsOpen,
     } = this.props;
     const { roles } = this.state;
-    console.log(this.state);
     return (
       <Dialog
         maxWidth="lg"

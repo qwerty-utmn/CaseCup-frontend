@@ -11,13 +11,8 @@ import {
   TextField,
   Avatar,
   Card,
-  TableCell,
-  TableRow,
   CardContent,
   Button,
-  CardHeader,
-  Table,
-  TableBody,
 } from '@material-ui/core';
 import ProfileProjects from './profileProjects';
 import getTabProps from '../heplers/getTabProps';
@@ -65,11 +60,9 @@ class Profile extends Component {
   }
 
   handlePhotoAdd = (e) => {
-    console.log(e.target.files);
     e.persist();
     const reader = new FileReader();
     reader.onload = () => {
-      console.log(reader.result);
       const parts = reader.result.split(';base64,');
       const contentType = parts[0].replace('data:', '');
       const base64 = parts[1];
@@ -99,7 +92,6 @@ class Profile extends Component {
   };
 
   handleSaveButtonClick = () => {
-    console.log(this.state.userForm);
     this.props.updateUser(this.state.userForm);
   };
 
