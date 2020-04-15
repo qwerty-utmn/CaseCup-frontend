@@ -32,7 +32,7 @@ export const projects = (state = [], action) => {
               reaction: action.payload.reaction,
             },
           ],
-          likes: action.payload.reaction ? project.likes + 1 : action.payload.reaction,
+          likes: action.payload.reaction ? project.likes + 1 : project.likes,
           dislikes: !action.payload.reaction ? project.dislikes + 1 : project.dislikes,
         } : project));
     }
