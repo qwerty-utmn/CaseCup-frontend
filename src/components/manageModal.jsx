@@ -17,20 +17,55 @@ import getInitials from '../heplers/getInitials';
 import binaryArrayToBase64 from '../heplers/binaryArrayToBase64';
 
 class ManageModal extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      roles: [],
+    };
+  }
+
+  componentDidMount=() => {
+    const { project_members } = this.props;
+    console.log('componentDidMount', project_members && project_members.length > 0);
+
+    if (project_members && project_members.length > 0) {
+      this.setState({ roles: project_members.map((member) => (member.role)) });
+    }
+  }
+
+  handleMemberChanged=(e) => {
+    e.persist();
+    this.setState((prevState) => {
+      const newMembersRoles = prevState.roles.slice();
+      newMembersRoles.splice(+e.target.name, 1, e.target.value);
+      return ({
+        roles: newMembersRoles,
+      });
+    });
+  }
+
+  onCloseManageModal=() => {
+    this.setState({ roles: this.props.project_members.map((member) => (member.role)) });
+    this.props.handleCloseManageModal();
+  }
+
   render() {
     const {
       project_members,
       handleSubmitManageModal,
-      handleCloseManageModal,
       manageModalIsOpen,
     } = this.props;
+    const { roles } = this.state;
+    console.log(this.state);
     return (
       <Dialog
         maxWidth="lg"
-        onClose={handleCloseManageModal}
+        onClose={this.onCloseManageModal}
         open={manageModalIsOpen}
       >
-        <DialogTitle>
+        <DialogTitle
+          disableTypography
+        >
           <Typography
             gutterBottom
             variant="h3"
@@ -40,7 +75,7 @@ class ManageModal extends Component {
         </DialogTitle>
         <DialogContent>
           <Grid container direction="column" spacing={2}>
-            {project_members && project_members.map((member) => (
+            {project_members && project_members.map((member, index) => (
               <Grid item key={member.user.user_id}>
                 <Grid container direction="row" alignItems="center" justify="space-between" spacing={2}>
                   <Grid item>
@@ -69,11 +104,9 @@ class ManageModal extends Component {
                       margin="dense"
                       variant="outlined"
                       size="small"
-                      value={member.role}
-                // onChange={(e) => {
-                //   console.log(e.target.value);
-                //   this.setState({ categoryForm: { ...categoryForm, category_id: e.target.value } });
-                // }}
+                      name={index.toString()}
+                      value={roles[index]}
+                      onChange={this.handleMemberChanged}
                       fullWidth
                     />
                   </Grid>
@@ -83,14 +116,14 @@ class ManageModal extends Component {
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseManageModal} color="primary">
+          <Button onClick={this.onCloseManageModal} color="primary">
             Отменить
           </Button>
           <Button
-            onClick={handleSubmitManageModal}
+            onClick={() => handleSubmitManageModal(roles)}
             variant="contained"
           >
-            Создать
+            Сохранить
           </Button>
         </DialogActions>
       </Dialog>

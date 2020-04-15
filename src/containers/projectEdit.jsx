@@ -30,7 +30,7 @@ import MembersCard from '../components/membersCard';
 import ManageModal from '../components/manageModal';
 
 import { getCategories, createCategory, deleteCategory } from '../actions/categories';
-import { updateProject, getProject } from '../actions/projects';
+import { updateProject, getProject, updateMember } from '../actions/projects';
 
 class ProjectEdit extends Component {
   constructor(props) {
@@ -74,7 +74,16 @@ class ProjectEdit extends Component {
     });
   };
 
-  handleSubmitManageModal=() => {
+  handleSubmitManageModal=(roles) => {
+    const { project_members } = this.props.project;
+    const membersToUpdate = project_members.map((member, index) => ({ ...member, role: roles[index] })).filter((member, index) => (project_members[index].role !== roles[index]));
+    console.log(membersToUpdate);
+    membersToUpdate.forEach((member) => {
+      this.props.updateMember(this.props.project.project_id, member.user_id, member.role);
+    });
+    this.setState({
+      manageModalIsOpen: false,
+    });
   };
 
   handleCloseManageModal=() => {
@@ -373,7 +382,7 @@ class ProjectEdit extends Component {
           onClose={this.handleCloseCreateCategoryModal}
           open={createCategoryModalIsOpen}
         >
-          <DialogTitle>
+          <DialogTitle disableTypography>
             <Typography
               gutterBottom
               variant="h3"
@@ -444,6 +453,7 @@ const mapStateToProps = (store) => ({
 const mapDispatchToProps = (dispatch) => ({
   getCategories: () => dispatch(getCategories()),
   getProject: (id) => dispatch(getProject(id)),
+  updateMember: (project_id, user_id, role) => dispatch(updateMember(project_id, user_id, role)),
   updateProject: (project) => dispatch(updateProject(project)),
   createCategory: (category) => dispatch(createCategory(category)),
   deleteCategory: (categoryId) => dispatch(deleteCategory(categoryId)),

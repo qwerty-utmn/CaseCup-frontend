@@ -40,6 +40,7 @@ import {
   deleteReaction,
   updateProject,
   removeMember,
+  updateMember,
 } from '../actions/projects';
 import { getUserByToken } from '../actions/user';
 import ManageModal from '../components/manageModal';
@@ -68,7 +69,16 @@ class Project extends Component {
     };
   }
 
-  handleSubmitManageModal=() => {
+  handleSubmitManageModal=(roles) => {
+    const { project_members } = this.props.project;
+    const membersToUpdate = project_members.map((member, index) => ({ ...member, role: roles[index] })).filter((member, index) => (project_members[index].role !== roles[index]));
+    console.log(membersToUpdate);
+    membersToUpdate.forEach((member) => {
+      this.props.updateMember(this.props.project.project_id, member.user_id, member.role);
+    });
+    this.setState({
+      manageModalIsOpen: false,
+    });
   };
 
   handleOpenManageModal=() => {
@@ -406,6 +416,7 @@ export default withRouter(connect(
     becomeMember: (projectId, userId, role) => dispatch(becomeMember(projectId, userId, role)),
     createReaction: (id, reaction, user_id) => dispatch(createReaction(id, reaction, user_id)),
     updateReaction: (id, reaction, user_id) => dispatch(updateReaction(id, reaction, user_id)),
+    updateMember: (project_id, user_id, role) => dispatch(updateMember(project_id, user_id, role)),
     deleteReaction: (id, user_id) => dispatch(deleteReaction(id, user_id)),
     getProject: (id) => dispatch(getProject(id)),
     updateProject: (project) => dispatch(updateProject(project)),

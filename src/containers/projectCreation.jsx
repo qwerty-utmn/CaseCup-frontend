@@ -330,7 +330,7 @@ class ProjectCreation extends Component {
           onClose={this.handleCloseCreateCategoryModal}
           open={createCategoryModalIsOpen}
         >
-          <DialogTitle>
+          <DialogTitle disableTypography>
             <Typography
               gutterBottom
               variant="h3"
@@ -396,8 +396,5 @@ const mapDispatchToProps = (dispatch) => ({
   createProject: (project) => dispatch(createProject(project)),
   createCategory: (category) => dispatch(createCategory(category)),
   deleteCategory: (categoryId) => dispatch(deleteCategory(categoryId)),
-  // logout: () => dispatch(logout()),
-  // removeErrors: () => dispatch(removeErrors())
-
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectCreation);

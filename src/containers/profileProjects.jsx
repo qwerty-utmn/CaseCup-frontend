@@ -6,7 +6,7 @@ import {
 import ProfileProjectCard from '../components/profileProjectCard';
 
 class ProfileProjects extends Component {
-  componentDidMount() {
+  componentDidMount=() => {
     console.log(this.props);
     this.props.getProjects(this.props.user.user_id);
   }

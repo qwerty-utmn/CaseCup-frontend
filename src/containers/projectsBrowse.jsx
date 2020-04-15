@@ -15,6 +15,8 @@ import {
   MenuItem,
   Container,
   TextField,
+  GridList,
+  GridListTile,
   IconButton,
   Chip,
   OutlinedInput,
@@ -275,41 +277,28 @@ class ProjectsBrowse extends Component {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={12} sd={6} md={4}>
-            <Grid container direction="column" spacing={3}>
+          <Grid item>
+            {/* {projects
+              && (
+              <GridList cols={3}>
+                {projects.map((project) => (
+                  <GridListTile key={project.project_id}>
+                    <ProjectCard
+                      currentUser={currentUser}
+                      project={project}
+                      createReaction={createReaction}
+                      updateReaction={updateReaction}
+                      deleteReaction={deleteReaction}
+                      getProjects={getProjects}
+                    />
+                  </GridListTile>
+                ))}
+              </GridList>
+              )} */}
+            <Grid container direction="row" spacing={3}>
               {projects
               && projects.map((project) => (
-                <Grid item key={project.project_id}>
-                  <ProjectCard
-                    currentUser={currentUser}
-                    project={project}
-                    createReaction={createReaction}
-                    updateReaction={updateReaction}
-                    deleteReaction={deleteReaction}
-                    getProjects={getProjects}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-            <Grid container direction="column" spacing={3}>
-              {projects
-              && projects.map((project) => (
-                <Grid item key={project.project_id}>
-                  <ProjectCard
-                    currentUser={currentUser}
-                    project={project}
-                    createReaction={createReaction}
-                    updateReaction={updateReaction}
-                    deleteReaction={deleteReaction}
-                    getProjects={getProjects}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-            <Grid container direction="column" spacing={3}>
-              {projects
-              && projects.map((project) => (
-                <Grid item key={project.project_id}>
+                <Grid item key={project.project_id} xs={12} sd={6} md={4}>
                   <ProjectCard
                     currentUser={currentUser}
                     project={project}

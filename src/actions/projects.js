@@ -350,3 +350,25 @@ export const removeMember = (project_id, user_id) => async (dispatch) => {
     console.error(err);
   }
 };
+
+export const updateMember = (project_id, user_id, role) => async (dispatch) => {
+  try {
+    dispatch({
+      type: 'START_LOADING',
+      payload: '',
+    });
+    await fetch(`http://${config.server}:${config.port}/projects/${project_id}/update_member`, {
+      method: 'put',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        Authorization: localStorage.getItem('token'),
+      },
+      body: JSON.stringify({
+        user_id,
+        role,
+      }),
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};
