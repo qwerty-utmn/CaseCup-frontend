@@ -24,6 +24,7 @@ class MembersCard extends Component {
       project,
       handleManageClick,
     } = this.props;
+    console.log(project_members);
     return (
       <Card
         style={{ ...style }}
@@ -62,7 +63,7 @@ class MembersCard extends Component {
             ))}
           </List>
         </CardContent>
-        {currentUser && currentUser.user_id === project.creator.user_id && !project._blocked && (
+        {currentUser && project && project.creator && currentUser.user_id === project.creator.user_id && !project._blocked && (
           <CardActions disableSpacing>
             <Button onClick={handleManageClick} fullWidth>Управлять</Button>
           </CardActions>

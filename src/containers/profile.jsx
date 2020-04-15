@@ -40,6 +40,14 @@ class Profile extends Component {
         middlename: '',
         user_photo: '',
       },
+      errors: {
+        user_id: false,
+        name: false,
+        username: false,
+        surname: false,
+        middlename: false,
+        user_photo: false,
+      },
     };
   }
 
@@ -97,10 +105,15 @@ class Profile extends Component {
 
   handleUserFormChange=(e) => {
     e.persist();
+    const error = e.target.value.length === 0;
     this.setState((prevState) => ({
       userForm: {
         ...prevState.userForm,
         [e.target.name]: e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1),
+      },
+      errors: {
+        ...prevState.errors,
+        [e.target.name]: error,
       },
     }));
   }
@@ -113,7 +126,13 @@ class Profile extends Component {
       getUserProjects,
     } = this.props;
 
-    const { currentTab, userForm } = this.state;
+    const {
+      currentTab,
+      userForm,
+      errors,
+    } = this.state;
+    const isFormValid = Object.values(errors).every((error) => error === false);
+
     return (
       <Container>
         {user && (
@@ -225,7 +244,9 @@ class Profile extends Component {
                                 disabled={currentUser && user.user_id !== currentUser.user_id}
                                 name="surname"
                                 onChange={this.handleUserFormChange}
+                                error={errors.surname}
                                 fullWidth
+                                required
                               />
                             </Grid>
                             <Grid item>
@@ -240,7 +261,9 @@ class Profile extends Component {
                                 disabled={currentUser && user.user_id !== currentUser.user_id}
                                 name="name"
                                 onChange={this.handleUserFormChange}
+                                error={errors.name}
                                 fullWidth
+                                required
                               />
                             </Grid>
                             <Grid item>
@@ -255,7 +278,9 @@ class Profile extends Component {
                                 disabled={currentUser && user.user_id !== currentUser.user_id}
                                 name="middlename"
                                 onChange={this.handleUserFormChange}
+                                error={errors.middlename}
                                 fullWidth
+                                required
                               />
                             </Grid>
                             <Grid item>
@@ -270,7 +295,9 @@ class Profile extends Component {
                                 disabled={currentUser && user.user_id !== currentUser.user_id}
                                 name="username"
                                 onChange={this.handleUserFormChange}
+                                error={errors.username}
                                 fullWidth
+                                required
                               />
                             </Grid>
                           </Grid>
@@ -283,7 +310,12 @@ class Profile extends Component {
                       <Grid container justify="center">
                         <Grid item>
 
-                          <Button color="primary" variant="contained" onClick={this.handleSaveButtonClick}>
+                          <Button
+                            color="primary"
+                            variant="contained"
+                            onClick={this.handleSaveButtonClick}
+                            disabled={!isFormValid}
+                          >
                             Сохранить
                           </Button>
                         </Grid>

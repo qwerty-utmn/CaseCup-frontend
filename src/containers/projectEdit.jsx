@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { withRouter } from 'react-router-dom';
-
 import {
   Grid,
   Typography,
@@ -31,6 +30,8 @@ import ManageModal from '../components/manageModal';
 
 import { getCategories, createCategory, deleteCategory } from '../actions/categories';
 import { updateProject, getProject, updateMember } from '../actions/projects';
+import { getUserByToken } from '../actions/user';
+
 
 class ProjectEdit extends Component {
   constructor(props) {
@@ -48,9 +49,22 @@ class ProjectEdit extends Component {
         categories: [],
         files: [],
       },
+      projectFormErrors: {
+        title: false,
+        description: false,
+        start_datetime: false,
+        end_datetime: false,
+        price: false,
+        categories: false,
+        files: false,
+      },
       categoryForm: {
         category_id: '',
         description: '',
+      },
+      categoryFormErrors: {
+        category_id: true,
+        description: true,
       },
       createCategoryModalIsOpen: false,
       manageModalIsOpen: false,
@@ -77,8 +91,7 @@ class ProjectEdit extends Component {
   handleSubmitManageModal=(roles) => {
     const { project_members } = this.props.project;
     const membersToUpdate = project_members.map(
-      (member, index) => (
-        { ...member, role: roles[index] }),
+      (member, index) => ({ ...member, role: roles[index] }),
     ).filter((member, index) => (project_members[index].role !== roles[index]));
     membersToUpdate.forEach((member) => {
       this.props.updateMember(this.props.project.project_id, member.user_id, member.role);
@@ -125,10 +138,30 @@ class ProjectEdit extends Component {
 
   handleProjectFormChange=(e) => {
     e.persist();
+    const error = e.target.value.length === 0;
     this.setState((prevState) => ({
       projectForm: {
         ...prevState.projectForm,
         [e.target.name]: e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1),
+      },
+      projectFormErrors: {
+        ...prevState.projectFormErrors,
+        [e.target.name]: error,
+      },
+    }));
+  }
+
+  handleCategoryFormChange=(e) => {
+    e.persist();
+    const error = e.target.value.length === 0;
+    this.setState((prevState) => ({
+      categoryForm: {
+        ...prevState.categoryForm,
+        [e.target.name]: e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1),
+      },
+      projectFormErrors: {
+        ...prevState.categoryFormErrors,
+        [e.target.name]: error,
       },
     }));
   }
@@ -139,6 +172,13 @@ class ProjectEdit extends Component {
   }
 
   componentDidUpdate=() => {
+    if (!this.props.currentUser.user_id) {
+      const token = localStorage.getItem('token');
+      this.props.getUserByToken(token);
+    }
+    if (!this.props.project) {
+      this.props.getProject(this.props.match.params.projectId);
+    }
     if (this.props.project
       && this.props.project.project_id
       && this.state.projectForm.project_id !== this.props.project.project_id) {
@@ -158,14 +198,18 @@ class ProjectEdit extends Component {
       createCategoryModalIsOpen,
       manageModalIsOpen,
       categoryForm,
+      projectFormErrors,
+      categoryFormErrors,
     } = this.state;
     const {
       categories,
       project,
       currentUser,
     } = this.props;
+    console.log('projectForm.members', projectForm.project_members);
     const categoriesId = categories && categories.map((cat) => cat.category_id);
-
+    const isProjectFormValid = Object.values(projectFormErrors).every((error) => error === false);
+    const isCategoryFormValid = Object.values(categoryFormErrors).every((error) => error === false);
     return (
       <Container>
         <Grid container direction="column" spacing={3}>
@@ -191,11 +235,13 @@ class ProjectEdit extends Component {
                       }}
                       variant="outlined"
                       size="small"
+                      error={projectFormErrors.title}
                       fullWidth
+                      required
                     />
                   </Grid>
                   <Grid item>
-                    <FormControl fullWidth variant="outlined" margin="dense">
+                    <FormControl fullWidth variant="outlined" margin="dense" error={projectFormErrors.categories} required>
                       <InputLabel id="label" shrink>
                         Категории
                       </InputLabel>
@@ -211,12 +257,17 @@ class ProjectEdit extends Component {
                         )}
                         onChange={(e, menuItem) => {
                           if (menuItem.props.value) {
-                            this.setState({
+                            const error = e.target.value.length === 0;
+                            this.setState((prevState) => ({
                               projectForm: {
-                                ...projectForm,
+                                ...prevState.projectForm,
                                 categories: e.target.value,
                               },
-                            });
+                              projectFormErrors: {
+                                ...prevState.projectFormErrors,
+                                categories: error,
+                              },
+                            }));
                           }
                         }}
                                                 // renderValue={selected => selected.join(', ')}
@@ -276,7 +327,9 @@ class ProjectEdit extends Component {
                       }}
                       variant="outlined"
                       size="small"
+                      error={projectFormErrors.description}
                       fullWidth
+                      required
                     />
                   </Grid>
                   <Grid container item spacing={2}>
@@ -292,7 +345,9 @@ class ProjectEdit extends Component {
                         }}
                         variant="outlined"
                         size="small"
+                        error={projectFormErrors.start_datetime}
                         fullWidth
+                        required
                       />
                     </Grid>
                     <Grid item xs={6} sm={3}>
@@ -307,7 +362,9 @@ class ProjectEdit extends Component {
                         }}
                         variant="outlined"
                         size="small"
+                        error={projectFormErrors.end_datetime}
                         fullWidth
+                        required
                       />
                     </Grid>
                     <Grid item xs={6} sm={3}>
@@ -321,7 +378,9 @@ class ProjectEdit extends Component {
                         }}
                         variant="outlined"
                         size="small"
+                        error={projectFormErrors.price}
                         fullWidth
+                        required
                       />
                     </Grid>
                   </Grid>
@@ -364,6 +423,7 @@ class ProjectEdit extends Component {
                   <Button
                     color="primary"
                     variant="contained"
+                    disabled={!isProjectFormValid}
                     onClick={this.handleUpdateProjectButtonClick}
                   >
                     Сохранить
@@ -404,11 +464,12 @@ class ProjectEdit extends Component {
               variant="outlined"
               helperText="Одно слово"
               size="small"
+              name="category_id"
               value={categoryForm.category_id}
-              onChange={(e) => {
-                this.setState({ categoryForm: { ...categoryForm, category_id: e.target.value } });
-              }}
+              onChange={this.handleCategoryFormChange}
+              error={categoryFormErrors.category_id}
               fullWidth
+              required
             />
             <TextField
               label="Описание"
@@ -418,11 +479,12 @@ class ProjectEdit extends Component {
               margin="dense"
               variant="outlined"
               size="small"
+              name="description"
               value={categoryForm.description}
-              onChange={(e) => {
-                this.setState({ categoryForm: { ...categoryForm, description: e.target.value } });
-              }}
+              onChange={this.handleCategoryFormChange}
+              error={categoryFormErrors.description}
               fullWidth
+              required
             />
           </DialogContent>
           <DialogActions>
@@ -432,6 +494,7 @@ class ProjectEdit extends Component {
             <Button
               onClick={this.handleSubmitCreateCategoryModal}
               variant="contained"
+              disabled={!isCategoryFormValid}
             >
               Создать
             </Button>
@@ -453,6 +516,7 @@ const mapStateToProps = (store) => ({
   currentUser: store.currentUser,
 });
 const mapDispatchToProps = (dispatch) => ({
+  getUserByToken: (token) => dispatch(getUserByToken(token)),
   getCategories: () => dispatch(getCategories()),
   getProject: (id) => dispatch(getProject(id)),
   updateMember: (project_id, user_id, role) => dispatch(updateMember(project_id, user_id, role)),

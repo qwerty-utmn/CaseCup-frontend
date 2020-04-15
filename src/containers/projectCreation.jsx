@@ -27,6 +27,8 @@ import {
 } from '@material-ui/core';
 import { getCategories, createCategory, deleteCategory } from '../actions/categories';
 import { createProject } from '../actions/projects';
+import { getUserByToken } from '../actions/user';
+
 
 class ProjectCreation extends Component {
   constructor(props) {
@@ -43,9 +45,22 @@ class ProjectCreation extends Component {
         categories: [],
         files: [],
       },
+      projectFormErrors: {
+        title: true,
+        description: true,
+        start_datetime: true,
+        end_datetime: true,
+        price: true,
+        categories: true,
+        files: false,
+      },
       categoryForm: {
         category_id: '',
         description: '',
+      },
+      categoryFormErrors: {
+        category_id: true,
+        description: true,
       },
       createCategoryModalIsOpen: false,
     };
@@ -94,10 +109,30 @@ class ProjectCreation extends Component {
 
   handleProjectFormChange=(e) => {
     e.persist();
+    const error = e.target.value.length === 0;
     this.setState((prevState) => ({
       projectForm: {
         ...prevState.projectForm,
         [e.target.name]: e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1),
+      },
+      projectFormErrors: {
+        ...prevState.projectFormErrors,
+        [e.target.name]: error,
+      },
+    }));
+  }
+
+  handleCategoryFormChange=(e) => {
+    e.persist();
+    const error = e.target.value.length === 0;
+    this.setState((prevState) => ({
+      categoryForm: {
+        ...prevState.categoryForm,
+        [e.target.name]: e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1),
+      },
+      projectFormErrors: {
+        ...prevState.categoryFormErrors,
+        [e.target.name]: error,
       },
     }));
   }
@@ -106,17 +141,39 @@ class ProjectCreation extends Component {
     this.props.getCategories();
   }
 
+  componentDidUpdate=() => {
+    if (!this.props.currentUser.user_id) {
+      const token = localStorage.getItem('token');
+      this.props.getUserByToken(token);
+    }
+    // if (this.props.project
+    //   && this.props.project.project_id
+    //   && this.state.projectForm.project_id !== this.props.project.project_id) {
+    //   const {
+    //     role,
+    //     categories,
+    //     ...rest
+    //   } = this.props.project;
+    //   const processedCategories = categories.map((cat) => (cat.category_id));
+    //   this.setState({ projectForm: { ...rest, categories: processedCategories } });
+    // }
+  }
+
   render() {
     const {
       projectForm,
       createCategoryModalIsOpen,
       categoryForm,
+      projectFormErrors,
+      categoryFormErrors,
     } = this.state;
     const {
       categories,
     } = this.props;
+    console.log(this.state);
     const categoriesId = categories && categories.map((cat) => cat.category_id);
-
+    const isProjectFormValid = Object.values(projectFormErrors).every((error) => error === false);
+    const isCategoryFormValid = Object.values(categoryFormErrors).every((error) => error === false);
     return (
       <Container>
         <Grid container direction="column" spacing={3}>
@@ -142,11 +199,13 @@ class ProjectCreation extends Component {
                       }}
                       variant="outlined"
                       size="small"
+                      error={projectFormErrors.title}
                       fullWidth
+                      required
                     />
                   </Grid>
                   <Grid item>
-                    <FormControl fullWidth variant="outlined" margin="dense">
+                    <FormControl fullWidth variant="outlined" margin="dense" error={projectFormErrors.categories} required>
                       <InputLabel id="label" shrink>
                         Категории
                       </InputLabel>
@@ -162,12 +221,17 @@ class ProjectCreation extends Component {
                         )}
                         onChange={(e, menuItem) => {
                           if (menuItem.props.value) {
-                            this.setState({
+                            const error = e.target.value.length === 0;
+                            this.setState((prevState) => ({
                               projectForm: {
-                                ...projectForm,
+                                ...prevState.projectForm,
                                 categories: e.target.value,
                               },
-                            });
+                              projectFormErrors: {
+                                ...prevState.projectFormErrors,
+                                categories: error,
+                              },
+                            }));
                           }
                         }}
                                                 // renderValue={selected => selected.join(', ')}
@@ -227,7 +291,9 @@ class ProjectCreation extends Component {
                       }}
                       variant="outlined"
                       size="small"
+                      error={projectFormErrors.description}
                       fullWidth
+                      required
                     />
                   </Grid>
                   <Grid container item spacing={2}>
@@ -243,7 +309,9 @@ class ProjectCreation extends Component {
                         }}
                         variant="outlined"
                         size="small"
+                        error={projectFormErrors.start_datetime}
                         fullWidth
+                        required
                       />
                     </Grid>
                     <Grid item xs={6} sm={3}>
@@ -258,7 +326,9 @@ class ProjectCreation extends Component {
                         }}
                         variant="outlined"
                         size="small"
+                        error={projectFormErrors.end_datetime}
                         fullWidth
+                        required
                       />
                     </Grid>
                     <Grid item xs={6} sm={3}>
@@ -272,7 +342,9 @@ class ProjectCreation extends Component {
                         }}
                         variant="outlined"
                         size="small"
+                        error={projectFormErrors.price}
                         fullWidth
+                        required
                       />
                     </Grid>
                   </Grid>
@@ -315,6 +387,7 @@ class ProjectCreation extends Component {
                   <Button
                     color="primary"
                     variant="contained"
+                    disabled={!isProjectFormValid}
                     onClick={this.handleCreateProjectButtonClick}
                   >
                     Создать
@@ -347,11 +420,12 @@ class ProjectCreation extends Component {
               variant="outlined"
               helperText="Одно слово"
               size="small"
+              name="category_id"
               value={categoryForm.category_id}
-              onChange={(e) => {
-                this.setState({ categoryForm: { ...categoryForm, category_id: e.target.value } });
-              }}
+              onChange={this.handleCategoryFormChange}
+              error={categoryFormErrors.category_id}
               fullWidth
+              required
             />
             <TextField
               label="Описание"
@@ -361,11 +435,12 @@ class ProjectCreation extends Component {
               margin="dense"
               variant="outlined"
               size="small"
+              name="description"
               value={categoryForm.description}
-              onChange={(e) => {
-                this.setState({ categoryForm: { ...categoryForm, description: e.target.value } });
-              }}
+              onChange={this.handleCategoryFormChange}
+              error={categoryFormErrors.description}
               fullWidth
+              required
             />
           </DialogContent>
           <DialogActions>
@@ -375,6 +450,7 @@ class ProjectCreation extends Component {
             <Button
               onClick={this.handleSubmitCreateCategoryModal}
               variant="contained"
+              disabled={!isCategoryFormValid}
             >
               Создать
             </Button>
@@ -389,6 +465,7 @@ const mapStateToProps = (store) => ({
   currentUser: store.currentUser,
 });
 const mapDispatchToProps = (dispatch) => ({
+  getUserByToken: (token) => dispatch(getUserByToken(token)),
   getCategories: () => dispatch(getCategories()),
   createProject: (project, history) => dispatch(createProject(project, history)),
   createCategory: (category) => dispatch(createCategory(category)),

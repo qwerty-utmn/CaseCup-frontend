@@ -65,7 +65,19 @@ class Project extends Component {
       role: '',
       currentTab: 0,
       manageModalIsOpen: false,
+      error: true,
     };
+  }
+
+  handleFormChange=(e) => {
+    e.persist();
+    const error = e.target.value.length === 0;
+    this.setState((prevState) => ({
+      ...prevState,
+      role: e.target.value,
+      error,
+    }
+    ));
   }
 
   handleSubmitManageModal=(roles) => {
@@ -96,7 +108,13 @@ class Project extends Component {
   };
 
   handleCloseApplyModal = () => {
-    this.setState({ applyModalIsOpen: false, role: '' });
+    this.setState((prevState) => ({
+      ...prevState,
+      applyModalIsOpen: false,
+      role: '',
+      error: true,
+    }
+    ));
   };
 
   handleApplyApplyModal = () => {
@@ -150,6 +168,7 @@ class Project extends Component {
       currentTab,
       role,
       manageModalIsOpen,
+      error,
     } = this.state;
 
     const userReaction = project
@@ -374,13 +393,15 @@ class Project extends Component {
                     label="Желаемая роль"
                     name="role"
                     value={role}
-                    onChange={(e) => this.setState({ role: e.target.value })}
+                    onChange={this.handleFormChange}
                     InputLabelProps={{
                       shrink: true,
                     }}
                     variant="outlined"
                     size="small"
+                    error={error}
                     fullWidth
+                    required
                   />
                 </DialogContent>
                 <DialogActions>
@@ -390,7 +411,8 @@ class Project extends Component {
                   <Button
                     onClick={this.handleApplyApplyModal}
                     variant="contained"
-                    style={{ color: '#FFFFFF', backgroundColor: '#4CAF50' }}
+                    // style={{ color: '#FFFFFF', backgroundColor: '#4CAF50' }}
+                    disabled={error}
                   >
                     Подать заявку
                   </Button>
@@ -416,8 +438,8 @@ export default withRouter(connect(
     currentUser: state.currentUser,
   }),
   (dispatch) => ({
-    createComment: (content, userId, projectId, datetime) => dispatch(
-      createComment(content, userId, projectId, datetime),
+    createComment: (content, user, projectId, datetime) => dispatch(
+      createComment(content, user, projectId, datetime),
     ),
     becomeMember: (projectId, userId, role) => dispatch(becomeMember(projectId, userId, role)),
     createReaction: (id, reaction, user_id) => dispatch(createReaction(id, reaction, user_id)),

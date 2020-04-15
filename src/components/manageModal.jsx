@@ -20,6 +20,7 @@ class ManageModal extends Component {
     super(props);
     this.state = {
       roles: [],
+      errors: [],
     };
   }
 
@@ -30,19 +31,40 @@ class ManageModal extends Component {
     }
   }
 
-  handleMemberChanged=(e) => {
+  componentDidUpdate=() => {
+    const { roles } = this.state;
+    const { project_members } = this.props;
+    if (project_members && roles.length === 0) {
+      this.setState({ roles: project_members.map((member) => (member.role)) });
+    }
+  }
+
+  onMemberChanged=(e) => {
     e.persist();
+    let error = false;
+    if (e.target.value.length === 0) error = true;
     this.setState((prevState) => {
       const newMembersRoles = prevState.roles.slice();
       newMembersRoles.splice(+e.target.name, 1, e.target.value);
+      const newErrors = prevState.errors.slice();
+      newErrors.splice(+e.target.name, 1, error);
       return ({
         roles: newMembersRoles,
+        errors: newErrors,
       });
     });
   }
 
   onCloseManageModal=() => {
-    this.setState({ roles: this.props.project_members.map((member) => (member.role)) });
+    const { project_members } = this.props;
+    if (project_members) {
+      this.setState({
+        roles: project_members.map(
+          (member) => (member.role),
+        ),
+        errors: new Array(project_members.length).fill(false),
+      });
+    }
     this.props.handleCloseManageModal();
   }
 
@@ -52,7 +74,8 @@ class ManageModal extends Component {
       handleSubmitManageModal,
       manageModalIsOpen,
     } = this.props;
-    const { roles } = this.state;
+    const { roles, errors } = this.state;
+    const isFormValid = errors.every((error) => error === false);
     return (
       <Dialog
         maxWidth="lg"
@@ -102,8 +125,10 @@ class ManageModal extends Component {
                       size="small"
                       name={index.toString()}
                       value={roles[index]}
-                      onChange={this.handleMemberChanged}
+                      onChange={this.onMemberChanged}
+                      error={errors[index]}
                       fullWidth
+                      required
                     />
                   </Grid>
                 </Grid>
@@ -118,6 +143,7 @@ class ManageModal extends Component {
           <Button
             onClick={() => handleSubmitManageModal(roles)}
             variant="contained"
+            disabled={!isFormValid}
           >
             Сохранить
           </Button>
