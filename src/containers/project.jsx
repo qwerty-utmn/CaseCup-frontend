@@ -129,8 +129,9 @@ class Project extends Component {
     const prevUserReaction = project.project_reaction.find(
       (item) => item.user_id === currentUser.user_id,
     );
+    console.log('prevUserReaction :', prevUserReaction);
     if (prevUserReaction) {
-      if (prevUserReaction.reaction === +reaction) {
+      if (+prevUserReaction.reaction === +reaction) {
         this.props.deleteReaction(project.project_id, reaction, currentUser.user_id, true);
       } else {
         this.props.updateReaction(project.project_id, reaction, currentUser.user_id, true);
@@ -420,10 +421,10 @@ export default withRouter(connect(
       createComment(content, userId, projectId, datetime),
     ),
     becomeMember: (projectId, userId, role) => dispatch(becomeMember(projectId, userId, role)),
-    createReaction: (id, reaction, user_id) => dispatch(createReaction(id, reaction, user_id)),
-    updateReaction: (id, reaction, user_id) => dispatch(updateReaction(id, reaction, user_id)),
+    createReaction: (id, reaction, user_id, single) => dispatch(createReaction(id, reaction, user_id, single)),
+    updateReaction: (id, reaction, user_id, single) => dispatch(updateReaction(id, reaction, user_id, single)),
+    deleteReaction: (id, reaction, user_id, single) => dispatch(deleteReaction(id, reaction, user_id, single)),
     updateMember: (project_id, user_id, role) => dispatch(updateMember(project_id, user_id, role)),
-    deleteReaction: (id, user_id) => dispatch(deleteReaction(id, user_id)),
     getProject: (id) => dispatch(getProject(id)),
     updateProject: (project) => dispatch(updateProject(project)),
     getUserByToken: (token) => dispatch(getUserByToken(token)),
