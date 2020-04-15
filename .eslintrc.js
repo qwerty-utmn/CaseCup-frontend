@@ -58,7 +58,9 @@ module.exports = {
     // 'import/prefer-default-export': 'off',
     // 'function-paren-newline': 'off',
     // 'react/jsx-curly-brace-presence': 'off',
+    "react/jsx-props-no-spreading": 'off',
     // 'no-unused-expressions': 'off',
+    "react/no-did-update-set-state": 'off',
     'no-underscore-dangle': 'off',
   },
 };
