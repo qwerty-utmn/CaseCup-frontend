@@ -2,12 +2,21 @@ import config from '../config';
 
 export const GET_PROJECTS = 'GET_PROJECTS';
 export const GET_PROJECT = 'GET_PROJECT';
+
 export const CREATE_PROJECT = 'CREATE_PROJECT';
 export const UPDATE_PROJECT = 'UPDATE_PROJECT';
 export const DELETE_PROJECT = 'DELETE_PROJECT';
+
 export const GET_CATEGORIES = 'GET_CATEGORIES';
 export const OPEN_ALERT = 'OPEN_ALERT';
 
+export const CREATE_REACTION_LOCAL = 'CREATE_REACTION_LOCAL';
+export const UPDATE_REACTION_LOCAL = 'UPDATE_REACTION_LOCAL';
+export const DELETE_REACTION_LOCAL = 'DELETE_REACTION_LOCAL';
+
+export const CREATE_PROJECT_REACTION = 'CREATE_PROJECT_REACTION';
+export const UPDATE_PROJECT_REACTION = 'UPDATE_PROJECT_REACTION';
+export const DELETE_PROJECT_REACTION = 'DELETE_PROJECT_REACTION';
 
 export const getProjects = (filter = 'start_datetime', sort = 'desc', search = '') => async (dispatch) => {
   try {
@@ -64,7 +73,7 @@ export const getProjects = (filter = 'start_datetime', sort = 'desc', search = '
 //   }
 // };
 
-export const createProject = (project) => async (dispatch) => {
+export const createProject = (project, history) => async (dispatch) => {
   try {
     dispatch({
       type: 'START_LOADING',
@@ -81,7 +90,7 @@ export const createProject = (project) => async (dispatch) => {
       body: JSON.stringify(projectInfo),
     });
     const newProject = await responseProject.json();
-
+    history.push(`/projects/${newProject.project_id}`);
     // if (!NewProject.error) {
     //   const postedFiles = await uploadFiles(files, NewProject.project_id);
 
@@ -224,12 +233,31 @@ export const deleteProject = (id) => async (dispatch) => {
   }
 };
 
-export const createReaction = (project_id, reaction, user_id) => async (dispatch) => {
+export const createReaction = (project_id, reaction, user_id, single = false) => async (dispatch) => {
   try {
     dispatch({
       type: 'START_LOADING',
       payload: '',
     });
+    if (single) {
+      dispatch({
+        type: CREATE_PROJECT_REACTION,
+        payload: {
+          project_id,
+          user_id,
+          reaction,
+        },
+      });
+    } else {
+      dispatch({
+        type: CREATE_REACTION_LOCAL,
+        payload: {
+          project_id,
+          user_id,
+          reaction,
+        },
+      });
+    }
     const response = await fetch(`http://${config.server}:${config.port}/reactions/create`, {
       method: 'post',
       headers: {
@@ -245,10 +273,10 @@ export const createReaction = (project_id, reaction, user_id) => async (dispatch
     const json = await response.json();
 
     if (response.ok) {
-      dispatch({
-        type: UPDATE_PROJECT,
-        payload: json.data,
-      });
+      // dispatch({
+      //   type: UPDATE_PROJECT_REACTION,
+      //   payload: json,
+      // });
       return;
     }
   } catch (err) {
@@ -256,12 +284,27 @@ export const createReaction = (project_id, reaction, user_id) => async (dispatch
   }
 };
 
-export const deleteReaction = (project_id, user_id) => async (dispatch) => {
+export const deleteReaction = (project_id, reaction, user_id, single = false) => async (dispatch) => {
   try {
-    dispatch({
-      type: 'START_LOADING',
-      payload: '',
-    });
+    if (single) {
+      dispatch({
+        type: DELETE_PROJECT_REACTION,
+        payload: {
+          project_id,
+          user_id,
+          reaction,
+        },
+      });
+    } else {
+      dispatch({
+        type: DELETE_REACTION_LOCAL,
+        payload: {
+          project_id,
+          user_id,
+          reaction,
+        },
+      });
+    }
     const response = await fetch(`http://${config.server}:${config.port}/reactions/remove`, {
       method: 'delete',
       headers: {
@@ -276,10 +319,10 @@ export const deleteReaction = (project_id, user_id) => async (dispatch) => {
     const json = await response.json();
 
     if (response.ok) {
-      dispatch({
-        type: UPDATE_PROJECT,
-        payload: json,
-      });
+      // dispatch({
+      //   type: DELETE_PROJECT_REACTION,
+      //   payload: json,
+      // });
       return;
     }
   } catch (err) {
@@ -287,12 +330,27 @@ export const deleteReaction = (project_id, user_id) => async (dispatch) => {
   }
 };
 
-export const updateReaction = (project_id, reaction, user_id) => async (dispatch) => {
+export const updateReaction = (project_id, reaction, user_id, single = false) => async (dispatch) => {
   try {
-    dispatch({
-      type: 'START_LOADING',
-      payload: '',
-    });
+    if (single) {
+      dispatch({
+        type: UPDATE_PROJECT_REACTION,
+        payload: {
+          project_id,
+          user_id,
+          reaction,
+        },
+      });
+    } else {
+      dispatch({
+        type: UPDATE_REACTION_LOCAL,
+        payload: {
+          project_id,
+          user_id,
+          reaction,
+        },
+      });
+    }
     const response = await fetch(`http://${config.server}:${config.port}/reactions/update`, {
       method: 'put',
       headers: {
@@ -305,13 +363,14 @@ export const updateReaction = (project_id, reaction, user_id) => async (dispatch
         user_id,
       }),
     });
+
     const json = await response.json();
 
     if (response.ok) {
-      dispatch({
-        type: UPDATE_PROJECT,
-        payload: json.data,
-      });
+      // dispatch({
+      //   type: UPDATE_PROJECT_REACTION,
+      //   payload: json,
+      // });
       return;
     }
   } catch (err) {

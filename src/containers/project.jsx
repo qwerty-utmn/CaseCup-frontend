@@ -81,38 +81,38 @@ class Project extends Component {
     });
   };
 
-  handleOpenManageModal=() => {
+  handleOpenManageModal = () => {
     this.setState({
       manageModalIsOpen: true,
     });
   };
 
-  handleCloseManageModal=() => {
+  handleCloseManageModal = () => {
     this.setState({ manageModalIsOpen: false });
   };
 
-  handleOpenApplyModal=() => {
+  handleOpenApplyModal = () => {
     this.setState({ applyModalIsOpen: true });
   };
 
-  handleCloseApplyModal=() => {
+  handleCloseApplyModal = () => {
     this.setState({ applyModalIsOpen: false, role: '' });
   };
 
-  handleApplyApplyModal=() => {
+  handleApplyApplyModal = () => {
     this.setState({ applyModalIsOpen: false });
     const { project, currentUser } = this.props;
     const { role } = this.state;
     this.props.becomeMember(project.project_id, currentUser.user_id, role);
   };
 
-  handleMessageSend=(content) => {
+  handleMessageSend = (content) => {
     const { project, currentUser } = this.props;
-    this.props.createComment(content, currentUser.user_id, project.project_id, moment(Date.now()).format('YYYY-MM-DD'));
-    this.props.getProject(project.project_id);
+    this.props.createComment(content, currentUser, project.project_id, moment(Date.now()).format('YYYY-MM-DD'));
+    // this.props.getProject(project.project_id);
   };
 
-  componentDidMount=() => {
+  componentDidMount = () => {
     const token = localStorage.getItem('token');
     this.props.getUserByToken(token);
 
@@ -131,14 +131,13 @@ class Project extends Component {
     );
     if (prevUserReaction) {
       if (prevUserReaction.reaction === +reaction) {
-        this.props.deleteReaction(project.project_id, currentUser.user_id);
+        this.props.deleteReaction(project.project_id, reaction, currentUser.user_id, true);
       } else {
-        this.props.updateReaction(project.project_id, reaction, currentUser.user_id);
+        this.props.updateReaction(project.project_id, reaction, currentUser.user_id, true);
       }
     } else {
-      this.props.createReaction(project.project_id, reaction, currentUser.user_id);
+      this.props.createReaction(project.project_id, reaction, currentUser.user_id, true);
     }
-    this.props.getProject(project.project_id);
   };
 
   render() {
